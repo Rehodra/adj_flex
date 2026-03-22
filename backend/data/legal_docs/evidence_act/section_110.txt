@@ -1,0 +1,10 @@
+INDIAN EVIDENCE ACT, 1872
+Section 110 - Placeholder
+
+CHAPTER: Placeholder
+CATEGORY: Placeholder
+ACT_YEAR: 1872
+
+SECTION_TEXT: Placeholder text for Evidence Act section {section_num}.
+KEY_POINTS: • Placeholder point 1
+• Placeholder point 2

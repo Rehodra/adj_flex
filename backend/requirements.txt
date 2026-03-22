@@ -1,0 +1,53 @@
+# Web Framework
+fastapi==0.135.1
+uvicorn[standard]==0.42.0
+python-multipart==0.0.6
+pydantic==2.12.5
+pydantic-settings==2.13.1
+
+# Google Gemini AI (new SDK)
+google-genai>=1.0.0
+
+# Vector Database (ChromaDB - local, no API key needed)
+chromadb==0.4.18
+sentence-transformers==2.2.2
+
+# Machine Learning
+torch==2.10.0
+transformers==5.3.0
+scikit-learn==1.8.0
+numpy==2.4.3
+safetensors==0.7.0
+
+# Text Processing
+tiktoken==0.12.0
+tokenizers==0.22.2
+regex==2026.2.28
+nltk==3.8.1
+spacy==3.7.2
+
+# Database
+sqlalchemy==2.0.48
+aiosqlite==0.22.1
+
+# Utilities
+python-dotenv==1.0.0
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+packaging==26.0
+
+# HTTP & Networking
+httpx==0.28.1
+requests==2.32.5
+
+# Testing
+pytest==9.0.2
+httpx==0.28.1
+
+# Additional Dependencies
+filelock==3.25.2
+fsspec==2026.2.0
+huggingface-hub==1.7.2
+markupsafe==3.0.3
+networkx==3.6.1
+sympy==1.14.0

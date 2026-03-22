@@ -1,0 +1,14 @@
+{
+  "id": "CONST_HARD_1",
+  "title": "Privacy Rights - Aadhaar-type Case",
+  "type": "constitutional",
+  "difficulty": "hard",
+  "laws_invoked": [
+    "Article 21 (Right to Privacy)"
+  ],
+  "location": "Supreme Court",
+  "description": "Detailed case with PILs, government's data collection policy, and surveillance evidence analyzing proportionality.",
+  "characters": [],
+  "evidence": [],
+  "legal_ambiguity": "Proportionality test in overriding the fundamental right to privacy."
+}

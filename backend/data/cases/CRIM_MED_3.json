@@ -1,0 +1,57 @@
+{
+  "id": "CRIM_MED_3",
+  "title": "State of West Bengal vs. Ananya Das - Criminal Breach of Trust",
+  "type": "criminal",
+  "difficulty": "medium",
+  "laws_invoked": [
+    "IPC 406",
+    "IPC 408"
+  ],
+  "location": "Salt Lake, Kolkata",
+  "description": "Ananya Das joined TechCorp Solutions in 2019 as a junior accountant and was promoted to Senior Accountant in 2022 with access to company bank accounts. Between January 2023 and October 2023, she systematically embezzled ₹1.2 crores through 8 fake vendor accounts, 156 fraudulent payments, forging digital signatures of Director Arvind Malhotra, and manipulating accounting entries. The fraud was discovered during the annual audit in November 2023 when CA Rajesh Sinha noticed unusual vendor payment patterns. Ananya was confronted on November 24, 2023, and confessed in writing, promising to repay ₹30 lakhs immediately. She paid ₹18 lakhs and then disappeared. FIR was filed on December 1, 2023.",
+  "characters": [
+    {
+      "name": "TechCorp Solutions Pvt. Ltd.",
+      "role": "Victim",
+      "details": "IT company"
+    },
+    {
+      "name": "Ananya Das",
+      "role": "Accused",
+      "details": "31, Senior Accountant, 5 years employment"
+    },
+    {
+      "name": "Arvind Malhotra",
+      "role": "Witness",
+      "details": "Company Director"
+    },
+    {
+      "name": "CA Rajesh Sinha",
+      "role": "Witness",
+      "details": "Auditor who discovered the fraud"
+    },
+    {
+      "name": "Priya Sen",
+      "role": "Witness",
+      "details": "Assistant Accountant (Co-worker)"
+    },
+    {
+      "name": "Inspector Moumita Chatterjee",
+      "role": "Investigating Officer",
+      "details": ""
+    }
+  ],
+  "evidence": [
+    "FIR No. 412/2023, Bidhannagar Police Station",
+    "Forensic audit report (detailed breakdown of all 156 transactions)",
+    "Fake vendor registration documents",
+    "Bank statements showing transfers to Ananya's relatives",
+    "Digital signature forgery analysis report",
+    "Property purchase documents (flat in New Town bought in Aug 2023)",
+    "Ananya's written confession (dated Nov 24, 2023)",
+    "Email trails (fake communication with vendors)",
+    "CCTV footage (Ananya leaving office with company documents)",
+    "Recovery statement (₹18 lakhs returned, ₹1.02 crores outstanding)"
+  ],
+  "legal_ambiguity": "IPC 406 (criminal breach of trust) vs IPC 408 (by employee). Whether the written confession is admissible (obtained before FIR). Whether Priya Sen is also guilty (helped unknowingly)."
+}

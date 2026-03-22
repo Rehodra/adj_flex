@@ -1,0 +1,46 @@
+{
+  "id": "CRIM_HARD_1",
+  "title": "State of Haryana vs. Manoj Verma - Murder or Culpable Homicide? Intent Ambiguity",
+  "type": "criminal",
+  "difficulty": "hard",
+  "laws_invoked": [
+    "IPC 300",
+    "IPC 304"
+  ],
+  "location": "Sector 14, Gurgaon",
+  "description": "Manoj and Ritu were married for 7 years. Manoj discovered in February 2024 that Ritu was having an affair with Sanjay Malhotra for the past 6 months. On March 3, 2024, Manoj confronted Sanjay at his office around 7 PM. Eyewitnesses say heated argument lasted 15 minutes. Manoj admits to 'losing control' and engaging in a physical fight. Manoj punched Sanjay 4 times. Sanjay fell and hit his head on a marble paperweight. Manoj picked up the paperweight and struck Sanjay once on the head. Sanjay collapsed, bleeding profusely. Manoj immediately called 100 (police) and ambulance. Sanjay died 40 minutes later. Autopsy Findings: Cause of Death: Severe head trauma from blunt object. Contributing Factor: Sanjay had a thin skull (congenital condition - discovered post-mortem).",
+  "characters": [
+    {
+      "name": "Sanjay Malhotra",
+      "role": "Victim (Deceased)",
+      "details": "29, real estate agent, had affair with accused's wife"
+    },
+    {
+      "name": "Manoj Verma",
+      "role": "Accused",
+      "details": "33, gym owner, discovered wife's affair"
+    },
+    {
+      "name": "Ritu Verma",
+      "role": "Witness",
+      "details": "30, Accused's Wife - homemaker"
+    },
+    {
+      "name": "DCP Rohit Mehra",
+      "role": "Investigating Officer",
+      "details": ""
+    }
+  ],
+  "evidence": [
+    "FIR No. 089/2024, Sector 14 Police Station",
+    "Post-mortem report (detailed skull analysis)",
+    "WhatsApp chat evidence (Ritu-Sanjay affair messages)",
+    "CCTV footage from office (shows fight, but angle doesn't clearly show paperweight blow)",
+    "Manoj's call to police (recording shows panic, 'I didn't mean to kill him')",
+    "Witness statements (2 witnesses - versions slightly differ on who started the fight)",
+    "Forensic report on paperweight (blood, hair, fingerprints match)",
+    "Medical expert opinion on 'thin skull rule'",
+    "Ritu's statement (she admits affair, says Manoj was provoked)"
+  ],
+  "legal_ambiguity": "Is this MURDER (IPC 300) or CULPABLE HOMICIDE (IPC 304)? Was the paperweight blow a reflex action or deliberate? Role of provocation (Exception 1). Distinction between intent and knowledge. 'Thin skull rule'."
+}

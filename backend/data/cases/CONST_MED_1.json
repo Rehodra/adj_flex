@@ -1,0 +1,15 @@
+{
+  "id": "CONST_MED_1",
+  "title": "Sedition vs Freedom of Speech",
+  "type": "constitutional",
+  "difficulty": "medium",
+  "laws_invoked": [
+    "Article 19(1)(a)",
+    "IPC 124A"
+  ],
+  "location": "Bangalore",
+  "description": "Detailed case with social media posts, speech transcripts, and police notices testing sedition laws.",
+  "characters": [],
+  "evidence": [],
+  "legal_ambiguity": "Limits of free speech under Article 19(2)."
+}

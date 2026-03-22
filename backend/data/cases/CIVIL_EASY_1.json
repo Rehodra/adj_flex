@@ -1,0 +1,15 @@
+{
+  "id": "CIVIL_EASY_1",
+  "title": "Breach of Contract - E-commerce Delivery Dispute",
+  "type": "civil",
+  "difficulty": "easy",
+  "laws_invoked": [
+    "Contract Act 1872",
+    "Sale of Goods Act 1930"
+  ],
+  "location": "Mumbai",
+  "description": "Detailed case with realistic characters, contract documents, email trails, delivery proofs involving a standard breach of e-commerce delivery contract.",
+  "characters": [],
+  "evidence": [],
+  "legal_ambiguity": "Standard breach analysis."
+}

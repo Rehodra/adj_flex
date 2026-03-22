@@ -1,0 +1,286 @@
+"""
+Main FastAPI Application for AI Legal Courtroom Simulator
+Backend API with Google Gemini integration and RAG system
+"""
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
+import uvicorn
+from datetime import datetime
+import json
+
+from app.config import get_settings
+from app.api.routes import session, argument, cases
+from app.models.schemas import HealthResponse, ErrorResponse
+
+
+# Application lifespan management
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage application startup and shutdown"""
+    # Startup
+    print("🚀 Starting AI Legal Courtroom Simulator API...")
+    print(f"📅 Started at: {datetime.utcnow()}")
+    
+    # Initialize components
+    settings = get_settings()
+    print(f"⚙️ Environment: {settings.ENV}")
+    print(f"🔑 Google Gemini API Key: {'✅ Configured' if settings.GEMINI_API_KEY else '❌ Missing'}")
+    print(f"📊 Vector DB Path: {settings.VECTOR_DB_PATH}")
+    
+    yield
+    
+    # Shutdown
+    print("🛑 Shutting down AI Legal Courtroom Simulator API...")
+
+
+# Create FastAPI application
+settings = get_settings()
+app = FastAPI(
+    title="AI Legal Courtroom Simulator API",
+    description="Backend for AI-powered legal education platform with Gemini AI and RAG system",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    lifespan=lifespan
+)
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# Include routers
+app.include_router(session.router, prefix="/api/session", tags=["session"])
+app.include_router(argument.router, prefix="/api/argument", tags=["argument"])
+app.include_router(cases.router, prefix="/api/cases", tags=["cases"])
+
+
+# Root endpoint
+@app.get("/", response_model=dict)
+async def root():
+    """Root endpoint with API information"""
+    return {
+        "message": "AI Legal Courtroom Simulator API",
+        "status": "running",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "redoc": "/redoc",
+        "health": "/health",
+        "timestamp": datetime.utcnow()
+    }
+
+
+# Health check endpoint
+@app.get("/health", response_model=HealthResponse)
+async def health_check():
+    """Comprehensive health check"""
+    try:
+        # Check dependencies
+        dependencies = {}
+        
+        # Check AI Provider
+        try:
+            if settings.AI_PROVIDER == "groq":
+                from groq import Groq
+                groq_client = Groq(api_key=settings.GROQ_API_KEY)
+                dependencies["ai_provider"] = "✅ Groq (Llama 3.3 70B)"
+            else:
+                from google import genai
+                client = genai.Client(api_key=settings.GEMINI_API_KEY)
+                models = client.models.list()
+                dependencies["ai_provider"] = "✅ Gemini Connected"
+        except Exception as e:
+            dependencies["ai_provider"] = f"❌ Error: {str(e)}"
+        
+        # Check ChromaDB (vector database)
+        try:
+            import chromadb
+            client = chromadb.PersistentClient(path=settings.VECTOR_DB_PATH)
+            collections = client.list_collections()
+            dependencies["chromadb"] = f"✅ {len(collections)} collections"
+        except Exception as e:
+            dependencies["chromadb"] = f"❌ Error: {str(e)}"
+        
+        # Check sentence transformers (embeddings)
+        try:
+            from sentence_transformers import SentenceTransformer
+            dependencies["sentence_transformers"] = "✅ Available"
+        except Exception as e:
+            dependencies["sentence_transformers"] = f"❌ Error: {str(e)}"
+        
+        # Overall status
+        all_healthy = all("✅" in status for status in dependencies.values())
+        
+        return HealthResponse(
+            status="healthy" if all_healthy else "degraded",
+            version="1.0.0",
+            uptime=None,  # Could be calculated from startup time
+            dependencies=dependencies
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Health check failed: {str(e)}"
+        )
+
+
+# API info endpoint
+@app.get("/api/info", response_model=dict)
+async def api_info():
+    """Get detailed API information"""
+    return {
+        "api": {
+            "name": "AI Legal Courtroom Simulator",
+            "version": "1.0.0",
+            "description": "Backend for AI-powered legal education platform",
+            "framework": "FastAPI",
+            "ai_provider": "Google Gemini",
+            "vector_database": "ChromaDB",
+            "embedding_model": "Google Embeddings API"
+        },
+        "features": {
+            "ai_judge": "Legal argument evaluation with scoring",
+            "ai_opponent": "Dynamic counter-argument generation",
+            "rag_system": "Retrieval-Augmented Generation for legal knowledge",
+            "session_management": "Multi-session game management",
+            "performance_analytics": "Detailed performance tracking",
+            "real_time_evaluation": "Instant argument feedback"
+        },
+        "legal_domains": {
+            "criminal_law": "Indian Penal Code (IPC)",
+            "civil_law": "Code of Civil Procedure (CPC)",
+            "evidence_law": "Indian Evidence Act",
+            "constitutional_law": "Constitution of India"
+        },
+        "scoring": {
+            "legal_accuracy": 40,
+            "reasoning": 35,
+            "evidence": 25,
+            "performance_tiers": ["Law Student", "Junior Advocate", "Competent Advocate", "Senior Counsel"]
+        },
+        "endpoints": {
+            "session_management": "/api/session",
+            "argument_submission": "/api/argument",
+            "documentation": "/docs",
+            "health_check": "/health"
+        },
+        "configuration": {
+            "cors_origins": settings.CORS_ORIGINS,
+            "vector_db_path": settings.VECTOR_DB_PATH,
+            "log_level": settings.LOG_LEVEL
+        }
+    }
+
+
+# Global exception handler
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exc: HTTPException):
+    """Handle HTTP exceptions"""
+    error_data = ErrorResponse(
+        error="HTTPException",
+        message=exc.detail,
+        details={"status_code": exc.status_code},
+        timestamp=datetime.utcnow()
+    ).dict()
+    
+    # Convert datetime to string for JSON serialization
+    error_data["timestamp"] = error_data["timestamp"].isoformat()
+    
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=error_data
+    )
+
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request, exc):
+    """Handle general exceptions"""
+    error_data = ErrorResponse(
+        error="InternalServerError",
+        message="An unexpected error occurred",
+        details={"exception": str(exc)},
+        timestamp=datetime.utcnow()
+    ).dict()
+    
+    # Convert datetime to string for JSON serialization
+    error_data["timestamp"] = error_data["timestamp"].isoformat()
+    
+    return JSONResponse(
+        status_code=500,
+        content=error_data
+    )
+
+
+# Development endpoints (only in development mode)
+if settings.ENV.lower() == "development":
+    
+    @app.get("/debug/config")
+    async def debug_config():
+        """Debug endpoint to view configuration (development only)"""
+        return {
+            "environment": settings.ENV,
+            "debug": settings.DEBUG,
+            "cors_origins": settings.CORS_ORIGINS,
+            "vector_db_path": settings.VECTOR_DB_PATH,
+            "log_level": settings.LOG_LEVEL,
+            "gemini_api_configured": bool(settings.GEMINI_API_KEY)
+        }
+    
+    @app.get("/debug/test-ai")
+    async def test_ai_connection():
+        """Test AI connection (development only)"""
+        try:
+            from app.ai_system.rag.retriever import RAGRetriever
+            from app.ai_system.agents.judge_agent import JudgeAgent
+            
+            # Test RAG system
+            rag = RAGRetriever(api_key=settings.GEMINI_API_KEY)
+            stats = rag.get_stats()
+            
+            # Test judge agent
+            judge = JudgeAgent(api_key=settings.GEMINI_API_KEY, rag_retriever=rag)
+            judge_info = judge.get_judge_info()
+            
+            return {
+                "rag_system": stats,
+                "judge_agent": judge_info,
+                "status": "✅ AI systems operational"
+            }
+            
+        except Exception as e:
+            return {
+                "status": "❌ AI system test failed",
+                "error": str(e)
+            }
+
+
+# Production middleware and optimizations
+if settings.ENV.lower() == "production":
+    # Add production-specific middleware here
+    # For example: logging, rate limiting, monitoring, etc.
+    pass
+
+
+# Run the application
+if __name__ == "__main__":
+    print("🚀 Starting AI Legal Courtroom Simulator API...")
+    print(f"📍 Environment: {settings.ENV}")
+    print(f"🌐 CORS Origins: {settings.CORS_ORIGINS}")
+    print(f"📚 Documentation: http://localhost:8000/docs")
+    
+    uvicorn.run(
+        "app.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=settings.DEBUG,
+        log_level=settings.LOG_LEVEL.lower()
+    )

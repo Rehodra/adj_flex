@@ -1,0 +1,56 @@
+{
+  "id": "CRIM_EASY_2",
+  "title": "State of Maharashtra vs. Vikram Yadav - Bar Brawl Assault",
+  "type": "criminal",
+  "difficulty": "easy",
+  "laws_invoked": [
+    "IPC 323",
+    "IPC 504"
+  ],
+  "location": "Phoenix Mall, Pune",
+  "description": "On February 3, 2024, around 11:45 PM at 'High Spirits' bar in Phoenix Mall, Rohan Kapoor accidentally bumped into Vikram Yadav while walking to the restroom. Vikram, who had consumed 4 pegs of whiskey (as per bill), verbally abused Rohan using casteist slurs. When Rohan asked him to calm down, Vikram punched him three times - once on the nose (causing bleeding), once on the left eye (resulting in swelling), and once on the chest. Rohan fell backwards, hitting his head on a bar stool. The bouncer intervened and separated them. Rohan was taken to Ruby Hall Clinic where he received 5 stitches on his forehead.",
+  "characters": [
+    {
+      "name": "Rohan Kapoor",
+      "role": "Victim",
+      "details": "28, software engineer, married, new father"
+    },
+    {
+      "name": "Vikram Yadav",
+      "role": "Accused",
+      "details": "32, gym trainer, known for anger issues"
+    },
+    {
+      "name": "Sameer Khan",
+      "role": "Witness",
+      "details": "Bartender"
+    },
+    {
+      "name": "Ajay Thakur",
+      "role": "Witness",
+      "details": "Bouncer"
+    },
+    {
+      "name": "Sub-Inspector Meera Joshi",
+      "role": "Investigating Officer",
+      "details": ""
+    }
+  ],
+  "evidence": [
+    "FIR No. 078/2024, Koregaon Park Police Station",
+    "Medical Legal Certificate (MLC) from Ruby Hall Clinic",
+    "Injury photographs (nose fracture, eye contusion, forehead laceration)",
+    "Bar CCTV footage (shows entire incident)",
+    "Bar bill (proof of Vikram's alcohol consumption)",
+    "Witness statements (5 witnesses - all consistent)",
+    "Blood alcohol test results (Vikram: 0.12% BAC)",
+    "Rohan's shirt with bloodstains (forensic evidence)"
+  ],
+  "evidence_chain": [
+    "Clear video showing unprovoked attack",
+    "Medical report confirms simple hurt (not grievous)",
+    "Multiple independent witnesses",
+    "Accused was intoxicated (but not defense under IPC 85/86)",
+    "Casteist slurs recorded in witness statements"
+  ]
+}

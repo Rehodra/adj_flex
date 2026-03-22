@@ -1,0 +1,15 @@
+{
+  "id": "CIVIL_HARD_1",
+  "title": "Defamation vs Free Speech",
+  "type": "civil",
+  "difficulty": "hard",
+  "laws_invoked": [
+    "IPC 499",
+    "Article 19(1)(a) Constitution"
+  ],
+  "location": "Delhi",
+  "description": "Detailed case with newspaper article, journalist's sources, and public figure's reputation damage analyzing free speech protections.",
+  "characters": [],
+  "evidence": [],
+  "legal_ambiguity": "Balancing Article 19(1)(a) against reputation rights."
+}

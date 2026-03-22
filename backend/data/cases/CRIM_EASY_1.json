@@ -1,0 +1,54 @@
+{
+  "id": "CRIM_EASY_1",
+  "title": "State of Karnataka vs. Arjun Mehta - Chain Snatching Case",
+  "type": "criminal",
+  "difficulty": "easy",
+  "laws_invoked": [
+    "IPC 379"
+  ],
+  "location": "Indiranagar, Bangalore",
+  "description": "On January 15, 2024, at 6:30 PM, Sunita Desai was returning home from Gandhi Bazaar market carrying groceries. As she crossed the MG Road junction near Cubbon Park, Arjun Mehta approached on a black Honda Activa (KA-03-MH-4567) without a helmet. He snatched her 22-karat gold chain (weight: 45 grams, value: ₹2,45,000) and fled towards Brigade Road. Sunita fell during the incident, sustaining injuries to her right knee and elbow. She immediately screamed for help.",
+  "characters": [
+    {
+      "name": "Sunita Desai",
+      "role": "Victim",
+      "details": "42, school teacher, widow, sole breadwinner"
+    },
+    {
+      "name": "Arjun Mehta",
+      "role": "Accused",
+      "details": "26, unemployed, drug addiction history"
+    },
+    {
+      "name": "Ramesh Kumar",
+      "role": "Witness",
+      "details": "shopkeeper"
+    },
+    {
+      "name": "Priya Singh",
+      "role": "Witness",
+      "details": "passerby"
+    },
+    {
+      "name": "Inspector Ravindra Nath",
+      "role": "Investigating Officer",
+      "details": ""
+    }
+  ],
+  "evidence": [
+    "FIR No. 034/2024, Indiranagar Police Station",
+    "CCTV footage (4 cameras, clear face capture)",
+    "Medical examination report (Dr. Kavitha, Victoria Hospital)",
+    "Recovery panchanama (chain found at accused's rented room)",
+    "Two eyewitness statements (Ramesh & Priya)",
+    "Accused's confession statement (retracted later)",
+    "Gold chain valuation certificate"
+  ],
+  "evidence_chain": [
+    "CCTV shows face clearly, vehicle number visible",
+    "Chain recovered from Arjun's possession within 6 hours",
+    "Pawn shop owner confirms Arjun tried to sell the chain",
+    "Fingerprints on victim's bag match Arjun's",
+    "Victim identifies accused in Test Identification Parade"
+  ]
+}

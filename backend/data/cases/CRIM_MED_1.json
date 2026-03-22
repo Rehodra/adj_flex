@@ -1,0 +1,50 @@
+{
+  "id": "CRIM_MED_1",
+  "title": "State of Tamil Nadu vs. Karthik Shankar - Road Rage Culpable Homicide",
+  "type": "criminal",
+  "difficulty": "medium",
+  "laws_invoked": [
+    "IPC 304 Part II"
+  ],
+  "location": "OMR Road, Chennai",
+  "description": "On March 12, 2024, at 10:15 PM on OMR Road near Siruseri toll plaza, Arun Prakash (driving Honda City) and Karthik Shankar (driving Toyota Fortuner) had a minor collision when Karthik changed lanes abruptly. Both vehicles had minor scratches. They pulled over to the side. What started as a heated argument escalated when Karthik, in a fit of rage, pushed Arun forcefully. Arun, who had recently undergone a heart surgery (2 months prior - medical records available), fell backwards and hit his head on the road divider edge. Karthik immediately called an ambulance, but Arun died en route to the hospital. Autopsy revealed: (1) Severe head trauma from hitting the divider, and (2) Heart attack possibly triggered by the altercation stress.",
+  "characters": [
+    {
+      "name": "Arun Prakash",
+      "role": "Victim (Deceased)",
+      "details": "34, IT professional, father of 2 kids"
+    },
+    {
+      "name": "Karthik Shankar",
+      "role": "Accused",
+      "details": "38, business owner, no criminal record"
+    },
+    {
+      "name": "Murugan",
+      "role": "Witness",
+      "details": "Auto driver"
+    },
+    {
+      "name": "Lakshmi",
+      "role": "Witness",
+      "details": "Toll booth operator"
+    },
+    {
+      "name": "Inspector Venkatesan",
+      "role": "Investigating Officer",
+      "details": ""
+    }
+  ],
+  "evidence": [
+    "FIR No. 156/2024, Siruseri Police Station",
+    "Post-mortem report (two causes: head injury + cardiac arrest)",
+    "Arun's medical history (cardiac bypass surgery 2 months ago)",
+    "CCTV footage (shows push, fall, but NOT the initial collision)",
+    "Dash cam footage from a passing vehicle (shows Arun falling)",
+    "Witness statements (auto driver saw the push)",
+    "Karthik's 100 call recording (shows immediate remorse)",
+    "Forensic report on road divider (blood and hair samples)",
+    "Insurance claim documents (proving minor collision damage)"
+  ],
+  "legal_ambiguity": "Did Karthik KNOW Arun had a heart condition? Did Karthik INTEND to cause death? Was the push sufficient in ordinary course of nature to cause death? Should it be IPC 304 Part I or Part II?"
+}

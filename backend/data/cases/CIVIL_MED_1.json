@@ -1,0 +1,15 @@
+{
+  "id": "CIVIL_MED_1",
+  "title": "Property Dispute - Ancestral Land Partition",
+  "type": "civil",
+  "difficulty": "medium",
+  "laws_invoked": [
+    "Transfer of Property Act 1882",
+    "Hindu Succession Act 1956"
+  ],
+  "location": "Lucknow",
+  "description": "Detailed case with family tree, property documents, survey reports, rival claims regarding ancestral property partition.",
+  "characters": [],
+  "evidence": [],
+  "legal_ambiguity": "Complex property division issues."
+}

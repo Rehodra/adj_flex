@@ -1,0 +1,15 @@
+{
+  "id": "CONST_EASY_1",
+  "title": "Right to Education Denial",
+  "type": "constitutional",
+  "difficulty": "easy",
+  "laws_invoked": [
+    "Article 21A",
+    "RTE Act 2009"
+  ],
+  "location": "Rural UP",
+  "description": "Detailed case with school denial letter, RTI responses, and government circulars regarding denial of primary education.",
+  "characters": [],
+  "evidence": [],
+  "legal_ambiguity": "Direct violation of Article 21A."
+}

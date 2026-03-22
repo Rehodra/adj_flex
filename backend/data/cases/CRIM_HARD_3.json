@@ -1,0 +1,62 @@
+{
+  "id": "CRIM_HARD_3",
+  "title": "State of Bihar vs. Ramesh Prasad & Family - Dowry Death",
+  "type": "criminal",
+  "difficulty": "hard",
+  "laws_invoked": [
+    "IPC 304B",
+    "IPC 498A",
+    "Evidence Act 113B"
+  ],
+  "location": "Patna",
+  "description": "Priya married Ramesh on February 14, 2022. Dowry given: ₹25 lakhs cash, 100 grams gold, Honda City car. Problems started when Ramesh's business failed and they demanded ₹15 lakhs more. Medical records show Priya suffered burn marks, fractured wrist, and multiple bruises over late 2023. On March 20, 2024, at 11:30 AM, Priya was found hanging from a ceiling fan by a dupatta. Ramesh claims he was at work, mother Shanti at temple, and brother Rajeev studying. Post-Mortem Report found death by hanging between 11 AM - 1 PM, but also fresh bruising on forehead and scratches on neck, suggesting a struggle before death. No suicide note was found.",
+  "characters": [
+    {
+      "name": "Priya Sharma",
+      "role": "Victim (Deceased)",
+      "details": "26, MBA graduate, married 2 years"
+    },
+    {
+      "name": "Ramesh Prasad",
+      "role": "Accused 1",
+      "details": "30, husband, bank employee"
+    },
+    {
+      "name": "Shanti Devi",
+      "role": "Accused 2",
+      "details": "55, mother-in-law"
+    },
+    {
+      "name": "Rajeev Prasad",
+      "role": "Accused 3",
+      "details": "32, brother-in-law"
+    },
+    {
+      "name": "Anil Sharma",
+      "role": "Witness",
+      "details": "60, Victim's Father - retired teacher"
+    },
+    {
+      "name": "Rekha Singh",
+      "role": "Witness",
+      "details": "Neighbor"
+    },
+    {
+      "name": "SI Priya Kumari",
+      "role": "Investigating Officer",
+      "details": ""
+    }
+  ],
+  "evidence": [
+    "FIR No. 156/2024, Kankarbagh Police Station",
+    "Post-mortem report (death by hanging + fresh struggle injuries)",
+    "Crime scene photos (feet 4 inches off ground, overturned stool, no suicide note)",
+    "WhatsApp chat history (complaining about dowry demands and violence)",
+    "Medical records (3 hospital visits in 6 months for suspicious injuries)",
+    "Neighbor Rekha's statement (heard arguments at 10:30 AM that day)",
+    "Bank statements (Ramesh pressuring Priya's father for €15L transfer)",
+    "Forensic report on dupatta (no fingerprints - wiped clean?)",
+    "Call detail records (Priya called father crying at 10:15 AM)"
+  ],
+  "legal_ambiguity": "Was it Suicide or Murder Disguised as Suicide? Application of Evidence Act 113B (presumption). All accused have partial alibis. Forensics ambiguous (hanging vs forced hanging). Circumstantial evidence chains."
+}

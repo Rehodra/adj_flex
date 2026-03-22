@@ -1,0 +1,58 @@
+{
+  "id": "CRIM_EASY_3",
+  "title": "State of Delhi vs. Neha Sharma - Online Shopping Fraud",
+  "type": "criminal",
+  "difficulty": "easy",
+  "laws_invoked": [
+    "IPC 420",
+    "IPC 465"
+  ],
+  "location": "Rohini, Delhi",
+  "description": "Between November 10-25, 2023, Neha Sharma created a fake e-commerce website 'SuperElectronics.in' mimicking the legitimate 'SuperElectronics.com'. She advertised iPhone 14 Pro Max at ₹45,000 (actual price: ₹1,39,900) on social media. Rajesh Gupta, looking for a phone for his grandson's birthday, placed an order and paid ₹45,000 via UPI to Neha's account (disguised as 'SuperElectronics Pvt Ltd'). After payment, Neha sent him a cheap Chinese phone worth ₹3,500 in an iPhone box. When Rajesh complained, Neha blocked all communication. Rajesh's son Amit, who works in IT, discovered the fake website and reported to cyber crime.",
+  "characters": [
+    {
+      "name": "Rajesh Gupta",
+      "role": "Victim",
+      "details": "55, retired banker, not tech-savvy"
+    },
+    {
+      "name": "Neha Sharma",
+      "role": "Accused",
+      "details": "29, MBA graduate, serial fraudster"
+    },
+    {
+      "name": "Amit Gupta",
+      "role": "Witness",
+      "details": "Rajesh's son"
+    },
+    {
+      "name": "Inspector Sandeep Kumar",
+      "role": "Cyber Crime Expert",
+      "details": ""
+    },
+    {
+      "name": "ASI Priyanka Rao",
+      "role": "Investigating Officer",
+      "details": ""
+    }
+  ],
+  "evidence": [
+    "FIR No. 234/2024, Cyber Crime Cell, Rohini",
+    "Fake website screenshots (with grammatical errors)",
+    "UPI transaction records (₹45,000 to Neha's account)",
+    "Bank account statements (Neha received ₹14.5 lakhs from 47 victims)",
+    "Courier tracking records",
+    "Domain registration details (registered under fake name)",
+    "WhatsApp chat screenshots (Neha promising delivery)",
+    "Forensic report on the Chinese phone received",
+    "Social media advertisement screenshots",
+    "IP address logs (traced to Neha's location)"
+  ],
+  "evidence_chain": [
+    "UPI payment directly to Neha's account",
+    "46 other victims identified with similar complaints",
+    "Domain registered just 1 month before scam",
+    "Fake GST number used on website",
+    "Digital evidence shows intent to cheat from beginning"
+  ]
+}

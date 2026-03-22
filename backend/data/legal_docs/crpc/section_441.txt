@@ -1,0 +1,10 @@
+CODE OF CRIMINAL PROCEDURE, 1973
+Section 441 - Placeholder
+
+CHAPTER: Placeholder
+CATEGORY: Procedural
+ACT_YEAR: 1973
+
+SECTION_TEXT: Placeholder text for CrPC section {section_num}.
+KEY_POINTS: • Placeholder point 1
+• Placeholder point 2
