@@ -73,7 +73,23 @@ How to run it:
 - Recommended: Open terminal in `backend` and run `start.bat` (keeps environment active in that terminal)
 - Optional: Double-click `start.bat` in File Explorer (works for setup/install, but activated environment will not remain available in your current VS Code terminal)
 
-### 3. Create Virtual Environment with UV (manual alternative)
+### 3. Windows One-Click Run (run.bat)
+
+Use `run.bat` when you want setup + server startup in one command:
+
+```bat
+run.bat
+```
+
+What `run.bat` does:
+- Calls `start.bat` to prepare environment and install dependencies
+- Starts FastAPI with hot reload on port 8000
+
+How to run it:
+- Recommended: Open terminal in `backend` and run `run.bat`
+- Optional: Double-click `run.bat` in File Explorer for quick local startup
+
+### 4. Create Virtual Environment with UV (manual alternative)
 
 ```bash
 # Option 1: Use the setup script (recommended)
@@ -93,7 +109,7 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
-### 4. Environment Configuration
+### 5. Environment Configuration
 
 ```bash
 # Copy environment template
@@ -108,7 +124,7 @@ Add your Google Gemini API Key:
 GOOGLE_API_KEY=your_gemini_api_key_here
 ```
 
-### 5. Index Legal Documents
+### 6. Index Legal Documents
 
 ```bash
 # Run the indexing script
@@ -118,7 +134,7 @@ uv run python scripts/index_legal_docs.py
 uv run python scripts/index_legal_docs.py --test --test-query "What is murder?"
 ```
 
-### 6. Start the Server
+### 7. Start the Server
 
 ```bash
 # Development mode
@@ -128,7 +144,7 @@ uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-### 7. Access the API
+### 8. Access the API
 
 - **API Documentation**: http://localhost:8000/docs
 - **ReDoc Documentation**: http://localhost:8000/redoc
