@@ -55,7 +55,25 @@ git clone <repository-url>
 cd law/backend
 ```
 
-### 2. Create Virtual Environment with UV
+### 2. Windows One-Command Setup (start.bat)
+
+If you are on Windows, use `start.bat` for quick setup:
+
+```bat
+start.bat
+```
+
+What `start.bat` does:
+- Uses existing virtual environment (`.venv-new` or `.venv`)
+- Creates `.venv` with `uv venv .venv` if none exists
+- Activates the virtual environment
+- Installs dependencies from `requirements.txt`
+
+How to run it:
+- Recommended: Open terminal in `backend` and run `start.bat` (keeps environment active in that terminal)
+- Optional: Double-click `start.bat` in File Explorer (works for setup/install, but activated environment will not remain available in your current VS Code terminal)
+
+### 3. Create Virtual Environment with UV (manual alternative)
 
 ```bash
 # Option 1: Use the setup script (recommended)
@@ -75,7 +93,7 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
-### 3. Environment Configuration
+### 4. Environment Configuration
 
 ```bash
 # Copy environment template
@@ -90,7 +108,7 @@ Add your Google Gemini API Key:
 GOOGLE_API_KEY=your_gemini_api_key_here
 ```
 
-### 4. Index Legal Documents
+### 5. Index Legal Documents
 
 ```bash
 # Run the indexing script
@@ -100,7 +118,7 @@ uv run python scripts/index_legal_docs.py
 uv run python scripts/index_legal_docs.py --test --test-query "What is murder?"
 ```
 
-### 5. Start the Server
+### 6. Start the Server
 
 ```bash
 # Development mode
@@ -110,7 +128,7 @@ uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-### 6. Access the API
+### 7. Access the API
 
 - **API Documentation**: http://localhost:8000/docs
 - **ReDoc Documentation**: http://localhost:8000/redoc
