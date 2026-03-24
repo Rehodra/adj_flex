@@ -49,10 +49,19 @@ def get_judge_agent() -> JudgeAgent:
     """Get or initialize judge agent"""
     global _judge_agent
     if _judge_agent is None:
+        provider = getattr(_settings, "AI_PROVIDER", "gemini").lower()
+        if provider == "groq":
+            api_key = _settings.GROQ_API_KEY
+            model_name = _settings.GROQ_MODEL
+        else:
+            api_key = _settings.GEMINI_API_KEY
+            model_name = _settings.GEMINI_MODEL
+            
         _judge_agent = JudgeAgent(
-            api_key=_settings.GEMINI_API_KEY,
+            api_key=api_key,
             rag_retriever=get_rag_retriever(),
-            model_name=_settings.GEMINI_MODEL
+            model_name=model_name,
+            provider=provider
         )
     return _judge_agent
 
@@ -61,30 +70,39 @@ def get_opponent_agent() -> OpponentAgent:
     """Get or initialize opponent agent"""
     global _opponent_agent
     if _opponent_agent is None:
+        provider = getattr(_settings, "AI_PROVIDER", "gemini").lower()
+        if provider == "groq":
+            api_key = _settings.GROQ_API_KEY
+            model_name = _settings.GROQ_MODEL
+        else:
+            api_key = _settings.GEMINI_API_KEY
+            model_name = _settings.GEMINI_MODEL
+            
         _opponent_agent = OpponentAgent(
-            api_key=_settings.GEMINI_API_KEY,
+            api_key=api_key,
             rag_retriever=get_rag_retriever(),
-            model_name=_settings.GEMINI_MODEL
+            model_name=model_name,
+            provider=provider
         )
     return _opponent_agent
 
 
 @router.post("/submit", response_model=EvaluationResponse)
 async def submit_argument(
-    request: ArgumentRequest,
-    session_data: Dict = Depends(get_valid_session)
+    request: ArgumentRequest
 ):
     """
     Submit argument and get evaluation + opponent response
     
     Args:
         request: Argument submission request
-        session_data: Valid session data (injected by dependency)
         
     Returns:
         EvaluationResponse with scores, feedback, and opponent response
     """
     try:
+        # Validate session from the request body
+        session_data = await get_valid_session(request.session_id)
         # Get AI agents
         judge = get_judge_agent()
         opponent = get_opponent_agent()

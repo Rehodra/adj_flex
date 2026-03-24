@@ -6,7 +6,7 @@ Handles session creation, retrieval, and management
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Dict, List, Optional
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from app.models.schemas import (
     SessionCreateRequest,
@@ -19,12 +19,9 @@ from app.models.schemas import (
     CaseFacts
 )
 from app.services.scoring_service import ScoringService
-
+from app.db import db
 
 router = APIRouter(tags=["session"])
-
-# In-memory session storage (use Redis/Database in production)
-sessions: Dict[str, Dict] = {}
 
 import os
 import json
@@ -76,19 +73,19 @@ async def create_session(request: SessionCreateRequest):
             "session_id": session_id,
             "case_id": request.case_id,
             "user_id": request.user_id,
-            "mode": request.mode,
-            "current_phase": CourtPhase.OPENING_STATEMENT,
+            "mode": request.mode.value if hasattr(request.mode, 'value') else request.mode,
+            "current_phase": CourtPhase.OPENING_STATEMENT.value,
             "case_facts": case_facts.dict(),
             "arguments": [],
             "total_score": 0.0,
-            "performance_tier": PerformanceTier.LAW_STUDENT,
+            "performance_tier": PerformanceTier.LAW_STUDENT.value,
             "created_at": datetime.utcnow(),
             "last_activity": datetime.utcnow(),
             "difficulty": request.difficulty
         }
         
-        # Store session
-        sessions[session_id] = session_data
+        # Store session in MongoDB
+        await db.db.sessions.insert_one(session_data)
         
         # Return session response
         return SessionResponse(
@@ -125,16 +122,18 @@ async def get_session(session_id: str):
         SessionResponse with current session state
     """
     try:
-        if session_id not in sessions:
+        session_data = await db.db.sessions.find_one({"session_id": session_id})
+        if not session_data:
             raise HTTPException(
                 status_code=404,
                 detail="Session not found"
             )
         
-        session_data = sessions[session_id]
-        
         # Update last activity
-        session_data["last_activity"] = datetime.utcnow()
+        await db.db.sessions.update_one(
+            {"session_id": session_id},
+            {"$set": {"last_activity": datetime.utcnow()}}
+        )
         
         # Calculate current performance tier
         if session_data["arguments"]:
@@ -181,13 +180,13 @@ async def update_session_phase(
         Success response
     """
     try:
-        if session_id not in sessions:
+        session_data = await db.db.sessions.find_one({"session_id": session_id})
+        if not session_data:
             raise HTTPException(
                 status_code=404,
                 detail="Session not found"
             )
         
-        session_data = sessions[session_id]
         old_phase = session_data["current_phase"]
         
         # Validate phase progression
@@ -198,8 +197,13 @@ async def update_session_phase(
             )
         
         # Update phase
-        session_data["current_phase"] = new_phase
-        session_data["last_activity"] = datetime.utcnow()
+        await db.db.sessions.update_one(
+            {"session_id": session_id},
+            {"$set": {
+                "current_phase": new_phase.value if hasattr(new_phase, 'value') else new_phase,
+                "last_activity": datetime.utcnow()
+            }}
+        )
         
         return SuccessResponse(
             message=f"Session phase updated from {old_phase} to {new_phase}",
@@ -231,7 +235,8 @@ async def delete_session(session_id: str):
         Success response
     """
     try:
-        if session_id not in sessions:
+        session_data = await db.db.sessions.find_one({"session_id": session_id})
+        if not session_data:
             raise HTTPException(
                 status_code=404,
                 detail="Session not found"
@@ -240,14 +245,14 @@ async def delete_session(session_id: str):
         # Store session info for response
         session_info = {
             "session_id": session_id,
-            "case_id": sessions[session_id]["case_id"],
-            "user_id": sessions[session_id]["user_id"],
-            "total_arguments": len(sessions[session_id]["arguments"]),
-            "final_score": sessions[session_id]["total_score"]
+            "case_id": session_data["case_id"],
+            "user_id": session_data["user_id"],
+            "total_arguments": len(session_data.get("arguments", [])),
+            "final_score": session_data.get("total_score", 0.0)
         }
         
         # Delete session
-        del sessions[session_id]
+        await db.db.sessions.delete_one({"session_id": session_id})
         
         return SuccessResponse(
             message="Session deleted successfully",
@@ -277,27 +282,28 @@ async def get_user_sessions(user_id: str):
     try:
         user_sessions = []
         
-        for session_id, session_data in sessions.items():
-            if session_data["user_id"] == user_id:
-                # Calculate performance tier
-                if session_data["arguments"]:
-                    avg_score = session_data["total_score"] / len(session_data["arguments"])
-                    performance_tier = ScoringService.get_performance_tier(avg_score)
-                else:
-                    performance_tier = PerformanceTier.LAW_STUDENT
-                
-                session_summary = {
-                    "session_id": session_id,
-                    "case_id": session_data["case_id"],
-                    "mode": session_data["mode"],
-                    "current_phase": session_data["current_phase"],
-                    "total_arguments": len(session_data["arguments"]),
-                    "score": session_data["total_score"],
-                    "performance_tier": performance_tier,
-                    "created_at": session_data["created_at"],
-                    "last_activity": session_data["last_activity"]
-                }
-                user_sessions.append(session_summary)
+        cursor = db.db.sessions.find({"user_id": user_id})
+        async for session_data in cursor:
+            session_id = session_data["session_id"]
+            # Calculate performance tier
+            if session_data.get("arguments"):
+                avg_score = session_data.get("total_score", 0.0) / len(session_data["arguments"])
+                performance_tier = ScoringService.get_performance_tier(avg_score)
+            else:
+                performance_tier = PerformanceTier.LAW_STUDENT
+            
+            session_summary = {
+                "session_id": session_id,
+                "case_id": session_data["case_id"],
+                "mode": session_data["mode"],
+                "current_phase": session_data["current_phase"],
+                "total_arguments": len(session_data.get("arguments", [])),
+                "score": session_data.get("total_score", 0.0),
+                "performance_tier": performance_tier,
+                "created_at": session_data["created_at"],
+                "last_activity": session_data["last_activity"]
+            }
+            user_sessions.append(session_summary)
         
         # Sort by last activity (most recent first)
         user_sessions.sort(key=lambda x: x["last_activity"], reverse=True)
@@ -363,22 +369,28 @@ async def get_session_stats():
         Session statistics
     """
     try:
-        total_sessions = len(sessions)
-        active_sessions = sum(
-            1 for session in sessions.values()
-            if (datetime.utcnow() - session["last_activity"]).seconds < 3600  # Active in last hour
-        )
+        total_sessions = await db.db.sessions.count_documents({})
         
-        # Calculate statistics by mode
+        one_hour_ago = datetime.utcnow() - timedelta(hours=1)
+        active_sessions = await db.db.sessions.count_documents({
+            "last_activity": {"$gte": one_hour_ago}
+        })
+        
+        # Calculate statistics by mode (Could use aggregation framework for efficiency)
         mode_stats = {}
         for mode in GameMode:
-            mode_sessions = [
-                session for session in sessions.values()
-                if session["mode"] == mode
+            mode_count = await db.db.sessions.count_documents({"mode": mode.value})
+            # To get average score easily, aggregate
+            pipeline = [
+                {"$match": {"mode": mode.value}},
+                {"$group": {"_id": None, "avg_score": {"$avg": "$total_score"}}}
             ]
+            agg_result = await db.db.sessions.aggregate(pipeline).to_list(length=1)
+            avg_score = agg_result[0]["avg_score"] if agg_result else 0.0
+            
             mode_stats[mode.value] = {
-                "total": len(mode_sessions),
-                "average_score": sum(s["total_score"] for s in mode_sessions) / len(mode_sessions) if mode_sessions else 0
+                "total": mode_count,
+                "average_score": avg_score
             }
         
         return {
@@ -467,12 +479,16 @@ async def get_valid_session(session_id: str) -> Dict:
     Raises:
         HTTPException: If session not found
     """
-    if session_id not in sessions:
+    session_data = await db.db.sessions.find_one({"session_id": session_id})
+    if not session_data:
         raise HTTPException(
             status_code=404,
             detail="Session not found"
         )
     
     # Update last activity
-    sessions[session_id]["last_activity"] = datetime.utcnow()
-    return sessions[session_id]
+    await db.db.sessions.update_one(
+        {"session_id": session_id},
+        {"$set": {"last_activity": datetime.utcnow()}}
+    )
+    return session_data

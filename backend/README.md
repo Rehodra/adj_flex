@@ -41,10 +41,10 @@ backend/
 
 ## 📋 Prerequisites
 
-- Python 3.8 or higher
-- UV (Python package manager) - install with `pip install uv`
-- Google Gemini API Key
-- Git
+- **Python 3.10**: Install from [python.org](https://www.python.org/downloads/release/python-310/). Ensure Python is added to your system PATH.
+- **UV (Python package manager)**: Install with `pip install uv` after setting up Python.
+- **Google Gemini API Key**: Required for AI functionality.
+- **Git**: Install from [git-scm.com](https://git-scm.com/).
 
 ## 🚀 Quick Start
 
@@ -64,14 +64,15 @@ start.bat
 ```
 
 What `start.bat` does:
-- Uses existing virtual environment (`.venv-new` or `.venv`)
-- Creates `.venv` with `uv venv .venv` if none exists
-- Activates the virtual environment
-- Installs dependencies from `requirements.txt`
+- Verifies Python 3.10 is installed and available in PATH.
+- Creates a virtual environment (`.venv-new`) if none exists.
+- Activates the virtual environment.
+- Upgrades `pip` and installs dependencies from `requirements.txt`.
+- Ensures core backend packages are installed.
 
 How to run it:
-- Recommended: Open terminal in `backend` and run `start.bat` (keeps environment active in that terminal)
-- Optional: Double-click `start.bat` in File Explorer (works for setup/install, but activated environment will not remain available in your current VS Code terminal)
+- **Recommended**: Open terminal in `backend` and run `start.bat` (keeps environment active in that terminal).
+- **Optional**: Double-click `start.bat` in File Explorer (works for setup/install, but activated environment will not remain available in your current VS Code terminal).
 
 ### 3. Windows One-Click Run (run.bat)
 
@@ -82,14 +83,37 @@ run.bat
 ```
 
 What `run.bat` does:
-- Calls `start.bat` to prepare environment and install dependencies
-- Starts FastAPI with hot reload on port 8000
+- Calls `start.bat` to prepare environment and install dependencies.
+- Starts FastAPI with hot reload on port 8000.
 
 How to run it:
-- Recommended: Open terminal in `backend` and run `run.bat`
-- Optional: Double-click `run.bat` in File Explorer for quick local startup
+- **Recommended**: Open terminal in `backend` and run `run.bat`.
+- **Optional**: Double-click `run.bat` in File Explorer for quick local startup.
 
-### 4. Create Virtual Environment with UV (manual alternative)
+### 4. Troubleshooting
+
+If you encounter issues:
+
+1. **Python not found**:
+   - Ensure Python 3.10 is installed and added to your system PATH.
+   - Verify by running `python --version` in your terminal.
+
+2. **Dependency installation fails**:
+   - Check your internet connection.
+   - Ensure `requirements.txt` exists in the `backend` folder.
+
+3. **Uvicorn not found**:
+   - Ensure `uvicorn` is installed in the virtual environment.
+   - Run `pip install uvicorn` after activating the virtual environment.
+
+4. **Permission issues**:
+   - Run the terminal as Administrator.
+
+5. **Other issues**:
+   - Check the error messages in the terminal.
+   - Refer to the [API Documentation](http://localhost:8000/docs) for more details.
+
+### 5. Create Virtual Environment with UV (manual alternative)
 
 ```bash
 # Option 1: Use the setup script (recommended)
@@ -109,7 +133,7 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
-### 5. Environment Configuration
+### 3. Environment Configuration
 
 ```bash
 # Copy environment template
@@ -124,7 +148,7 @@ Add your Google Gemini API Key:
 GOOGLE_API_KEY=your_gemini_api_key_here
 ```
 
-### 6. Index Legal Documents
+### 4. Index Legal Documents
 
 ```bash
 # Run the indexing script
@@ -134,7 +158,7 @@ uv run python scripts/index_legal_docs.py
 uv run python scripts/index_legal_docs.py --test --test-query "What is murder?"
 ```
 
-### 7. Start the Server
+### 5. Start the Server
 
 ```bash
 # Development mode
@@ -144,7 +168,7 @@ uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-### 8. Access the API
+### 6. Access the API
 
 - **API Documentation**: http://localhost:8000/docs
 - **ReDoc Documentation**: http://localhost:8000/redoc

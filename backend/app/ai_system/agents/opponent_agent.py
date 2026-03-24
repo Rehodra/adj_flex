@@ -22,16 +22,17 @@ class OpponentAgent(BaseAgent):
     AI Opponent Lawyer that generates counter-arguments using RAG-retrieved legal provisions
     """
     
-    def __init__(self, api_key: str = None, rag_retriever: RAGRetriever = None, model_name: str = "gemini-2.0-flash"):
+    def __init__(self, api_key: str = None, rag_retriever: RAGRetriever = None, model_name: str = "gemini-1.5-flash", provider: str = "gemini"):
         """
         Initialize Opponent Agent
         
         Args:
-            api_key: Google Gemini API key
+            api_key: AI provider API key
             rag_retriever: RAG system instance
-            model_name: Gemini model name
+            model_name: Model name
+            provider: 'gemini' or 'groq'
         """
-        super().__init__(api_key, model_name)
+        super().__init__(api_key, model_name, provider)
         self.rag_retriever = rag_retriever
         self.current_personality = "experienced"  # Can be changed for variety
         self.current_strategy = "methodical"  # Can be changed based on case

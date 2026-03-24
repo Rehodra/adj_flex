@@ -22,6 +22,16 @@ class Settings(BaseSettings):
     DEBUG: bool = Field(default=False, env="DEBUG")
     SECRET_KEY: str = Field(default="your-secret-key-change-this", env="SECRET_KEY")
     
+    # Sarvam AI
+    SARVAM_API_KEY: str = Field(default="", env="SARVAM_API_KEY")
+    
+    # MongoDB
+    MONGODB_URI: str = Field(default="mongodb://localhost:27017", env="MONGODB_URI")
+    
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = Field(default="", env="GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET: str = Field(default="", env="GOOGLE_CLIENT_SECRET")
+    
     # CORS
     CORS_ORIGINS: List[str] = Field(
         default=["http://localhost:3000", "http://localhost:5173"],

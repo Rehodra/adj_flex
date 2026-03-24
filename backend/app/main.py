@@ -10,11 +10,16 @@ from contextlib import asynccontextmanager
 import uvicorn
 from datetime import datetime
 import json
+import os # Added for os.path.exists check
+import logging # Added for logger
 
 from app.config import get_settings
-from app.api.routes import session, argument, cases
+from app.api.routes import cases, session, argument, audio, auth
+from app.db import connect_to_mongo, close_mongo_connection
 from app.models.schemas import HealthResponse, ErrorResponse
 
+# Initialize logger
+logger = logging.getLogger(__name__)
 
 # Application lifespan management
 @asynccontextmanager
@@ -29,11 +34,20 @@ async def lifespan(app: FastAPI):
     print(f"⚙️ Environment: {settings.ENV}")
     print(f"🔑 Google Gemini API Key: {'✅ Configured' if settings.GEMINI_API_KEY else '❌ Missing'}")
     print(f"📊 Vector DB Path: {settings.VECTOR_DB_PATH}")
+
+    logger.info("Initializing vector database...")
+    if not os.path.exists(settings.VECTOR_DB_PATH):
+        logger.warning(f"Vector DB path {settings.VECTOR_DB_PATH} not found.")
     
+    # Initialize MongoDB
+    await connect_to_mongo()
+        
     yield
     
     # Shutdown
     print("🛑 Shutting down AI Legal Courtroom Simulator API...")
+    logger.info("Shutting down application...")
+    await close_mongo_connection()
 
 
 # Create FastAPI application
@@ -57,10 +71,12 @@ app.add_middleware(
 )
 
 
-# Include routers
+# Include API routers
 app.include_router(session.router, prefix="/api/session", tags=["session"])
 app.include_router(argument.router, prefix="/api/argument", tags=["argument"])
 app.include_router(cases.router, prefix="/api/cases", tags=["cases"])
+app.include_router(audio.router, prefix="/api/audio", tags=["audio"])
+app.include_router(auth.router, prefix="/api", tags=["auth"])
 
 
 # Root endpoint
