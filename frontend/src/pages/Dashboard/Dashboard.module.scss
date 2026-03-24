@@ -1,0 +1,128 @@
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    
+    h1 {
+      font-size: 2.2rem;
+      color: #0f172a;
+      font-weight: 800;
+    }
+  }
+
+  .casesGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: flex-start;
+  }
+}
+
+.caseCard {
+  width: calc(33.333% - 1.35rem);
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  .heading {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1e293b;
+    line-height: 1.4;
+  }
+
+  .metaData {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    
+    .type {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+    }
+    .difficulty {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #e53e3e;
+      &.easy { color: #10b981; }
+      &.medium { color: #f59e0b; }
+      &.hard { color: #ef4444; }
+    }
+  }
+
+  .description {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  .tags {
+    margin-bottom: 2rem;
+    
+    p {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      color: #334155;
+    }
+    
+    .tagList {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      
+      span {
+        background-color: #e0e7ff;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        color: #4f46e5;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .playButton {
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background-color: #0f172a;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: #1e293b;
+    }
+  }
+}
