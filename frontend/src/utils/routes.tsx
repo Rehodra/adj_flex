@@ -1,14 +1,15 @@
 import { RouteObject } from "react-router-dom";
-import Authentication from "../pages/Authentication";
+//import Authentication from "../pages/Authentication";
 import Login from "../pages/Login/Login";
-import ProtectedRoute from "../components/ProtectedRoute";
+//import ProtectedRoute from "../components/ProtectedRoute";
 import IndividualSearchPage from "../pages/IndividualSearchPage/IndividualSearchPage";
-import Main from "../pages/Main";
+//import Main from "../pages/Main";
 import Search from "../pages/Search/Search";
 import User from "../pages/User/User";
 import JudgementSearch from "../pages/judgmentSearch/judgmentSearch";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Simulator from "../pages/Simulator/Simulator";
+import LandingPage from "../pages/LandingPage/LandingPage";
 
 const routes : RouteObject[] = [
     {
@@ -29,7 +30,7 @@ const routes : RouteObject[] = [
     },
     {
         path : "/",
-        element: <Login />
+        element: <LandingPage/>
     }
     ,
     {
