@@ -1,190 +1,395 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion";
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 import styles from "./LandingPage.module.scss";
 
-export default function LandingPage() {
-  return (
-    <div className={styles.container}>
-      {/* NAVBAR */}
-      <nav className={styles.navbar}>
-        <div className={styles.logoSection}>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg"
-            alt="India Emblem"
-            className={styles.logo}
-          />
-          <span className={styles.title}>e-Court India</span>
-        </div>
+const IconShield = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+);
 
-        <div className={styles.navLinks}>
-          <Link to="/Dashboard">Dashboard</Link>
-          <Link to="/cases">Cases</Link>
-          <Link to="/judgementsearch">Judgments</Link>
-          <Link to="/contact">Contact</Link>
-        </div>
+const IconBookOpen = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+);
 
-        <Link to="/authentication">
-          <button className={styles.loginBtn}>Login</button>
-        </Link>
-      </nav>
+const IconClock = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+);
 
-      {/* HERO SECTION */}
-      <section className={styles.hero}>
-        <h1>Smart & Transparent Courtroom System</h1>
-        <p>
-          Access judgments, hearings, case files, and digital court records in
-          one unified platform.
-        </p>
+const IconArrowRight = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+);
 
-        <div className={styles.heroActions}>
-          <Link to="/cases">
-            <button className={styles.primaryBtn}>Search Cases</button>
-          </Link>
+const IconCheckCircle = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+);
 
-          <Link to="/judgementsearch">
-            <button className={styles.secondaryBtn}>View Judgments</button>
-          </Link>
-        </div>
-      </section>
+const IconDatabase = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+);
 
-      {/* FEATURES */}
-      <section className={styles.features}>
-        <h2>Core Features</h2>
+const IconActivity = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+);
 
-        <div className={styles.featureGrid}>
-          <div className={styles.featureCard}>
-            <h3>Case Search</h3>
-            <p>Find case status, FIR details, and related court documents.</p>
-          </div>
+const IconScales = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3v18" />
+    <path d="M3 21h18" />
+    <path d="M12 6H5l-1 5a5 5 0 0 0 10 0l-1-5" />
+    <path d="M12 6h7l1 5a5 5 0 0 1-10 0l1-5" />
+  </svg>
+);
 
-          <div className={styles.featureCard}>
-            <h3>Judgment Archive</h3>
-            <p>Explore detailed judgments from major courts.</p>
-          </div>
+const IconGavel = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m14 13-7.5 7.5c-.8.8-2.1.8-2.9 0l-1.1-1.1c-.8-.8-.8-2.1 0-2.9L10 9" />
+    <path d="m14 6 4 4" />
+    <path d="M21 7 17 3" />
+    <path d="m21 7-4-4-2 2 4 4z" />
+    <path d="m17 11 4-4-2-2-4 4z" />
+    <path d="M18 12 12 6" />
+  </svg>
+);
 
-          <div className={styles.featureCard}>
-            <h3>Hearing Tracker</h3>
-            <p>Track upcoming hearings and daily court orders.</p>
-          </div>
-        </div>
-      </section>
+const IconLandmark = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 22h18" />
+    <path d="M6 18v-7" />
+    <path d="M10 18v-7" />
+    <path d="M14 18v-7" />
+    <path d="M18 18v-7" />
+    <path d="M12 2l8 5H4z" />
+  </svg>
+);
 
-      {/* FOOTER */}
-      <footer className={styles.footer}>
-        © {new Date().getFullYear()} e-Court India · All Rights Reserved
-      </footer>
-    </div>
-  );
+const IconChevronLeft = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+);
+
+const IconQuill = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14.5 2C10 6.5 8 13 8 13L4 17l4 4 4-4s6.5-2 11-6.5C23 6 22 2 22 2s-4-1-7.5 0z" />
+    <path d="M8 13l3.5 3.5" />
+    <path d="M12.5 5.5l5 5" />
+  </svg>
+);
+
+const IconLink = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+  </svg>
+);
+
+const IconGlobe = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="2" y1="12" x2="22" y2="12" />
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+);
+
+const IconGraph = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 3 3 21 21 21" />
+    <polyline points="3 17 9 11 13 15 21 7" />
+    <line x1="21" y1="14" x2="21" y2="7" />
+    <line x1="14" y1="7" x2="21" y2="7" />
+  </svg>
+);
+
+const IconSafe = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+);
+
+const IconUsers = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+);
+
+const StatCounter = ({ endValue, suffix = '' }: { endValue: number, suffix?: string }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (inView) {
+      let startTimestamp: number;
+      const duration = 2000;
+      const step = (timestamp: number) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 4); // easeOutQuart
+        setCount(Math.floor(ease * endValue));
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+  }, [inView, endValue]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
 }
 
+const LandingPage = () => {
+  const { scrollY } = useScroll();
+  const parallaxY = useTransform(scrollY, [0, 800], [0, 100]); // Parallax slow movement
+  
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.15 }
+    }
+  };
 
-// import React from "react";
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+  };
 
-// const LandingPage: React.FC = () => {
-//     return (
-//         <div className="text-white min-h-screen w-full"
-//             style={{
-//                 background: `
-//                     linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.5)), 
-//                     url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920') 
-//                     center/cover no-repeat
-//                 `
-//             }}
-//         >
+  return (
+    <div className={styles.container}>
+      <Navbar />
 
-//             {/* NAVBAR */}
-//             <nav className="w-full bg-black/40 backdrop-blur-md px-10 py-4 flex justify-between items-center">
-//                 <div className="flex items-center gap-3">
-//                     <img
-//                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Scales_of_Justice.svg/1200px-Scales_of_Justice.svg.png"
-//                         alt="Court Emblem"
-//                         className="w-10 h-10"
-//                     />
-//                     <h1 className="text-2xl font-bold tracking-wide">CourtRoom Portal</h1>
-//                 </div>
+      {/* HERO SECTION */}
+      <section className={`${styles.section} ${styles.hero}`}>
+        <div className={styles.heroContent}>
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <span className={styles.badge}>NEXT-GEN LEGAL TECHNOLOGY</span>
+            <h1>Smart, Transparent & AI-Powered <br/><span>Courtroom Simulation</span></h1>
+            <p>
+              Train, argue, and win with confidence. Adjournment.ai simulates real courtroom scenarios using advanced AI—helping law students and professionals master legal reasoning, argument structure, and evidence-based advocacy.
+            </p>
+            <p className={styles.subText}>
+              Built for aspiring lawyers, law students, and legal professionals preparing for real-world litigation.
+            </p>
 
-//                 <div className="flex gap-6 text-lg">
-//                     <a href="/" className="hover:text-yellow-400">Home</a>
-//                     <a href="#features" className="hover:text-yellow-400">Features</a>
-//                     <a href="#contact" className="hover:text-yellow-400">Contact</a>
-//                 </div>
-//             </nav>
+            <div className={styles.heroActions}>
+              <Link to="/cases">
+                <button className={styles.primaryBtn}>
+                  Start Simulation
+                </button>
+              </Link>
+              <Link to="/judgementsearch">
+                <button className={styles.secondaryBtn}>Explore Judgments</button>
+              </Link>
+            </div>
 
-//             {/* HERO SECTION */}
-//             <section className="flex flex-col items-center text-center mt-24 px-6">
-//                 <h2 className="text-5xl font-bold drop-shadow-lg">
-//                     Digital Justice, Simplified.
-//                 </h2>
+            <div className={styles.trustBanner}>
+              <p className={styles.trustText}>Trusted by 5,000+ learners and legal professionals</p>
+              <div className={styles.trustItems}>
+                <span>Real Courtroom Scenarios</span>
+                <span className={styles.bullet}>•</span>
+                <span>AI-Powered Judge Feedback</span>
+                <span className={styles.bullet}>•</span>
+                <span>Instant Performance Analysis</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+        <div className={styles.heroVisual}>
+          <motion.div 
+            className={styles.mockupContainer}
+            style={{ y: parallaxY }} // Subtle parallax
+            initial={{ opacity: 0, y: 40, rotateX: 5 }}
+            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            transition={{ delay: 0.3, duration: 1, type: "spring", stiffness: 60 }}
+          >
+            <div className={styles.mockupHeader}>
+              <div className={styles.mockupActions}>
+                <div className={styles.dot} style={{background: '#ff5f56'}} />
+                <div className={styles.dot} style={{background: '#ffbd2e'}} />
+                <div className={styles.dot} style={{background: '#27c93f'}} />
+              </div>
+              <div className={styles.mockupTitle}>Simulator • State vs. Mehta</div>
+            </div>
+            
+            <div className={styles.mockupBody}>
+              <div className={styles.mockupChat}>
+                <div className={styles.chatMessage + ' ' + styles.userMsg}>
+                  Your Honor, Exhibit A clearly contradicts the witness timeline.
+                </div>
+                <div className={styles.chatMessage + ' ' + styles.judgeMsg}>
+                  <div className={styles.judgeMsgHeader}>
+                    <span>AI Judge Feedback</span>
+                    <span className={styles.badgeLabel}>Good Reasoning</span>
+                  </div>
+                  Valid point. However, cite the relevant section of the Evidence Act to substantiate this claim.
+                </div>
+              </div>
+              
+              <div className={styles.mockupScores}>
+                <div className={styles.scoreRow}>
+                  <div className={styles.scoreLabel}>Legal Accuracy</div>
+                  <div className={styles.scoreBar}><div style={{width: '78%', background: '#3b82f6'}}></div></div>
+                  <div className={styles.scoreVal}>78%</div>
+                </div>
+                <div className={styles.scoreRow}>
+                  <div className={styles.scoreLabel}>Evidence Usage</div>
+                  <div className={styles.scoreBar}><div style={{width: '92%', background: '#10b981'}}></div></div>
+                  <div className={styles.scoreVal}>92%</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-//                 <p className="mt-4 text-xl max-w-2xl">
-//                     A secure and transparent court management system designed for case tracking,
-//                     hearing schedules, document management, judge dashboards, and more.
-//                 </p>
+      {/* FEATURES SECTION */}
+      <section className={styles.featuresSectionWrapper}>
+        <motion.div 
+          className={styles.features}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+        >
+          <div className={styles.sectionHeader}>
+            <h2>Engineered for <span className={styles.serifText}>Legal Excellence</span></h2>
+            <p>Our platform combines cutting-edge AI with rigorous legal standards to provide an unparalleled courtroom simulation experience.</p>
+          </div>
 
-//                 <div className="mt-8 flex gap-6">
-//                     <a
-//                         href="#features"
-//                         className="bg-yellow-500 text-black px-8 py-3 font-bold rounded-lg hover:bg-yellow-400 transition"
-//                     >
-//                         Explore Features
-//                     </a>
+          <div className={styles.featureGrid}>
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#eff6ff', '--card-color': '#007BFF' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconScales size={28} /></div>
+              <h3>Realistic Case Scenarios</h3>
+              <p>Train with meticulously crafted case files that reflect real Indian courtroom dynamics and legal complexities.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
 
-//                     <a
-//                         href="#login"
-//                         className="border border-gray-300 px-8 py-3 rounded-lg hover:bg-gray-100 hover:text-black transition"
-//                     >
-//                         Login
-//                     </a>
-//                 </div>
-//             </section>
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#FEF3C7', '--card-color': '#D97706' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconLandmark size={28} /></div>
+              <h3>Intelligent Legal Authority</h3>
+              <p>Instantly access and test your arguments against a vast, AI-driven database of precedents and penal sections.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
 
-//             {/* FEATURES */}
-//             <section id="features" className="mt-32 px-10 pb-12">
-//                 <h3 className="text-4xl font-bold text-center mb-10">Core Features</h3>
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#FEE2E2', '--card-color': '#DC2626' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconGavel size={28} /></div>
+              <h3>Precision AI Judge Feedback</h3>
+              <p>Receive comprehensive, real-time evaluations from our AI Judge on argument structure and advocacy skills.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
 
-//                 <div className="grid md:grid-cols-3 gap-10">
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#F3E8FF', '--card-color': '#9333EA' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconQuill size={28} /></div>
+              <h3>Drafting & Pleadings AI</h3>
+              <p>Generate high-precision drafts for petitions, affidavits, and legal notices seamlessly tailored to Indian formats.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
 
-//                     {/* Feature Card */}
-//                     <div className="bg-black/40 p-8 rounded-xl border border-white/20 backdrop-blur-md">
-//                         <img
-//                             src="https://cdn-icons-png.flaticon.com/512/1048/1048945.png"
-//                             className="w-16 mb-4"
-//                             alt="Case Management"
-//                         />
-//                         <h4 className="text-2xl font-semibold">Case Management</h4>
-//                         <p className="mt-3">
-//                             Track case status, documents, and updates with complete transparency.
-//                         </p>
-//                     </div>
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#CCFBF1', '--card-color': '#0D9488' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconLink size={28} /></div>
+              <h3>Citations & Precedent Mapping</h3>
+              <p>Instantly link your arguments to relevant Supreme Court and High Court citations with automated verification.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
 
-//                     <div className="bg-black/40 p-8 rounded-xl border border-white/20 backdrop-blur-md">
-//                         <img
-//                             src="https://cdn-icons-png.flaticon.com/512/2991/2991109.png"
-//                             className="w-16 mb-4"
-//                             alt="Hearing Scheduler"
-//                         />
-//                         <h4 className="text-2xl font-semibold">Hearing Scheduler</h4>
-//                         <p className="mt-3">
-//                             Automated hearing dates, judge allocation, and courtroom assignment.
-//                         </p>
-//                     </div>
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#E0E7FF', '--card-color': '#4F46E5' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconGlobe size={28} /></div>
+              <h3>Multilingual Support</h3>
+              <p>Seamlessly process and translate legal documents with full support for all major Indian regional languages.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
 
-//                     <div className="bg-black/40 p-8 rounded-xl border border-white/20 backdrop-blur-md">
-//                         <img
-//                             src="https://cdn-icons-png.flaticon.com/512/2885/2885383.png"
-//                             className="w-16 mb-4"
-//                             alt="Document Archive"
-//                         />
-//                         <h4 className="text-2xl font-semibold">Digital Document Archive</h4>
-//                         <p className="mt-3">
-//                             Access court orders, FIRs, affidavits, and case files securely.
-//                         </p>
-//                     </div>
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#FFEDD5', '--card-color': '#EA580C' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconGraph size={28} /></div>
+              <h3>Strategic Case Risk Analysis</h3>
+              <p>Predictive AI modeling to reliably assess probability of success based on historical judge and counsel trends.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
 
-//                 </div>
-//             </section>
-//         </div>
-//     );
-// };
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#D1FAE5', '--card-color': '#059669' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconSafe size={28} /></div>
+              <h3>Evidence Management Vault</h3>
+              <p>A secure, encrypted workspace to efficiently organize your exhibits, digital evidence, and witness statements.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
 
-// export default LandingPage;
+            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#FCE7F3', '--card-color': '#DB2777' } as React.CSSProperties}>
+              <div className={styles.iconWrapper}><IconUsers size={28} /></div>
+              <h3>Collaborative Virtual Chambers</h3>
+              <p>Work in real-time with your legal team, seamlessly leave annotations, and conduct robust mock-trials.</p>
+              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* PREMIUM STATS SECTION */}
+      <motion.section 
+        className={`${styles.section} ${styles.premiumStatsSection}`}
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <div className={styles.statsGlowContainer}>
+          <div className={styles.statsGlow} />
+        </div>
+        
+        <div className={styles.statsHeader}>
+          <h2>Data-Driven Performance. <br/><span>Proven Results.</span></h2>
+          <p>Built for the modern legal professional, tested on thousands of real-world scenarios.</p>
+        </div>
+        
+        <div className={styles.statsGrid}>
+          {/* Card 1 */}
+          <div className={styles.statCard}>
+            <div className={styles.statIconWrapper}>
+              <IconDatabase size={24} />
+            </div>
+            <div className={styles.statDivider} />
+            <h4 className={styles.statNumber}>
+              <StatCounter endValue={5000} suffix="+" />
+            </h4>
+            <span className={styles.statLabel}>Judgments Indexed</span>
+          </div>
+          
+          {/* Card 2 */}
+          <div className={styles.statCard}>
+            <div className={styles.statIconWrapper}>
+              <IconCheckCircle size={24} />
+            </div>
+            <div className={styles.statDivider} />
+            <h4 className={styles.statNumber}>
+              <StatCounter endValue={98} suffix="%" />
+            </h4>
+            <span className={styles.statLabel}>Accuracy Rate</span>
+          </div>
+
+          {/* Card 3 */}
+          <div className={styles.statCard}>
+            <div className={styles.statIconWrapper}>
+              <IconActivity size={24} />
+            </div>
+            <div className={styles.statDivider} />
+            <h4 className={styles.statNumber}>
+              <StatCounter endValue={10} suffix="k+" />
+            </h4>
+            <span className={styles.statLabel}>Simulations Run</span>
+          </div>
+        </div>
+      </motion.section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default LandingPage;

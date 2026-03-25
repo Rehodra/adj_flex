@@ -1,7 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from './Simulator.module.scss';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
+import Navbar from '../../components/Navbar/Navbar';
+
+const IconMic = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+);
+
+const IconMicOff = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V5a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+);
+
+const IconSend = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+);
+
+const IconChevronDown = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="6 9 12 15 18 9"/></svg>
+);
+
+const IconChevronUp = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="18 15 12 9 6 15"/></svg>
+);
+
+const IconClock = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+);
+
+const IconLogout = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+);
+
+const IconShieldAlert = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+);
 
 // Interfaces matching backend schemas
 interface CaseFacts {
@@ -26,6 +60,7 @@ interface ChatMessage {
 
 const Simulator = () => {
   const { caseId } = useParams<{ caseId: string }>();
+  const navigate = useNavigate();
   const [sessionId, setSessionId] = useState<string>('');
   const [caseFacts, setCaseFacts] = useState<CaseFacts | null>(null);
   const [phase, setPhase] = useState<string>('opening_statement');
@@ -41,6 +76,22 @@ const Simulator = () => {
   const audioChunksRef = useRef<Blob[]>([]);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Realistic Courtroom Time
+  const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes in seconds
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   // 1. Initialize Session on mount
   useEffect(() => {
     const initSession = async () => {
@@ -48,7 +99,7 @@ const Simulator = () => {
         const res = await axios.post("http://localhost:8000/api/session/create", {
           case_id: caseId,
           user_id: "demo_user_001",
-          mode: "criminal" // Default, could be dynamic
+          mode: "criminal" 
         });
         
         setSessionId(res.data.session_id);
@@ -103,7 +154,7 @@ const Simulator = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      setAudioStatus('Translating with Sarvam AI...');
+      setAudioStatus('Processing audio...');
     }
   };
 
@@ -116,7 +167,6 @@ const Simulator = () => {
     formData.append('file', audioBlob, 'recording.wav');
 
     try {
-      // Calling our newly integrated Sarvam STT route
       const res = await axios.post("http://localhost:8000/api/audio/speech-to-text", formData);
       if (res.data.transcript) {
         setInputText(res.data.transcript);
@@ -124,7 +174,7 @@ const Simulator = () => {
         setTimeout(() => setAudioStatus(''), 3000);
       }
     } catch (err) {
-      console.error('Sarvam AI Translation failed', err);
+      console.error('STT failed', err);
       setAudioStatus('Translation failed.');
     }
   };
@@ -133,7 +183,6 @@ const Simulator = () => {
   const submitArgument = async () => {
     if (!inputText.trim() || !sessionId) return;
     
-    // Auto-detect sections from text (e.g. "Section 302") rough regex for demo
     const rx = /section\s*(\d+[A-Z]?)/gi;
     const cited: string[] = [];
     let match;
@@ -147,7 +196,6 @@ const Simulator = () => {
     setLoading(true);
 
     try {
-      // Map backend phase string to exact Enum required by Pydantic
       let mappedPhase = phase;
       if (mappedPhase === "opening_statements") mappedPhase = "opening_statement";
       if (mappedPhase === "closing_statements") mappedPhase = "closing_statement";
@@ -169,7 +217,6 @@ const Simulator = () => {
         opponent_response 
       } = res.data;
 
-      // Add Judge Evaluation
       setMessages(prev => [...prev, {
         id: Date.now().toString() + '_judge',
         type: 'judge',
@@ -182,7 +229,6 @@ const Simulator = () => {
         }
       }]);
 
-      // Add Opponent Counter
       if (opponent_response) {
         setMessages(prev => [...prev, {
           id: Date.now().toString() + '_opp',
@@ -202,92 +248,196 @@ const Simulator = () => {
     }
   };
 
-  if (!caseFacts) return <div className={styles.simulatorContainer} style={{padding: '3rem'}}>Loading Courtroom...</div>;
+  const terminateSession = () => {
+    if (window.confirm("Are you sure you want to terminate this courtroom session? Any unsaved progress will be lost.")) {
+      navigate('/cases');
+    }
+  };
+
+  if (!caseFacts) return (
+    <div className={styles.loadingContainer}>
+      <motion.div 
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+        className={styles.loader}
+      />
+      <p>Consulting Judicial Records...</p>
+    </div>
+  );
 
   return (
-    <div className={styles.simulatorContainer}>
+    <div className={styles.fullPage}>
+      <Navbar />
       
-      {/* LEFT PANE - CASE FACTS */}
-      <div className={styles.leftPane}>
-        <h2>{caseFacts.title}</h2>
-        <div className={styles.meta}>
-          <span className={styles.type}>{caseFacts.type} CASE</span>
-          <span className={styles.phase}>{phase.replace('_', ' ')} phase</span>
+      <div className={styles.simulatorContainer}>
+        
+        {/* LEFT PANE - CASE FACTS */}
+        <div className={styles.leftPane}>
+          <div className={styles.caseHeader}>
+            <h2>{caseFacts.title}</h2>
+            <div className={styles.meta}>
+              <span className={styles.type}>{caseFacts.type}</span>
+              <span className={styles.phaseBadge}>{phase.replace('_', ' ').toUpperCase()}</span>
+            </div>
+          </div>
+
+          <div className={styles.paneScroll}>
+            <div className={styles.section}>
+              <h3><IconShieldAlert size={18} /> Brief Facts</h3>
+              <p>{caseFacts.facts}</p>
+            </div>
+
+            <div className={styles.section}>
+              <h3>Evidence & Exhibits</h3>
+              <ul className={styles.evidenceList}>
+                {caseFacts.evidence?.map((item, idx) => (
+                  <li key={idx}><span className={styles.bullet}>•</span> {item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className={styles.sideControls}>
+             <div className={styles.timer}>
+                <IconClock size={16} />
+                <span>Session Time Remaining: <strong>{formatTime(timeLeft)}</strong></span>
+             </div>
+             <button className={styles.terminateBtn} onClick={terminateSession}>
+                <IconLogout size={16} /> Terminate Session
+             </button>
+          </div>
         </div>
 
-        <div className={styles.section}>
-          <h3>Brief Facts</h3>
-          <p>{caseFacts.facts}</p>
-        </div>
-
-        <div className={styles.section}>
-          <h3>Evidence</h3>
-          <ul>
-            {caseFacts.evidence?.map((item, idx) => (
-              <li key={idx}>{item}</li>
+        {/* RIGHT PANE - SIMULATOR CHAT */}
+        <div className={styles.rightPane}>
+          <div className={styles.chatFeed}>
+            {messages.map((m) => (
+              <div key={m.id} className={`${styles.messageCard} ${styles[m.type]}`}>
+                 {m.type === 'user' && <div className={styles.role}>Your Argument</div>}
+                 {m.type === 'opponent' && <div className={styles.role}>Opposing Counsel</div>}
+                 
+                 {m.type === 'judge' ? (
+                   <JudgeResponse m={m} />
+                 ) : (
+                   <div className={styles.messageText}>{m.text}</div>
+                 )}
+              </div>
             ))}
-          </ul>
-        </div>
-      </div>
+            {loading && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className={styles.typingIndicator}
+              >
+                The Judge is analyzing your argument...
+              </motion.div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
 
-      {/* RIGHT PANE - SIMULATOR CHAT */}
-      <div className={styles.rightPane}>
-        <div className={styles.chatFeed}>
-          {messages.map((m) => (
-            <div key={m.id} className={`${styles.messageCard} ${styles[m.type]}`}>
-               {m.type === 'user' && <div className={styles.role}>Your Argument</div>}
-               {m.type === 'judge' && <div className={styles.role}>The Honorable Judge (AI)</div>}
-               {m.type === 'opponent' && <div className={styles.role}>Opposing Counsel (AI)</div>}
-               
-               <div style={{ whiteSpace: 'pre-wrap' }}>{m.text}</div>
-               
-               {m.scores && (
-                 <div className={styles.scores}>
-                   <span>Legal Accuracy: {m.scores.legal}/100</span>
-                   <span>Reasoning: {m.scores.reasoning}/100</span>
-                   <span>Overall: {m.scores.overall}/100</span>
-                 </div>
-               )}
+          <div className={styles.inputArea}>
+            <AnimatePresence>
+              {audioStatus && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className={styles.statusText}
+                >
+                  {audioStatus}
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
+            <div className={styles.controls}>
+              <button 
+                className={`${styles.recordBtn} ${isRecording ? styles.recording : ''}`}
+                onClick={toggleRecording}
+              >
+                {isRecording ? (
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ repeat: Infinity, duration: 1 }}
+                  >
+                    <IconMic className={styles.micIcon} />
+                  </motion.div>
+                ) : (
+                  <IconMic className={styles.micIcon} />
+                )}
+                {isRecording ? 'Stop' : 'Speak'}
+              </button>
+              
+              <textarea 
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder="Submit your oral or written argument here..."
+                onKeyDown={(e) => {
+                  if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitArgument(); }
+                }}
+              />
+              
+              <button 
+                className={styles.submitBtn} 
+                onClick={submitArgument}
+                disabled={loading || !inputText.trim()}
+              >
+                <IconSend size={18} />
+              </button>
             </div>
-          ))}
-          {loading && (
-            <div className={`${styles.messageCard} ${styles.system}`}>
-              AI is analyzing the argument and consulting the legal database...
-            </div>
-          )}
-          <div ref={chatEndRef} />
-        </div>
-
-        <div className={styles.inputArea}>
-          {audioStatus && <div className={`${styles.statusText} ${isRecording ? styles.recording : ''}`}>{audioStatus}</div>}
-          <div className={styles.controls}>
-            <button 
-              className={`${styles.recordBtn} ${isRecording ? styles.recording : ''}`}
-              onClick={toggleRecording}
-            >
-              🎙️ {isRecording ? 'Stop' : 'Speak'}
-            </button>
-            <textarea 
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              placeholder="Type your localized argument here, or use the microphone for regional translation..."
-              onKeyDown={(e) => {
-                if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitArgument(); }
-              }}
-            />
-            <button 
-              className={styles.submitBtn} 
-              onClick={submitArgument}
-              disabled={loading || !inputText.trim()}
-            >
-              Submit
-            </button>
           </div>
         </div>
       </div>
-
     </div>
   );
 };
+
+// Sub-component for Judge Response Dropdown
+const JudgeResponse = ({ m }: { m: ChatMessage }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className={styles.judgeContainer}>
+      <div className={styles.judgeHeader} onClick={() => setIsOpen(!isOpen)}>
+        <div className={styles.role}>Judge's Feedback & Evaluation</div>
+        {isOpen ? <IconChevronUp size={20} /> : <IconChevronDown size={20} />}
+      </div>
+      
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className={styles.judgeContent}
+          >
+            <div className={styles.messageText}>{m.text}</div>
+            {m.scores && (
+              <div className={styles.scoresGrid}>
+                <div className={styles.scoreItem}>
+                  <div className={styles.scoreHeader}>
+                    <span>Legal Accuracy</span>
+                    <span className={styles.scoreVal}>{m.scores.legal}/100</span>
+                  </div>
+                  <div className={styles.progressBar}><div style={{width: `${m.scores.legal}%`}} /></div>
+                </div>
+                <div className={styles.scoreItem}>
+                   <div className={styles.scoreHeader}>
+                    <span>Reasoning & Logic</span>
+                    <span className={styles.scoreVal}>{m.scores.reasoning}/100</span>
+                  </div>
+                  <div className={styles.progressBar}><div style={{width: `${m.scores.reasoning}%`}} /></div>
+                </div>
+                <div className={styles.overallScoreBadge}>
+                  <span>Overall Court Impact</span>
+                  <div className={styles.boldVal}>{m.scores.overall}%</div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default Simulator;
