@@ -1,0 +1,27 @@
+.git/
+# ignore all dotfiles except git metadata and .gitignore
+.*
+!.gitignore
+!.gitattributes
+!.git
+
+# common project ignores for Python/Node
+__pycache__/
+*.py[cod]
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+node_modules/
+dist/
+build/
+.DS_Store
+
+# local env files
+.env
+.env.*
