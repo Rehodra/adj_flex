@@ -7,28 +7,30 @@ pydantic-settings==2.13.1
 
 # Google Gemini AI (new SDK)
 google-genai>=1.0.0
+groq
 
 # Vector Database (ChromaDB - local, no API key needed)
-chromadb==0.4.18
+chromadb==0.4.15
 sentence-transformers==2.2.2
 
 # Machine Learning
 torch==2.10.0
-transformers==5.3.0
-scikit-learn==1.8.0
-numpy==2.4.3
+transformers==4.36.2
+scikit-learn==1.7.2
+numpy==1.26.4
 safetensors==0.7.0
 
 # Text Processing
 tiktoken==0.12.0
-tokenizers==0.22.2
+tokenizers==0.15.2
 regex==2026.2.28
 nltk==3.8.1
-spacy==3.7.2
+# spacy==3.7.2
 
 # Database
 sqlalchemy==2.0.48
 aiosqlite==0.22.1
+motor==3.4.0
 
 # Utilities
 python-dotenv==1.0.0
@@ -47,7 +49,7 @@ httpx==0.28.1
 # Additional Dependencies
 filelock==3.25.2
 fsspec==2026.2.0
-huggingface-hub==1.7.2
+huggingface-hub==0.23.2
 markupsafe==3.0.3
 networkx==3.6.1
 sympy==1.14.0
