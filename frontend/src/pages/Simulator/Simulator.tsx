@@ -14,7 +14,16 @@ const IconMicOff = ({ size = 24, className = "" }) => (
 );
 
 const IconSend = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+  >
+    <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" />
+  </svg>
 );
 
 const IconChevronDown = ({ size = 24, className = "" }) => (
@@ -324,14 +333,19 @@ const Simulator = () => {
               </div>
             ))}
             {loading && (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className={styles.typingIndicator}
-              >
-                The Judge is analyzing your argument...
-              </motion.div>
-            )}
+  <div className={styles.aiThinking}>
+    <div className={styles.wave}>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div className={styles.thinkingText}>
+      The Judge is analyzing your argument...
+    </div>
+  </div>
+)}
             <div ref={chatEndRef} />
           </div>
 
