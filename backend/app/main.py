@@ -3,6 +3,7 @@ Main FastAPI Application for AI Legal Courtroom Simulator
 Backend API with Google Gemini integration and RAG system
 """
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -12,12 +13,16 @@ from datetime import datetime
 import json
 import os # Added for os.path.exists check
 import logging # Added for logger
-
+from fastapi.responses import StreamingResponse
+from gtts import gTTS
+import io
+import requests
 from app.config import get_settings
 from app.api.routes import cases, session, argument, audio, auth
 from app.db import connect_to_mongo, close_mongo_connection
 from app.models.schemas import HealthResponse, ErrorResponse
 
+load_dotenv()
 # Initialize logger
 logger = logging.getLogger(__name__)
 
@@ -216,6 +221,69 @@ async def http_exception_handler(request, exc: HTTPException):
         content=error_data
     )
 
+#For TEXT TO SPEECH
+# @app.get("/tts")
+# def text_to_speech(text: str, role: str = "user"):
+#     import io
+#     from gtts import gTTS
+#     from fastapi.responses import StreamingResponse
+
+#     audio_bytes = io.BytesIO()
+
+#     # 🎭 Role-based language
+#     if role == "judge":
+#         tts = gTTS(text=text, lang="en", tld="co.in")
+#     elif role == "opponent":
+#         tts = gTTS(text=text, lang="en")
+#     elif role == "user":
+#         tts = gTTS(text=text, lang="bn")  # example Bengali
+#     else:
+#         tts = gTTS(text=text, lang="en")
+
+#     tts.write_to_fp(audio_bytes)
+#     audio_bytes.seek(0)
+
+#     return StreamingResponse(audio_bytes, media_type="audio/mpeg")
+
+#11Labs TTS Endpoint
+API_KEY = os.getenv("ELEVENLABS_API_KEY")
+
+@app.get("/tts")
+def elevenlabs_tts(text: str, role: str = "judge"):
+    # 🎭 Role-based voices
+    if role == "judge":
+        voice_id = "JBFqnCBsd6RMkjVDRZzb"  # example (Rachel)
+    elif role == "opponent":
+        voice_id = "JBFqnCBsd6RMkjVDRZzb"
+    else:
+        voice_id = "JBFqnCBsd6RMkjVDRZzb"
+
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+
+    headers = {
+        "xi-api-key": API_KEY,
+        "Content-Type": "application/json"
+    }
+
+    data = {
+         "text": text,
+        "model_id": "eleven_multilingual_v2",  # ✅ correct model
+        "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.8
+        }
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+
+    print("STATUS:", response.status_code)
+    print("CONTENT TYPE:", response.headers.get("content-type"))
+    print("RESPONSE TEXT:", response.text[:200])  # debug
+
+    return StreamingResponse(
+        io.BytesIO(response.content),
+        media_type="audio/mpeg"
+    )
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
