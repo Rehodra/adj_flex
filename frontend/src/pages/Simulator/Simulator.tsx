@@ -4,13 +4,14 @@ import styles from './Simulator.module.scss';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../../components/Navbar/Navbar';
+import { Pause, Volume2 } from "lucide-react";
 
 const IconMic = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" y1="19" x2="12" y2="22" /></svg>
 );
 
 const IconMicOff = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V5a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="1" y1="1" x2="23" y2="23" /><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V5a3 3 0 0 0-5.94-.6" /><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23" /><line x1="12" y1="19" x2="12" y2="22" /></svg>
 );
 
 const IconSend = ({ size = 24, className = "" }) => (
@@ -26,24 +27,25 @@ const IconSend = ({ size = 24, className = "" }) => (
   </svg>
 );
 
+
 const IconChevronDown = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="6 9 12 15 18 9"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="6 9 12 15 18 9" /></svg>
 );
 
 const IconChevronUp = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="18 15 12 9 6 15"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="18 15 12 9 6 15" /></svg>
 );
 
 const IconClock = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
 );
 
 const IconLogout = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
 );
 
 const IconShieldAlert = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
 );
 
 // Interfaces matching backend schemas
@@ -67,6 +69,9 @@ interface ChatMessage {
   };
 }
 
+
+
+
 const Simulator = () => {
   const { caseId } = useParams<{ caseId: string }>();
   const navigate = useNavigate();
@@ -74,10 +79,12 @@ const Simulator = () => {
   const [caseFacts, setCaseFacts] = useState<CaseFacts | null>(null);
   const [phase, setPhase] = useState<string>('opening_statement');
   
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [playingId, setPlayingId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   // Audio Recording State
   const [isRecording, setIsRecording] = useState(false);
   const [audioStatus, setAudioStatus] = useState<string>('');
@@ -101,6 +108,9 @@ const Simulator = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // iconSpeaker
+
+
   // 1. Initialize Session on mount
   useEffect(() => {
     const initSession = async () => {
@@ -108,13 +118,13 @@ const Simulator = () => {
         const res = await axios.post("http://localhost:8000/api/session/create", {
           case_id: caseId,
           user_id: "demo_user_001",
-          mode: "criminal" 
+          mode: "criminal"
         });
-        
+
         setSessionId(res.data.session_id);
         setCaseFacts(res.data.case_facts);
         setPhase(res.data.current_phase);
-        
+
         setMessages([{
           id: 'welcome',
           type: 'system',
@@ -124,7 +134,7 @@ const Simulator = () => {
         console.error("Failed to map session", err);
       }
     };
-    
+
     if (caseId) initSession();
   }, [caseId]);
 
@@ -191,7 +201,7 @@ const Simulator = () => {
   // 3. Handle Argument Submission
   const submitArgument = async () => {
     if (!inputText.trim() || !sessionId) return;
-    
+
     const rx = /section\s*(\d+[A-Z]?)/gi;
     const cited: string[] = [];
     let match;
@@ -217,13 +227,13 @@ const Simulator = () => {
         phase: mappedPhase
       });
 
-      const { 
-        feedback, 
-        legal_accuracy_score, 
-        reasoning_score, 
-        evidence_score, 
-        overall_score, 
-        opponent_response 
+      const {
+        feedback,
+        legal_accuracy_score,
+        reasoning_score,
+        evidence_score,
+        overall_score,
+        opponent_response
       } = res.data;
 
       setMessages(prev => [...prev, {
@@ -265,7 +275,7 @@ const Simulator = () => {
 
   if (!caseFacts) return (
     <div className={styles.loadingContainer}>
-      <motion.div 
+      <motion.div
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
         className={styles.loader}
@@ -274,12 +284,89 @@ const Simulator = () => {
     </div>
   );
 
+  //Browser tts
+  const speakBrowserTTS = (text: string, role: string) => {
+  const synth = window.speechSynthesis;
+
+  if (!synth) {
+    console.error("Browser TTS not supported");
+    return;
+  }
+
+  // Stop any ongoing speech
+  synth.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  // 🎯 Customize voice based on role
+  const voices = synth.getVoices();
+
+  if (role === "judge") {
+    utterance.voice = voices.find(v => v.name.includes("Google UK English Male")) || voices[0];
+    utterance.pitch = 0.8;
+    utterance.rate = 0.9;
+  } else if (role === "opponent") {
+    utterance.voice = voices.find(v => v.name.includes("Google US English")) || voices[0];
+    utterance.pitch = 1;
+    utterance.rate = 1;
+  } else {
+    utterance.voice = voices[0];
+  }
+
+  synth.speak(utterance);
+};
+
+  // 4. Handle TTS 
+const playTTS = async (text: string, role: string, messageId: string) => {
+  try {
+    // 🔁 If same message is playing → pause
+    if (playingId === messageId && audioRef.current) {
+      audioRef.current.pause();
+      setPlayingId(null);
+      return;
+    }
+
+    // ⛔ Stop previous audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
+    const res = await fetch(
+      `http://localhost:8000/tts?text=${encodeURIComponent(text)}&role=${role}`
+    );
+
+    if (!res.ok) {
+      console.error(await res.text());
+      return;
+    }
+
+    const blob = await res.blob();
+
+    const audio = new Audio(URL.createObjectURL(blob));
+    audioRef.current = audio;
+
+    audio.play();
+    setPlayingId(messageId);
+
+    // 🔁 Reset when finished
+    audio.onended = () => {
+      setPlayingId(null);
+    };
+
+  } catch (err) {
+    console.warn("TTS error → fallback to browser", err);
+    speakBrowserTTS(text, role);
+  }
+};
+
+
   return (
     <div className={styles.fullPage}>
       <Navbar />
-      
+
       <div className={styles.simulatorContainer}>
-        
+
         {/* LEFT PANE - CASE FACTS */}
         <div className={styles.leftPane}>
           <div className={styles.caseHeader}>
@@ -307,13 +394,13 @@ const Simulator = () => {
           </div>
 
           <div className={styles.sideControls}>
-             <div className={styles.timer}>
-                <IconClock size={16} />
-                <span>Session Time Remaining: <strong>{formatTime(timeLeft)}</strong></span>
-             </div>
-             <button className={styles.terminateBtn} onClick={terminateSession}>
-                <IconLogout size={16} /> Terminate Session
-             </button>
+            <div className={styles.timer}>
+              <IconClock size={16} />
+              <span>Session Time Remaining: <strong>{formatTime(timeLeft)}</strong></span>
+            </div>
+            <button className={styles.terminateBtn} onClick={terminateSession}>
+              <IconLogout size={16} /> Terminate Session
+            </button>
           </div>
         </div>
 
@@ -322,37 +409,50 @@ const Simulator = () => {
           <div className={styles.chatFeed}>
             {messages.map((m) => (
               <div key={m.id} className={`${styles.messageCard} ${styles[m.type]}`}>
-                 {m.type === 'user' && <div className={styles.role}>Your Argument</div>}
-                 {m.type === 'opponent' && <div className={styles.role}>Opposing Counsel</div>}
-                 
-                 {m.type === 'judge' ? (
-                   <JudgeResponse m={m} />
-                 ) : (
-                   <div className={styles.messageText}>{m.text}</div>
-                 )}
+                {m.type === 'user' && <div className={styles.role}>Your Argument</div>}
+                {m.type === 'opponent' && <div className={styles.role}>Opposing Counsel</div>}
+
+                {m.type === 'judge' ? (
+                  <JudgeResponse m={m} playTTS={playTTS} playingId={playingId} />
+                ) : (
+                  <div className={styles.messageText}>
+                    {m.text}
+                    <button
+                      onClick={() => playTTS(m.text, m.type, m.id)}
+                      style={{
+                        marginLeft: "10px",
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer"
+                      }}
+                    >
+                       {playingId === m.id ? <Pause /> : <Volume2 />}
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
             {loading && (
-  <div className={styles.aiThinking}>
-    <div className={styles.wave}>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <div className={styles.thinkingText}>
-      The Judge is analyzing your argument...
-    </div>
-  </div>
-)}
+              <div className={styles.aiThinking}>
+                <div className={styles.wave}>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div className={styles.thinkingText}>
+                  The Judge is analyzing your argument...
+                </div>
+              </div>
+            )}
             <div ref={chatEndRef} />
           </div>
 
           <div className={styles.inputArea}>
             <AnimatePresence>
               {audioStatus && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
@@ -362,9 +462,9 @@ const Simulator = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-            
+
             <div className={styles.controls}>
-              <button 
+              <button
                 className={`${styles.recordBtn} ${isRecording ? styles.recording : ''}`}
                 onClick={toggleRecording}
               >
@@ -380,18 +480,18 @@ const Simulator = () => {
                 )}
                 {isRecording ? 'Stop' : 'Speak'}
               </button>
-              
-              <textarea 
+
+              <textarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Submit your oral or written argument here..."
                 onKeyDown={(e) => {
-                  if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitArgument(); }
+                  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitArgument(); }
                 }}
               />
-              
-              <button 
-                className={styles.submitBtn} 
+
+              <button
+                className={styles.submitBtn}
                 onClick={submitArgument}
                 disabled={loading || !inputText.trim()}
               >
@@ -406,7 +506,7 @@ const Simulator = () => {
 };
 
 // Sub-component for Judge Response Dropdown
-const JudgeResponse = ({ m }: { m: ChatMessage }) => {
+const JudgeResponse = ({ m, playTTS, playingId }: { m: ChatMessage; playTTS: (text: string, role: string, messageId: string) => Promise<void>; playingId: string | null }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -415,16 +515,29 @@ const JudgeResponse = ({ m }: { m: ChatMessage }) => {
         <div className={styles.role}>Judge's Feedback & Evaluation</div>
         {isOpen ? <IconChevronUp size={20} /> : <IconChevronDown size={20} />}
       </div>
-      
+
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             className={styles.judgeContent}
           >
-            <div className={styles.messageText}>{m.text}</div>
+            <div className={styles.messageText}>
+              {m.text}
+              <button
+                onClick={() => playTTS(m.text, "judge", m.id)}
+                style={{
+                  marginLeft: "10px",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer"
+                }}
+              >
+                 {playingId === m.id ? <Pause /> : <Volume2 />}
+              </button>
+            </div>
             {m.scores && (
               <div className={styles.scoresGrid}>
                 <div className={styles.scoreItem}>
@@ -432,14 +545,14 @@ const JudgeResponse = ({ m }: { m: ChatMessage }) => {
                     <span>Legal Accuracy</span>
                     <span className={styles.scoreVal}>{m.scores.legal}/100</span>
                   </div>
-                  <div className={styles.progressBar}><div style={{width: `${m.scores.legal}%`}} /></div>
+                  <div className={styles.progressBar}><div style={{ width: `${m.scores.legal}%` }} /></div>
                 </div>
                 <div className={styles.scoreItem}>
-                   <div className={styles.scoreHeader}>
+                  <div className={styles.scoreHeader}>
                     <span>Reasoning & Logic</span>
                     <span className={styles.scoreVal}>{m.scores.reasoning}/100</span>
                   </div>
-                  <div className={styles.progressBar}><div style={{width: `${m.scores.reasoning}%`}} /></div>
+                  <div className={styles.progressBar}><div style={{ width: `${m.scores.reasoning}%` }} /></div>
                 </div>
                 <div className={styles.overallScoreBadge}>
                   <span>Overall Court Impact</span>

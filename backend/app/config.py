@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     # Sarvam AI
     SARVAM_API_KEY: str = Field(default="", env="SARVAM_API_KEY")
     
+    # ElevenLabs TTS
+    ELEVENLABS_API_KEY: str = Field(default="", env="ELEVENLABS_API_KEY")
+
     # MongoDB
     MONGODB_URI: str = Field(default="mongodb://localhost:27017", env="MONGODB_URI")
     
