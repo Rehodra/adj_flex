@@ -1,6 +1,92 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useRef, useEffect } from 'react';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+
+/* ===== LOTTIE COMPONENT (NEW) ===== */
+
+const LottieAnimation = ({ src }: { src: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    import("@dotlottie/player-component").then(() => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = `
+          <dotlottie-player
+            src="${src}"
+            autoplay
+            loop
+            style="width:100%;height:100%"
+          ></dotlottie-player>
+        `;
+      }
+    });
+
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = "";
+      }
+    };
+  }, [src]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: "100%",
+        minHeight: "520px"
+      }}
+    />
+  );
+};
+
+/* ===== ICONS ===== */
+
+const EmailIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="3" />
+    <polyline points="2,4 12,13 22,4" />
+  </svg>
+);
+
+const LockIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="5" y="11" width="14" height="10" rx="2" />
+    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    <circle cx="12" cy="16" r="1" fill="currentColor" />
+  </svg>
+);
+
+const GoogleIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24">
+    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+  </svg>
+);
+
+const ScalesIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" y1="2" x2="12" y2="22"/>
+    <line x1="3" y1="7" x2="21" y2="7"/>
+    <path d="M6 7L3 14a3 3 0 0 0 6 0L6 7z"/>
+    <path d="M18 7l-3 7a3 3 0 0 0 6 0L18 7z"/>
+    <line x1="8" y1="22" x2="16" y2="22"/>
+  </svg>
+);
+
+/* ===== ANIMATIONS ===== */
+
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+const GlobalFonts = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+`;
+
+/* ===== COMPONENT ===== */
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,98 +111,110 @@ const Login = () => {
     navigate('/cases', { replace: true });
   }, [navigate]);
 
-  // Basic mock function to hook into a backend OAuth flow later
   const handleGoogleLogin = () => {
-    const frontendRedirect = `${window.location.origin}/authentication`;
-    window.location.href = `http://localhost:8000/api/auth/google?frontend_redirect=${encodeURIComponent(frontendRedirect)}`;
+    // We will redirect to backend OAuth endpoint
+    window.location.href = "http://localhost:8000/api/auth/google";
   };
 
   const handleBypass = (e: React.FormEvent) => {
     e.preventDefault();
-    // Temporary bypass for testing Dashboard without backend auth
-    setTimeout(() => {
-        navigate('/cases');
-    }, 500);
+    setTimeout(() => { navigate('/cases'); }, 500);
   };
 
   return (
-    <Container>
+    <>
+      <GlobalFonts />
+      <Container>
 
-      {/* NAVBAR */}
-      <Navbar>
-        <Logo>
-          <LogoIcon>⚖️</LogoIcon>
-          adjournment <LogoSpan>AI</LogoSpan>
-        </Logo>
-        <BackButton onClick={() => navigate("/")}>
-          Back to Home
-        </BackButton>
-      </Navbar>
+        {/* NAVBAR */}
+        <Navbar>
+          <Logo>
+            <LogoIcon>⚖️</LogoIcon>
+            adjournment <LogoSpan>AI</LogoSpan>
+          </Logo>
+          <BackButton onClick={() => navigate("/")}>
+            Back to Home
+          </BackButton>
+        </Navbar>
 
-      {/* FORM CENTERED */}
-      <FormWrapper>
-        <StyledWrapper>
-          <form className="form" onSubmit={handleBypass}>
-            <h2>Sign In to Courtroom</h2>
-            <div className="flex-column">
-              <label>Email </label>
-            </div>
-            <div className="inputForm">
-              <svg height={20} viewBox="0 0 32 32" width={20} xmlns="http://www.w3.org/2000/svg"><g id="Layer_3" data-name="Layer 3"><path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z" /></g></svg>
-              <input type="email" className="input" placeholder="Enter your Email" required />
-            </div>
-            <div className="flex-column">
-              <label>Password </label>
-            </div>
-            <div className="inputForm">
-              <svg height={20} viewBox="-64 0 512 512" width={20} xmlns="http://www.w3.org/2000/svg"><path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0" /><path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0" /></svg>        
-              <input type="password" className="input" placeholder="Enter your Password" required />
-              <svg viewBox="0 0 576 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z" /></svg>
-            </div>
-            <div className="flex-row">
-              <div>
-                <input type="checkbox" id="remember" />
-                <label htmlFor="remember"> Remember me </label>
-              </div>
-              <span className="span">Forgot password?</span>
-            </div>
-            <button type="submit" className="button-submit">Sign In</button>
-            
-            <p className="p">Don't have an account? <span className="span" onClick={() => navigate('/signup')}>Sign Up</span></p>
-            <p className="p line">Or With</p>
-            
-            <div className="flex-row">
-              <button type="button" className="btn google" onClick={handleGoogleLogin}>
-                <svg version="1.1" width={20} id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xmlSpace="preserve">
-                  <path style={{fill: '#FBBB00'}} d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256
-      	c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456
-      	C103.821,274.792,107.225,292.797,113.47,309.408z" />
-                  <path style={{fill: '#518EF8'}} d="M507.527,208.176C510.467,223.662,512,239.655,512,256c0,18.328-1.927,36.206-5.598,53.451
-      	c-12.462,58.683-45.025,109.925-90.134,146.187l-0.014-0.014l-73.044-3.727l-10.338-64.535
-      	c29.932-17.554,53.324-45.025,65.646-77.911h-136.89V208.176h138.887L507.527,208.176L507.527,208.176z" />
-                  <path style={{fill: '#28B446'}} d="M416.253,455.624l0.014,0.014C372.396,490.901,316.666,512,256,512
-      	c-97.491,0-182.252-54.491-225.491-134.681l82.961-67.91c21.619,57.698,77.278,98.771,142.53,98.771
-      	c28.047,0,54.323-7.582,76.87-20.818L416.253,455.624z" />
-                  <path style={{fill: '#F14336'}} d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012
-      	c-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0
-      	C318.115,0,375.068,22.126,419.404,58.936z" />
-                </svg>
-                Google 
-              </button>
-            </div>
-          </form>
-        </StyledWrapper>
-      </FormWrapper>
+        {/* FORM + LOTTIE */}
+        <FormWrapper>
 
-      {/* FOOTER */}
-      <Footer>
-        <LeftFooter>© 2026 Adjournment AI. All rights reserved.</LeftFooter>
-        <RightFooter>
-          Terms of Service | Privacy Policy | Help Center | Contact Us
-        </RightFooter>
-      </Footer>
+          {/* LEFT SIDE — STYLED FORM */}
+          <StyledWrapper>
+            <form className="form" onSubmit={handleBypass}>
 
-    </Container>
+              <FormHeader>
+                <ScalesIcon />
+                <FormTitle>Sign In to Courtroom</FormTitle>
+                <FormSubtitle>Your legal workspace awaits</FormSubtitle>
+              </FormHeader>
+
+              <Divider />
+
+              {/* Email */}
+              <FieldGroup>
+                <FieldLabel>Email Address</FieldLabel>
+                <InputRow>
+                  <IconWrap><EmailIcon /></IconWrap>
+                  <StyledInput type="email" placeholder="Enter your email" required />
+                </InputRow>
+              </FieldGroup>
+
+              {/* Password */}
+              <FieldGroup>
+                <FieldLabel>Password</FieldLabel>
+                <InputRow>
+                  <IconWrap><LockIcon /></IconWrap>
+                  <StyledInput type="password" placeholder="Enter your password" required />
+                </InputRow>
+              </FieldGroup>
+
+              {/* Remember / Forgot */}
+              <FlexRow>
+                <RememberLabel>
+                  <StyledCheckbox type="checkbox" id="remember" />
+                  <span>Remember me</span>
+                </RememberLabel>
+                <ForgotLink>Forgot password?</ForgotLink>
+              </FlexRow>
+
+              {/* Submit */}
+              <SubmitButton type="submit">Sign In</SubmitButton>
+
+              {/* Sign up */}
+              <SignUpText>
+                Don't have an account?{' '}
+                <InlineLink onClick={() => navigate('/signup')}>Sign Up</InlineLink>
+              </SignUpText>
+
+              {/* Divider */}
+              <OrDivider><span>Or continue with</span></OrDivider>
+
+              {/* Google */}
+              <GoogleButton type="button" onClick={handleGoogleLogin}>
+                <GoogleIcon />
+                Sign in with Google
+              </GoogleButton>
+
+            </form>
+          </StyledWrapper>
+
+          {/* RIGHT SIDE — LOTTIE */}
+          <RightSide>
+            <LottieAnimation src="https://lottie.host/fd9bc3cd-7389-4f72-ad75-9561924b8333/GpEnDcTuJR.lottie" />
+          </RightSide>
+
+        </FormWrapper>
+
+        {/* FOOTER */}
+        <Footer>
+          <LeftFooter>© 2026 Adjournment AI. All rights reserved.</LeftFooter>
+          <RightFooter>Terms of Service | Privacy Policy | Help Center | Contact Us</RightFooter>
+        </Footer>
+
+      </Container>
+    </>
   );
 };
 
@@ -141,19 +239,15 @@ const Navbar = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 0 24px;
-  flex-shrink: 0;
 `;
 
-const LogoIcon = styled.span`
-  margin-right: 6px;
-`;
+const LogoIcon = styled.span`margin-right: 6px;`;
 
 const Logo = styled.div`
   font-size: 17px;
   font-weight: 700;
   display: flex;
   align-items: center;
-  letter-spacing: -0.2px;
 `;
 
 const LogoSpan = styled.span`
@@ -165,13 +259,7 @@ const BackButton = styled.button`
   background: transparent;
   border: none;
   color: #e2e8f0;
-  font-size: 13px;
   cursor: pointer;
-  padding: 6px 0;
-
-  &:hover {
-    color: white;
-  }
 `;
 
 const FormWrapper = styled.div`
@@ -179,160 +267,291 @@ const FormWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 60px;
   padding: 40px 24px;
 `;
+
+const RightSide = styled.div`
+  width: 700px;
+  height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+`;
+
+/* ===== FORM CARD ===== */
 
 const StyledWrapper = styled.div`
   .form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    background-color: #ffffff;
-    padding: 30px;
-    width: 450px;
-    border-radius: 20px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-  
-  h2 {
-    color: #0f172a;
-    font-weight: 800;
-    margin-bottom: 20px;
-    text-align: center;
-  }
+    gap: 0;
+    background: #ffffff;
+    padding: 36px 38px 32px;
+    width: 430px;
+    border-radius: 18px;
+    box-shadow:
+      0 0 0 1px rgba(30,58,138,0.08),
+      0 4px 6px rgba(15,23,42,0.06),
+      0 20px 60px rgba(15,23,42,0.1);
+    position: relative;
+    animation: ${fadeUp} 0.55s cubic-bezier(.22,.68,0,1.2) both;
+    overflow: hidden;
 
-  ::placeholder {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #1e3a8a, #3b82f6, #60a5fa, #3b82f6, #1e3a8a);
+    }
   }
+`;
 
-  .flex-column > label {
-    color: #151717;
-    font-weight: 600;
-    margin-left: 5px;
+const FormHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  padding-top: 4px;
+`;
+
+const FormTitle = styled.h2`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: 0.3px;
+  text-align: center;
+`;
+
+const FormSubtitle = styled.p`
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+  color: #64748b;
+  margin: 0;
+  letter-spacing: 0.4px;
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.25), transparent);
+  margin-bottom: 22px;
+`;
+
+/* ===== FIELDS ===== */
+
+const FieldGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+`;
+
+const FieldLabel = styled.label`
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: #1e3a8a;
+`;
+
+const InputRow = styled.div`
+  display: flex;
+  align-items: center;
+  background: #f8faff;
+  border: 1px solid #dbeafe;
+  border-radius: 9px;
+  padding: 0 14px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+
+  &:focus-within {
+    border-color: #3b82f6;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
   }
+`;
 
-  .inputForm {
-    border: 1.5px solid #ecedec;
-    border-radius: 10px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-    transition: 0.2s ease-in-out;
+const IconWrap = styled.span`
+  display: flex;
+  align-items: center;
+  color: #3b82f6;
+  margin-right: 10px;
+  flex-shrink: 0;
+`;
+
+const StyledInput = styled.input`
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 12px 0;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 15px;
+  color: #0f172a;
+
+  &::placeholder {
+    color: #94a3b8;
+    font-style: italic;
   }
+`;
 
-  .input {
-    margin-left: 10px;
-    border-radius: 10px;
-    border: none;
-    width: 85%;
-    height: 100%;
+/* ===== REMEMBER / FORGOT ===== */
+
+const FlexRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+`;
+
+const RememberLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 13.5px;
+  color: #475569;
+  cursor: pointer;
+  user-select: none;
+`;
+
+const StyledCheckbox = styled.input`
+  width: 14px;
+  height: 14px;
+  accent-color: #1e3a8a;
+  cursor: pointer;
+`;
+
+const ForgotLink = styled.span`
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+  color: #3b82f6;
+  cursor: pointer;
+  transition: color 0.2s;
+  &:hover { color: #1e3a8a; }
+`;
+
+/* ===== SUBMIT BUTTON ===== */
+
+const SubmitButton = styled.button`
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+  background-size: 200% auto;
+  color: #ffffff;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: background-position 0.4s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+  margin-bottom: 16px;
+
+  &:hover {
+    background-position: right center;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 28px rgba(37,99,235,0.45);
   }
+  &:active { transform: translateY(0); }
+`;
 
-  .input:focus {
-    outline: none;
+/* ===== SIGN UP TEXT ===== */
+
+const SignUpText = styled.p`
+  text-align: center;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 16px;
+`;
+
+const InlineLink = styled.span`
+  color: #2563eb;
+  cursor: pointer;
+  font-style: italic;
+  transition: color 0.2s;
+  &:hover { color: #1e3a8a; }
+`;
+
+/* ===== OR DIVIDER ===== */
+
+const OrDivider = styled.div`
+  position: relative;
+  text-align: center;
+  margin-bottom: 16px;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: #dbeafe;
   }
+  &::before { left: 0; }
+  &::after  { right: 0; }
 
-  .inputForm:focus-within {
-    border: 1.5px solid #2d79f3;
-  }
-
-  .flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    justify-content: space-between;
-    margin-top: 5px;
-  }
-
-  .flex-row > div {
-    display: flex;
-    align-items: center;
-  }
-
-  .flex-row > div > label {
-    font-size: 14px;
-    color: black;
-    font-weight: 500;
-    margin-left: 5px;
-  }
-
-  .span {
-    font-size: 14px;
-    margin-left: 5px;
-    color: #2d79f3;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .button-submit {
-    margin: 20px 0 10px 0;
-    background-color: #0f172a;
-    border: none;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 10px;
-    height: 50px;
-    width: 100%;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .button-submit:hover {
-    background-color: #1e293b;
-  }
-
-  .p {
-    text-align: center;
-    color: #475569;
-    font-size: 14px;
-    margin: 5px 0;
-    font-weight: 500;
-  }
-
-  .line {
-    margin: 15px 0;
+  span {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 12px;
+    font-style: italic;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+    padding: 0 10px;
     position: relative;
     z-index: 1;
   }
-
-  .btn {
-    margin-top: 10px;
-    width: 100%;
-    height: 50px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 600;
-    gap: 10px;
-    border: 1px solid #e2e8f0;
-    background-color: white;
-    color: #334155;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
-  }
-
-  .btn:hover {
-    border: 1px solid #2d79f3;
-    background-color: #f8fafc;
-  }
 `;
+
+/* ===== GOOGLE BUTTON ===== */
+
+const GoogleButton = styled.button`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px;
+  border-radius: 10px;
+  border: 1px solid #dbeafe;
+  background: #f8faff;
+  color: #1e3a8a;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+
+  &:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    transform: translateY(-1px);
+  }
+  &:active { transform: translateY(0); }
+`;
+
+/* ===== FOOTER ===== */
 
 const Footer = styled.footer`
   padding: 14px 24px;
   background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 100%);
   display: flex;
   justify-content: space-between;
-  align-items: center;
   font-size: 12px;
   color: #e2e8f0;
-  flex-shrink: 0;
 `;
 
 const LeftFooter = styled.div``;
-
 const RightFooter = styled.div``;
