@@ -193,7 +193,7 @@
     max-width: 90%;
     padding: 0;
     border-radius: 14px;
-    overflow: hidden;
+    overflow: visible; /* allow content to expand */
   }
 
   &.system {
@@ -205,6 +205,13 @@
     border-radius: 20px;
     padding: 0.5rem 1.2rem;
   }
+}
+
+.messageText {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #334155;
+  white-space: pre-wrap;
 }
 
 .role {
@@ -221,6 +228,8 @@
 .judgeContainer {
   display: flex;
   flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden; /* clips rounded corners on header/content */
 }
 
 .judgeHeader {
@@ -235,6 +244,21 @@
   .role { opacity: 1; color: #1e40af; margin-bottom: 0; }
 
   &:hover { background: #dbeafe; }
+}
+
+.judgeHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.overallPill {
+  background: #2563eb;
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 99px;
 }
 
 .judgeContent {
@@ -291,6 +315,59 @@
 
   span { font-weight: 800; color: #0f172a; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
   .boldVal { font-size: 1.4rem; color: #2563eb; font-weight: 900; }
+}
+
+.incorrectSections {
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #fee2e2;
+}
+
+.suggestions {
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #fef9c3;
+
+  ul {
+    margin: 0.5rem 0 0 1rem;
+    padding: 0;
+    li {
+      color: #475569;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 0.4rem;
+    }
+  }
+}
+
+.sectionTitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  margin-bottom: 0.8rem;
+}
+
+.incorrectItem {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.sectionTag {
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ── INPUT AREA ── */

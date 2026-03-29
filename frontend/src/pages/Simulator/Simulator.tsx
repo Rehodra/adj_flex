@@ -46,6 +46,30 @@ const IconShieldAlert = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
 );
 
+const IconScale = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+    <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+    <path d="M7 21h10"/>
+    <path d="M12 3v18"/>
+    <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+  </svg>
+);
+
+const IconX = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+);
+
+const IconLightbulb = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/>
+    <path d="M9 18h6"/>
+    <path d="M10 22h4"/>
+  </svg>
+);
 // Interfaces matching backend schemas
 interface CaseFacts {
   title: string;
@@ -64,7 +88,12 @@ interface ChatMessage {
     reasoning: number;
     evidence: number;
     overall: number;
+    turn_score: number;
+    cumulative_score: number;
+    performance_tier: string;
   };
+  suggestions?: string[];
+  incorrect_sections?: { section: string; reason: string }[];
 }
 
 const Simulator = () => {
@@ -226,25 +255,37 @@ const Simulator = () => {
         opponent_response 
       } = res.data;
 
-      setMessages(prev => [...prev, {
-        id: Date.now().toString() + '_judge',
-        type: 'judge',
-        text: feedback,
-        scores: {
-          legal: legal_accuracy_score,
-          reasoning: reasoning_score,
-          evidence: evidence_score,
-          overall: overall_score
-        }
-      }]);
+      setMessages(prev => {
+        const newMessages = [...prev];
+        
+        newMessages.push({
+          id: Date.now().toString() + '_judge',
+          type: 'judge',
+          text: feedback || "Your argument has been received and evaluated by the bench.",
+          scores: {
+            legal: legal_accuracy_score ?? 0,
+            reasoning: reasoning_score ?? 0,
+            evidence: evidence_score ?? 0,
+            overall: overall_score ?? 0,
+            turn_score: res.data.turn_score ?? 0,
+            cumulative_score: res.data.cumulative_score ?? 0,
+            performance_tier: res.data.performance_tier ?? 'Law Student',
+          },
+          suggestions: res.data.suggestions ?? [],
+          incorrect_sections: res.data.incorrect_sections ?? [],
+        });
 
-      if (opponent_response) {
-        setMessages(prev => [...prev, {
-          id: Date.now().toString() + '_opp',
-          type: 'opponent',
-          text: opponent_response
-        }]);
-      }
+        if (opponent_response) {
+          newMessages.push({
+            id: Date.now().toString() + '_opp',
+            type: 'opponent',
+            text: opponent_response
+          });
+        }
+        
+        return newMessages;
+      });
+      
     } catch (err: any) {
       console.error(err);
       setMessages(prev => [...prev, {
@@ -407,49 +448,110 @@ const Simulator = () => {
 
 // Sub-component for Judge Response Dropdown
 const JudgeResponse = ({ m }: { m: ChatMessage }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // closed by default
+
+  const [summary, detailed] = m.text.includes("Detailed Analysis:") 
+    ? m.text.split("Detailed Analysis:") 
+    : [m.text, ""];
 
   return (
     <div className={styles.judgeContainer}>
       <div className={styles.judgeHeader} onClick={() => setIsOpen(!isOpen)}>
-        <div className={styles.role}>Judge's Feedback & Evaluation</div>
-        {isOpen ? <IconChevronUp size={20} /> : <IconChevronDown size={20} />}
+        <div className={styles.role} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <IconScale size={16} /> JUDGE'S EVALUATION
+        </div>
+        <div className={styles.judgeHeaderRight}>
+          {m.scores && (
+            <span className={styles.overallPill}>{m.scores.overall}% Overall</span>
+          )}
+          {isOpen ? <IconChevronUp size={20} /> : <IconChevronDown size={20} />}
+        </div>
       </div>
       
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className={styles.judgeContent}
-          >
-            <div className={styles.messageText}>{m.text}</div>
-            {m.scores && (
-              <div className={styles.scoresGrid}>
-                <div className={styles.scoreItem}>
-                  <div className={styles.scoreHeader}>
-                    <span>Legal Accuracy</span>
-                    <span className={styles.scoreVal}>{m.scores.legal}/100</span>
-                  </div>
-                  <div className={styles.progressBar}><div style={{width: `${m.scores.legal}%`}} /></div>
+      {isOpen && (
+        <div className={styles.judgeContent}>
+          {/* Feedback Text Formatted */}
+          <div className={styles.messageText}>
+            {summary.split('\n\n').map((paragraph, idx) => {
+              if (!paragraph.trim()) return null;
+              return <p key={idx} style={{ marginBottom: '1rem' }}>{paragraph}</p>;
+            })}
+            
+            {detailed && (
+              <div style={{ marginTop: '2rem' }}>
+                <div style={{ color: '#64748b', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '1rem' }}>Detailed Analysis:</div>
+                <p>{detailed.trim()}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Scores */}
+          {m.scores && (
+            <div className={styles.scoresGrid}>
+              <div className={styles.scoreItem}>
+                <div className={styles.scoreHeader}>
+                  <span>Legal Accuracy</span>
+                  <span className={styles.scoreVal}>{m.scores.legal}/100</span>
                 </div>
-                <div className={styles.scoreItem}>
-                   <div className={styles.scoreHeader}>
-                    <span>Reasoning & Logic</span>
-                    <span className={styles.scoreVal}>{m.scores.reasoning}/100</span>
-                  </div>
-                  <div className={styles.progressBar}><div style={{width: `${m.scores.reasoning}%`}} /></div>
+                <div className={styles.progressBar}><div style={{width: `${m.scores.legal}%`}} /></div>
+              </div>
+              <div className={styles.scoreItem}>
+                <div className={styles.scoreHeader}>
+                  <span>Reasoning & Logic</span>
+                  <span className={styles.scoreVal}>{m.scores.reasoning}/100</span>
                 </div>
-                <div className={styles.overallScoreBadge}>
-                  <span>Overall Court Impact</span>
+                <div className={styles.progressBar}><div style={{width: `${m.scores.reasoning}%`}} /></div>
+              </div>
+              <div className={styles.scoreItem}>
+                <div className={styles.scoreHeader}>
+                  <span>Evidence Use</span>
+                  <span className={styles.scoreVal}>{m.scores.evidence}/100</span>
+                </div>
+                <div className={styles.progressBar}><div style={{width: `${m.scores.evidence}%`}} /></div>
+              </div>
+              <div className={styles.overallScoreBadge}>
+                <div>
+                  <div style={{fontSize:'0.75rem',fontWeight:700,color:'#64748b',textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:'2px'}}>Performance Tier</div>
+                  <div style={{fontWeight:700,color:'#0f172a'}}>{m.scores.performance_tier}</div>
+                </div>
+                <div style={{textAlign:'right'}}>
+                  <div style={{fontSize:'0.75rem',fontWeight:700,color:'#64748b',textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:'2px'}}>Court Impact</div>
                   <div className={styles.boldVal}>{m.scores.overall}%</div>
                 </div>
               </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+          )}
+
+          {/* Incorrect Sections */}
+          {m.incorrect_sections && m.incorrect_sections.length > 0 && (
+            <div className={styles.incorrectSections}>
+              <div className={styles.sectionTitle} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <IconX size={16} /> INCORRECT CITATIONS
+              </div>
+              {m.incorrect_sections.map((s, i) => (
+                <div key={i} className={styles.incorrectItem}>
+                  <span className={styles.sectionTag}>Sec. {s.section}</span>
+                  <span>{s.reason}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Suggestions */}
+          {m.suggestions && m.suggestions.length > 0 && (
+            <div className={styles.suggestions}>
+              <div className={styles.sectionTitle} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <IconLightbulb size={16} /> SUGGESTIONS
+              </div>
+              <ul>
+                {m.suggestions.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
