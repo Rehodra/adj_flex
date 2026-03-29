@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     ENV: str = Field(default="development", env="ENV")
     DEBUG: bool = Field(default=False, env="DEBUG")
     SECRET_KEY: str = Field(default="your-secret-key-change-this", env="SECRET_KEY")
+    JWT_SECRET_KEY: str = Field(default="", env="JWT_SECRET_KEY")
+    JWT_ALGORITHM: str = Field(default="HS256", env="JWT_ALGORITHM")
+    JWT_EXPIRE_MINUTES: int = Field(default=10080, env="JWT_EXPIRE_MINUTES")
     
     # Sarvam AI
     SARVAM_API_KEY: str = Field(default="", env="SARVAM_API_KEY")
@@ -31,6 +34,8 @@ class Settings(BaseSettings):
     # Google OAuth
     GOOGLE_CLIENT_ID: str = Field(default="", env="GOOGLE_CLIENT_ID")
     GOOGLE_CLIENT_SECRET: str = Field(default="", env="GOOGLE_CLIENT_SECRET")
+    GOOGLE_REDIRECT_URI: str = Field(default="", env="GOOGLE_REDIRECT_URI")
+    GOOGLE_FRONTEND_SUCCESS_URI: str = Field(default="", env="GOOGLE_FRONTEND_SUCCESS_URI")
     
     # CORS
     CORS_ORIGINS: List[str] = Field(

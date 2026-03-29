@@ -5,10 +5,30 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    if (!token) {
+      return;
+    }
+
+    const user = {
+      id: '',
+      email: params.get('email') || '',
+      name: params.get('name') || '',
+      picture: params.get('picture') || '',
+    };
+
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    navigate('/cases', { replace: true });
+  }, [navigate]);
+
   // Basic mock function to hook into a backend OAuth flow later
   const handleGoogleLogin = () => {
-    // We will redirect to backend OAuth endpoint
-    window.location.href = "http://localhost:8000/api/auth/google";
+    const frontendRedirect = `${window.location.origin}/authentication`;
+    window.location.href = `http://localhost:8000/api/auth/google?frontend_redirect=${encodeURIComponent(frontendRedirect)}`;
   };
 
   const handleBypass = (e: React.FormEvent) => {

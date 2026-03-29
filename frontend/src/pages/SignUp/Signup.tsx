@@ -12,8 +12,29 @@ import {
 const Signup = () => {
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (!token) {
+      return;
+    }
+
+    const user = {
+      id: "",
+      email: params.get("email") || "",
+      name: params.get("name") || "",
+      picture: params.get("picture") || "",
+    };
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    navigate("/cases", { replace: true });
+  }, [navigate]);
+
   const handleGoogleSignup = () => {
-    window.location.href = "http://localhost:8000/api/auth/google";
+    const frontendRedirect = `${window.location.origin}/signup`;
+    window.location.href = `http://localhost:8000/api/auth/google?frontend_redirect=${encodeURIComponent(frontendRedirect)}`;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
