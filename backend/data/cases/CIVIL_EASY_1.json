@@ -1,3 +1,4 @@
+
 {
   "id": "CIVIL_EASY_1",
   "title": "Breach of Contract - E-commerce Delivery Dispute",
@@ -7,9 +8,60 @@
     "Contract Act 1872",
     "Sale of Goods Act 1930"
   ],
-  "location": "Mumbai",
-  "description": "Detailed case with realistic characters, contract documents, email trails, delivery proofs involving a standard breach of e-commerce delivery contract.",
-  "characters": [],
-  "evidence": [],
-  "legal_ambiguity": "Standard breach analysis."
+  "location": "Andheri West, Mumbai",
+  "description": "On March 10, 2024, Rahul Sharma, a 34-year-old IT professional residing in Andheri West, Mumbai, placed an online order for a high-end smartphone (Model: X-Pro Max, value: ₹89,999) through the e-commerce platform ShopKart India Pvt. Ltd. The order confirmation promised delivery within 3 days, i.e., by March 13, 2024. Rahul made full payment via UPI at the time of purchase.\n\nOn March 13, the delivery status was updated as 'Delivered' on the platform. However, Rahul did not receive the package. Upon checking with the building security and neighbors, no delivery attempt was confirmed. Rahul immediately raised a complaint through customer support and email.\n\nThe delivery partner, QuickShip Logistics, claimed that the package was handed over to a 'security guard' at the address and produced a digital delivery confirmation with a forged signature. Rahul denied authorizing any such delivery or providing consent to leave the package with a third party.",
+  "characters": [
+    {
+      "name": "Rahul Sharma",
+      "role": "Plaintiff (Buyer)",
+      "details": "34, IT professional, resident of Andheri West, purchaser of the smartphone"
+    },
+    {
+      "name": "ShopKart India Pvt. Ltd.",
+      "role": "Defendant (Seller)",
+      "details": "E-commerce company responsible for sale and order fulfillment"
+    },
+    {
+      "name": "QuickShip Logistics",
+      "role": "Defendant (Delivery Partner)",
+      "details": "Third-party logistics provider responsible for last-mile delivery"
+    },
+    {
+      "name": "Amit Yadav",
+      "role": "Delivery Agent",
+      "details": "Employee of QuickShip Logistics who marked the order as delivered"
+    },
+    {
+      "name": "Rakesh Singh",
+      "role": "Witness",
+      "details": "Security guard of the residential building who denies receiving the package"
+    },
+    {
+      "name": "Neha Kapoor",
+      "role": "Customer Support Executive",
+      "details": "Representative of ShopKart who handled Rahul's complaint"
+    }
+  ],
+  "evidence": [
+    "Order confirmation email with delivery promise (dated March 10, 2024)",
+    "UPI payment receipt of ₹89,999",
+    "Platform delivery status screenshot marked as 'Delivered'",
+    "Customer complaint emails and chat transcripts",
+    "Digital proof of delivery (with disputed signature)",
+    "CCTV footage from apartment entrance showing no delivery attempt",
+    "Security register logbook (no entry of delivery on March 13)",
+    "Legal notice sent by Rahul Sharma (dated March 20, 2024)",
+    "Reply from ShopKart denying liability",
+    "Terms and conditions of ShopKart regarding delivery and liability"
+  ],
+  "evidence_chain": [
+    "Valid contract formed through order placement and payment",
+    "Seller promised delivery within 3 days",
+    "Delivery marked complete without actual handover to buyer",
+    "Security guard and CCTV evidence contradict delivery claim",
+    "Disputed signature indicates possible forgery or negligence",
+    "Failure to refund or replace establishes breach of contract",
+    "Liability extends to both seller and delivery partner under agency principle"
+  ],
+  "legal_ambiguity": "Whether delivery to a third party without explicit consent constitutes valid delivery, and whether the seller can shift liability to the logistics partner despite contractual obligation to the buyer."
 }

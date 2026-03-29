@@ -8,8 +8,57 @@
     "Hindu Succession Act 1956"
   ],
   "location": "Lucknow",
-  "description": "Detailed case with family tree, property documents, survey reports, rival claims regarding ancestral property partition.",
-  "characters": [],
-  "evidence": [],
-  "legal_ambiguity": "Complex property division issues."
+  "description": "A dispute arose in 2024 between the Sharma siblings over partition of ancestral land located in Lucknow, originally owned by their late father, Raghunath Sharma. After his death in 2018, no formal partition was executed. The eldest son, Amit Sharma, has been in possession of the majority of the land and claims an oral family settlement granting him a larger share due to financial contributions. The other siblings, Neha Sharma and Rohit Sharma, contest this claim and seek equal division as per succession laws.",
+  "characters": [
+    {
+      "name": "Amit Sharma",
+      "role": "Defendant",
+      "details": "Eldest son, in possession of major portion, claims oral family settlement"
+    },
+    {
+      "name": "Neha Sharma",
+      "role": "Plaintiff",
+      "details": "Daughter seeking equal share in ancestral property"
+    },
+    {
+      "name": "Rohit Sharma",
+      "role": "Plaintiff",
+      "details": "Younger son supporting equal division claim"
+    },
+    {
+      "name": "Late Raghunath Sharma",
+      "role": "Deceased Owner",
+      "details": "Original owner of the ancestral property"
+    },
+    {
+      "name": "Suresh Verma",
+      "role": "Witness",
+      "details": "Neighbor claiming knowledge of alleged oral family settlement"
+    },
+    {
+      "name": "Anita Gupta",
+      "role": "Surveyor",
+      "details": "Government-approved surveyor who prepared land division report"
+    }
+  ],
+  "evidence": [
+    "Property title documents in name of Raghunath Sharma",
+    "Death certificate of Raghunath Sharma (2018)",
+    "Land revenue and tax records",
+    "Survey report showing current possession and boundaries",
+    "Electricity and utility bills in Amit Sharma's name",
+    "Witness statement regarding oral family settlement",
+    "Legal notice demanding partition",
+    "Reply denying equal division claim"
+  ],
+  "evidence_chain": [
+    "Property originally owned by deceased father",
+    "No registered partition executed after death",
+    "All legal heirs entitled under succession law",
+    "Defendant claims larger share via oral settlement",
+    "Possession and utility records support defendant’s control",
+    "Plaintiffs challenge validity of oral agreement",
+    "Court must determine enforceability of oral partition vs statutory rights"
+  ],
+  "legal_ambiguity": "Whether an unregistered oral family settlement can override statutory equal inheritance rights and how possession and contribution impact partition."
 }
