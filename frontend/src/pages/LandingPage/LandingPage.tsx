@@ -31,7 +31,7 @@ const LottieAnimation = ({ src }: { src: string }) => {
     };
   }, [src]);
 
-  return <div ref={containerRef} style={{ width: '100%', minHeight: '1000px', marginTop: '200px' }} />;
+  return <div ref={containerRef} style={{ width: '100%', height: '100%', minHeight: '340px' }} />;
 };
 
 const IconShield = ({ size = 24 }) => (
@@ -192,138 +192,232 @@ const LandingPage = () => {
       <Navbar />
 
       {/* HERO SECTION */}
-      <section className={`${styles.section} ${styles.hero}`}>
-        <div className={styles.heroContent}>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <span className={styles.badge}>NEXT-GEN LEGAL TECHNOLOGY</span>
-            <h1>Smart, Transparent & AI-Powered <br/><span>Courtroom Simulation</span></h1>
-            <p>
-              Train, argue, and win with confidence. Adjournment.ai simulates real courtroom scenarios using advanced AI—helping law students and professionals master legal reasoning, argument structure, and evidence-based advocacy.
-            </p>
-            <p className={styles.subText}>
-              Built for aspiring lawyers, law students, and legal professionals preparing for real-world litigation.
-            </p>
+      <section className={styles.heroSection}>
+        {/* Background blobs */}
+        <div className={styles.blobTopLeft} />
+        <div className={styles.blobBottomRight} />
+        <div className={styles.gridTexture} />
 
-            <div className={styles.heroActions}>
+        <div className={styles.heroInner}>
+          {/* LEFT: TEXT CONTENT */}
+          <motion.div
+            className={styles.heroContent}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
+            <motion.span
+              className={styles.badge}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6 }}
+            >
+              ⚡ Next-Gen Legal Technology
+            </motion.span>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.75, ease: 'easeOut' }}
+            >
+              Smart, Transparent &amp; <br />
+              AI-Powered{' '}
+              <span className={styles.gradientText}>Courtroom<br />Simulation</span>
+            </motion.h1>
+
+            <motion.p
+              className={styles.heroDesc}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.7 }}
+            >
+              Train, argue, and win with confidence. Adjournment.ai simulates real courtroom scenarios using advanced AI—helping law students and professionals master legal reasoning, argument structure, and evidence-based advocacy.
+            </motion.p>
+
+            <motion.div
+              className={styles.heroActions}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.7 }}
+            >
               <Link to="/cases">
                 <button className={styles.primaryBtn}>
-                  Start Simulation
+                  Start Simulation <span className={styles.btnArrow}><IconArrowRight size={18} /></span>
                 </button>
               </Link>
               <Link to="/judgementsearch">
                 <button className={styles.secondaryBtn}>Explore Judgments</button>
               </Link>
-            </div>
+            </motion.div>
 
-            <div className={styles.trustBanner}>
-              <p className={styles.trustText}>Trusted by 5,000+ learners and legal professionals</p>
-              <div className={styles.trustItems}>
-                <span>Real Courtroom Scenarios</span>
-                <span className={styles.bullet}>•</span>
-                <span>AI-Powered Judge Feedback</span>
-                <span className={styles.bullet}>•</span>
-                <span>Instant Performance Analysis</span>
+            <motion.div
+              className={styles.trustBar}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.75, duration: 0.8 }}
+            >
+              <span className={styles.trustLabel}>TRUSTED BY 5,000+ LEARNERS AND LEGAL PROFESSIONALS</span>
+              <div className={styles.trustPills}>
+                <span className={styles.trustPill}><IconCheckCircle size={14} /> Real Courtroom Scenarios</span>
+                <span className={styles.trustPill}><IconShield size={14} /> AI-Powered Judge</span>
+                <span className={styles.trustPill}><IconActivity size={14} /> Instant Analytics</span>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
-        </div>
 
-        <div className={styles.heroVisual}>
+          {/* RIGHT: LOTTIE ANIMATION */}
           <motion.div
-            style={{ y: parallaxY }}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 1, type: "spring", stiffness: 60 }}
+            className={styles.heroVisual}
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 1, type: 'spring', stiffness: 55, damping: 18 }}
           >
-            <LottieAnimation src="https://lottie.host/e109ed1b-4dd5-4c08-a93e-833e1730a18b/I4PD7iIlnI.lottie" />
+            <div className={styles.visualGlow} />
+            <motion.div
+              className={styles.lottieWrap}
+              animate={{ y: [0, -12, 0], scale: [1, 1.02, 1] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <LottieAnimation src="https://lottie.host/e109ed1b-4dd5-4c08-a93e-833e1730a18b/I4PD7iIlnI.lottie" />
+            </motion.div>
           </motion.div>
+        </div>
+      </section>      {/* FEATURES SECTION — LIGHT THEME, ORBITAL LAYOUT */}
+      <section className={styles.featuresSection}>
+        <div className={styles.featuresBlob} />
+
+        <div className={styles.featuresInner}>
+          {/* Section Header */}
+          <motion.div
+            className={styles.sectionHeader}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <span className={styles.sectionBadge}>Platform Capabilities</span>
+            <h2>Engineered for <span className={styles.featureGradient}>Legal Excellence</span></h2>
+            <p>Our platform combines cutting-edge AI with rigorous legal standards to provide an unparalleled courtroom simulation experience.</p>
+          </motion.div>
+
+          {/* Orbital Layout */}
+          <div className={styles.orbitalLayout}>
+
+            {/* TOP ROW */}
+            <div className={styles.orbitalTop}>
+              {[
+                { icon: <IconGavel size={22} />, color: '#dc2626', bg: '#fef2f2', title: 'AI Judge Feedback', desc: 'Real-time argument evaluation with detailed scoring.' },
+                { icon: <IconScales size={22} />, color: '#2563eb', bg: '#eff6ff', title: 'Realistic Scenarios', desc: 'Meticulously crafted Indian courtroom case files.' },
+                { icon: <IconLink size={22} />, color: '#0d9488', bg: '#f0fdfa', title: 'Citation Mapping', desc: 'Auto-link arguments to SC/HC precedents.' },
+              ].map((f, i) => (
+                <motion.div
+                  key={i}
+                  className={styles.orbCard}
+                  style={{ '--orb-color': f.color, '--orb-bg': f.bg } as React.CSSProperties}
+                  initial={{ opacity: 0, y: -20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.6 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                >
+                  <div className={styles.orbCardIcon}>{f.icon}</div>
+                  <h3>{f.title}</h3>
+                  <p>{f.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* MIDDLE ROW: Card | Center | Card */}
+            <div className={styles.orbitalMiddle}>
+              {/* Left Card */}
+              {[
+                { icon: <IconQuill size={22} />, color: '#9333ea', bg: '#faf5ff', title: 'Drafting AI', desc: 'Generate petitions & pleadings for Indian formats.' },
+              ].map((f, i) => (
+                <motion.div
+                  key={i}
+                  className={styles.orbCard}
+                  style={{ '--orb-color': f.color, '--orb-bg': f.bg } as React.CSSProperties}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                >
+                  <div className={styles.orbCardIcon}>{f.icon}</div>
+                  <h3>{f.title}</h3>
+                  <p>{f.desc}</p>
+                </motion.div>
+              ))}
+
+              {/* CENTER LOTTIE */}
+              <motion.div
+                className={styles.orbCenter}
+                initial={{ opacity: 0, scale: 0.85 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, type: 'spring', stiffness: 60 }}
+              >
+                <div className={styles.orbCenterGlow} />
+                <motion.div
+                  animate={{ y: [0, -8, 0], scale: [1, 1.02, 1] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  className={styles.orbCenterInner}
+                >
+                  <LottieAnimation src="https://lottie.host/e109ed1b-4dd5-4c08-a93e-833e1730a18b/I4PD7iIlnI.lottie" />
+                </motion.div>
+                <div className={styles.orbRing1} />
+                <div className={styles.orbRing2} />
+              </motion.div>
+
+              {/* Right Card */}
+              {[
+                { icon: <IconGraph size={22} />, color: '#ea580c', bg: '#fff7ed', title: 'Risk Analysis', desc: 'Predict case outcome using historical AI modeling.' },
+              ].map((f, i) => (
+                <motion.div
+                  key={i}
+                  className={styles.orbCard}
+                  style={{ '--orb-color': f.color, '--orb-bg': f.bg } as React.CSSProperties}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                >
+                  <div className={styles.orbCardIcon}>{f.icon}</div>
+                  <h3>{f.title}</h3>
+                  <p>{f.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* BOTTOM ROW */}
+            <div className={styles.orbitalBottom}>
+              {[
+                { icon: <IconGlobe size={22} />, color: '#4f46e5', bg: '#eef2ff', title: 'Multilingual Support', desc: 'Hindi, English & all major Indian regional languages.' },
+                { icon: <IconSafe size={22} />, color: '#059669', bg: '#f0fdf4', title: 'Evidence Vault', desc: 'Encrypted workspace for exhibits & digital evidence.' },
+                { icon: <IconUsers size={22} />, color: '#db2777', bg: '#fdf2f8', title: 'Virtual Chambers', desc: 'Collaborate in real-time mock-trial sessions.' },
+              ].map((f, i) => (
+                <motion.div
+                  key={i}
+                  className={styles.orbCard}
+                  style={{ '--orb-color': f.color, '--orb-bg': f.bg } as React.CSSProperties}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.6 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                >
+                  <div className={styles.orbCardIcon}>{f.icon}</div>
+                  <h3>{f.title}</h3>
+                  <p>{f.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* FEATURES SECTION */}
-      <section className={styles.featuresSectionWrapper}>
-        <motion.div
-          className={styles.features}
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          <div className={styles.sectionHeader}>
-            <h2>Engineered for <span className={styles.serifText}>Legal Excellence</span></h2>
-            <p>Our platform combines cutting-edge AI with rigorous legal standards to provide an unparalleled courtroom simulation experience.</p>
-          </div>
 
-          <div className={styles.featureGrid}>
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#eff6ff', '--card-color': '#007BFF' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconScales size={28} /></div>
-              <h3>Realistic Case Scenarios</h3>
-              <p>Train with meticulously crafted case files that reflect real Indian courtroom dynamics and legal complexities.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#FEF3C7', '--card-color': '#D97706' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconLandmark size={28} /></div>
-              <h3>Intelligent Legal Authority</h3>
-              <p>Instantly access and test your arguments against a vast, AI-driven database of precedents and penal sections.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#FEE2E2', '--card-color': '#DC2626' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconGavel size={28} /></div>
-              <h3>Precision AI Judge Feedback</h3>
-              <p>Receive comprehensive, real-time evaluations from our AI Judge on argument structure and advocacy skills.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#F3E8FF', '--card-color': '#9333EA' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconQuill size={28} /></div>
-              <h3>Drafting & Pleadings AI</h3>
-              <p>Generate high-precision drafts for petitions, affidavits, and legal notices seamlessly tailored to Indian formats.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#CCFBF1', '--card-color': '#0D9488' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconLink size={28} /></div>
-              <h3>Citations & Precedent Mapping</h3>
-              <p>Instantly link your arguments to relevant Supreme Court and High Court citations with automated verification.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#E0E7FF', '--card-color': '#4F46E5' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconGlobe size={28} /></div>
-              <h3>Multilingual Support</h3>
-              <p>Seamlessly process and translate legal documents with full support for all major Indian regional languages.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#FFEDD5', '--card-color': '#EA580C' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconGraph size={28} /></div>
-              <h3>Strategic Case Risk Analysis</h3>
-              <p>Predictive AI modeling to reliably assess probability of success based on historical judge and counsel trends.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#D1FAE5', '--card-color': '#059669' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconSafe size={28} /></div>
-              <h3>Evidence Management Vault</h3>
-              <p>A secure, encrypted workspace to efficiently organize your exhibits, digital evidence, and witness statements.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.featureCard} style={{ '--card-bg': '#FCE7F3', '--card-color': '#DB2777' } as React.CSSProperties}>
-              <div className={styles.iconWrapper}><IconUsers size={28} /></div>
-              <h3>Collaborative Virtual Chambers</h3>
-              <p>Work in real-time with your legal team, seamlessly leave annotations, and conduct robust mock-trials.</p>
-              <span className={styles.exploreLink}>Explore Feature <IconArrowRight size={16} /></span>
-            </motion.div>
-          </div>
-        </motion.div>
-      </section>
 
       {/* PREMIUM STATS SECTION */}
       <motion.section
