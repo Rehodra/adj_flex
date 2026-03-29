@@ -1,20 +1,21 @@
-@import "../../styles/variables.scss";
+@use "../../styles/variables.scss";
 
 .container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: #e9ebf1;
   font-family: 'Inter', -apple-system, sans-serif;
   scroll-behavior: smooth;
+  margin-top: 0; // Remove any margin above the container
 }
 
 .section {
-  padding: 80px 40px;
+  padding: 20px 40px; // Reduce padding to minimize gaps
   width: 100%;
-  
-  @media (max-width: 968px) { padding: 60px 20px; }
-  @media (max-width: 480px) { padding: 40px 16px; }
+
+  @media (max-width: 968px) { padding: 40px 20px; }
+  @media (max-width: 480px) { padding: 20px 16px; }
 }
 
 .hero {
@@ -22,31 +23,39 @@
   grid-template-columns: 1.25fr 0.75fr;
   align-items: center;
   gap: 80px;
-  background: radial-gradient(circle at top right, #f8fafc 0%, #ffffff 100%);
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: 20px !important; // Forces hero closer to navbar
-  padding-bottom: 60px;
+  padding-top: 0px; // Forces hero closer to navbar
+  padding-bottom: 20px;
+
+  .heroContentWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px; /* Adjust spacing between text and animation */
+  }
 
   .heroContent {
     max-width: 600px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 
     .badge {
       display: inline-block;
       align-self: flex-start;
       padding: 0.4rem 1rem;
-      background: #eff6ff;
-      color: #3b82f6;
+      background: #537FE7;
+      color: #ffffff;
       font-weight: 700;
       font-size: 0.75rem;
       border-radius: 99px;
       margin-bottom: 24px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      border: 1px solid #bfdbfe;
+      border: 1px solid rgba(83, 127, 231, 0.2);
     }
 
     h1 {
@@ -54,11 +63,11 @@
       font-weight: 800;
       line-height: 1.15;
       letter-spacing: -1.2px;
-      color: #0b1c2c;
+      color: #0f172a;
       margin-bottom: 24px;
 
       span {
-        color: #3b82f6;
+        color: #537FE7;
       }
     }
 
@@ -145,11 +154,11 @@
       
       span {
         font-size: 0.85rem;
-        color: #475569;
+        color: #64748b;
         font-weight: 500;
         
         &.bullet {
-          color: #cbd5e1;
+          color: #475569;
         }
       }
     }
@@ -161,6 +170,8 @@
   justify-content: center;
   align-items: center;
   perspective: 1000px;
+  position: relative;
+  z-index: 2;
   
   .mockupContainer {
     width: 100%;
@@ -300,26 +311,10 @@
 .featuresSectionWrapper {
   position: relative;
   width: 100%;
-  padding: 120px 40px;
-  background-color: #f8fafc;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
   overflow: hidden;
-
-  // Background circuit/node lines
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200%; height: 200%;
-    background-image: 
-      linear-gradient(rgba(0, 123, 255, 0.03) 2px, transparent 2px),
-      linear-gradient(90deg, rgba(0, 123, 255, 0.03) 2px, transparent 2px);
-    background-size: 100px 100px;
-    z-index: 0;
-    pointer-events: none;
-    mask-image: radial-gradient(circle at center, black 20%, transparent 60%);
-    -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 60%);
-  }
+  margin-top: -40px; // Shift the features section higher to reduce the gap
 
   .features {
     position: relative;
@@ -336,13 +331,13 @@
     h2 {
       font-size: 3rem;
       font-weight: 800;
-      color: #0A192F;
+      color: #ffffff;
       margin-bottom: 20px;
       letter-spacing: -0.5px;
 
       span.serifText {
         font-family: 'Playfair Display', serif;
-        color: #007BFF;
+        color: #60a5fa;
         font-style: italic;
         font-weight: 600;
         letter-spacing: 0;
@@ -351,7 +346,7 @@
 
     p {
       font-size: 1.15rem;
-      color: #475569;
+      color: #cbd5e1;
       line-height: 1.6;
       max-width: 600px;
       margin: 0 auto;
@@ -376,17 +371,17 @@
 
   .featureCard {
     padding: 24px 24px 60px 24px; /* Room for absolute link */
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     box-shadow: 
-      0 10px 30px -10px rgba(10, 25, 47, 0.05),
-      0 20px 20px -10px rgba(10, 25, 47, 0.03);
+      0 10px 30px -10px rgba(0, 0, 0, 0.3),
+      0 20px 20px -10px rgba(0, 0, 0, 0.2);
       
     position: relative;
     overflow: hidden;
@@ -396,7 +391,7 @@
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at top left, var(--card-bg, #eff6ff) 0%, transparent 60%);
+      background: radial-gradient(circle at top left, var(--card-bg, rgba(96, 165, 250, 0.1)) 0%, transparent 60%);
       opacity: 0;
       transition: opacity 0.4s ease;
       z-index: 0;
@@ -407,8 +402,8 @@
       z-index: 1;
       width: 44px;
       height: 44px;
-      background: var(--card-bg, #eff6ff);
-      color: var(--card-color, #0A192F);
+      background: var(--card-bg, rgba(96, 165, 250, 0.1));
+      color: var(--card-color, #60a5fa);
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -424,7 +419,7 @@
       z-index: 1;
       font-size: 1.15rem;
       font-weight: 700;
-      color: #0A192F;
+      color: #ffffff;
       margin-bottom: 8px;
       line-height: 1.3;
     }
@@ -432,7 +427,7 @@
     p {
       position: relative;
       z-index: 1;
-      color: #475569;
+      color: #cbd5e1;
       line-height: 1.5;
       font-size: 0.9rem;
       margin: 0;
@@ -445,7 +440,7 @@
       z-index: 1;
       font-size: 0.9rem;
       font-weight: 700;
-      color: var(--card-color, #007BFF);
+      color: var(--card-color, #60a5fa);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -459,16 +454,17 @@
     &:hover {
       transform: translateY(-6px) !important; /* Override framer inline style */
       box-shadow: 
-        0 15px 30px -8px rgba(10, 25, 47, 0.08),
-        0 20px 20px -10px rgba(10, 25, 47, 0.04);
-      border-color: var(--card-color, rgba(0, 123, 255, 0.3));
+        0 15px 30px -8px rgba(0, 0, 0, 0.4),
+        0 20px 20px -10px rgba(0, 0, 0, 0.3);
+      border-color: var(--card-color, rgba(96, 165, 250, 0.3));
+      background: rgba(255, 255, 255, 0.08);
 
       &::before {
         opacity: 0.7;
       }
 
       .iconWrapper {
-        background: var(--card-color, #007BFF);
+        background: var(--card-color, #60a5fa);
         color: white;
         
         svg { transform: scale(1.1); }
@@ -791,7 +787,7 @@
   }
 
   .featuresSectionWrapper {
-    padding: 80px 20px;
+    padding: 40px 20px;
     
     .featuredCard {
       transform: none !important;

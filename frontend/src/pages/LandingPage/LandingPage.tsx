@@ -5,6 +5,35 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import styles from "./LandingPage.module.scss";
 
+// Stable Lottie component using @dotlottie/player web component
+// Run: npm install @dotlottie/player
+const LottieAnimation = ({ src }: { src: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Dynamically import to avoid SSR/TS issues
+    import('@dotlottie/player-component').then(() => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = `
+          <dotlottie-player
+            src="${src}"
+            autoplay
+            loop
+            style="width:100%;height:100%"
+          ></dotlottie-player>
+        `;
+      }
+    }).catch(() => {
+      // Fallback: do nothing, container stays empty
+    });
+    return () => {
+      if (containerRef.current) containerRef.current.innerHTML = '';
+    };
+  }, [src]);
+
+  return <div ref={containerRef} style={{ width: '100%', minHeight: '1000px', marginTop: '200px' }} />;
+};
+
 const IconShield = ({ size = 24 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
 );
@@ -128,7 +157,7 @@ const StatCounter = ({ endValue, suffix = '' }: { endValue: number, suffix?: str
       const step = (timestamp: number) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 4); // easeOutQuart
+        const ease = 1 - Math.pow(1 - progress, 4);
         setCount(Math.floor(ease * endValue));
         if (progress < 1) {
           window.requestAnimationFrame(step);
@@ -143,11 +172,11 @@ const StatCounter = ({ endValue, suffix = '' }: { endValue: number, suffix?: str
 
 const LandingPage = () => {
   const { scrollY } = useScroll();
-  const parallaxY = useTransform(scrollY, [0, 800], [0, 100]); // Parallax slow movement
-  
+  const parallaxY = useTransform(scrollY, [0, 800], [0, 100]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
       transition: { staggerChildren: 0.15 }
     }
@@ -165,7 +194,7 @@ const LandingPage = () => {
       {/* HERO SECTION */}
       <section className={`${styles.section} ${styles.hero}`}>
         <div className={styles.heroContent}>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -202,57 +231,22 @@ const LandingPage = () => {
             </div>
           </motion.div>
         </div>
+
         <div className={styles.heroVisual}>
-          <motion.div 
-            className={styles.mockupContainer}
-            style={{ y: parallaxY }} // Subtle parallax
-            initial={{ opacity: 0, y: 40, rotateX: 5 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          <motion.div
+            style={{ y: parallaxY }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 1, type: "spring", stiffness: 60 }}
           >
-            <div className={styles.mockupHeader}>
-              <div className={styles.mockupActions}>
-                <div className={styles.dot} style={{background: '#ff5f56'}} />
-                <div className={styles.dot} style={{background: '#ffbd2e'}} />
-                <div className={styles.dot} style={{background: '#27c93f'}} />
-              </div>
-              <div className={styles.mockupTitle}>Simulator • State vs. Mehta</div>
-            </div>
-            
-            <div className={styles.mockupBody}>
-              <div className={styles.mockupChat}>
-                <div className={styles.chatMessage + ' ' + styles.userMsg}>
-                  Your Honor, Exhibit A clearly contradicts the witness timeline.
-                </div>
-                <div className={styles.chatMessage + ' ' + styles.judgeMsg}>
-                  <div className={styles.judgeMsgHeader}>
-                    <span>AI Judge Feedback</span>
-                    <span className={styles.badgeLabel}>Good Reasoning</span>
-                  </div>
-                  Valid point. However, cite the relevant section of the Evidence Act to substantiate this claim.
-                </div>
-              </div>
-              
-              <div className={styles.mockupScores}>
-                <div className={styles.scoreRow}>
-                  <div className={styles.scoreLabel}>Legal Accuracy</div>
-                  <div className={styles.scoreBar}><div style={{width: '78%', background: '#3b82f6'}}></div></div>
-                  <div className={styles.scoreVal}>78%</div>
-                </div>
-                <div className={styles.scoreRow}>
-                  <div className={styles.scoreLabel}>Evidence Usage</div>
-                  <div className={styles.scoreBar}><div style={{width: '92%', background: '#10b981'}}></div></div>
-                  <div className={styles.scoreVal}>92%</div>
-                </div>
-              </div>
-            </div>
+            <LottieAnimation src="https://lottie.host/e109ed1b-4dd5-4c08-a93e-833e1730a18b/I4PD7iIlnI.lottie" />
           </motion.div>
         </div>
       </section>
 
       {/* FEATURES SECTION */}
       <section className={styles.featuresSectionWrapper}>
-        <motion.div 
+        <motion.div
           className={styles.features}
           variants={containerVariants}
           initial="hidden"
@@ -332,7 +326,7 @@ const LandingPage = () => {
       </section>
 
       {/* PREMIUM STATS SECTION */}
-      <motion.section 
+      <motion.section
         className={`${styles.section} ${styles.premiumStatsSection}`}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -342,14 +336,13 @@ const LandingPage = () => {
         <div className={styles.statsGlowContainer}>
           <div className={styles.statsGlow} />
         </div>
-        
+
         <div className={styles.statsHeader}>
           <h2>Data-Driven Performance. <br/><span>Proven Results.</span></h2>
           <p>Built for the modern legal professional, tested on thousands of real-world scenarios.</p>
         </div>
-        
+
         <div className={styles.statsGrid}>
-          {/* Card 1 */}
           <div className={styles.statCard}>
             <div className={styles.statIconWrapper}>
               <IconDatabase size={24} />
@@ -360,8 +353,7 @@ const LandingPage = () => {
             </h4>
             <span className={styles.statLabel}>Judgments Indexed</span>
           </div>
-          
-          {/* Card 2 */}
+
           <div className={styles.statCard}>
             <div className={styles.statIconWrapper}>
               <IconCheckCircle size={24} />
@@ -373,7 +365,6 @@ const LandingPage = () => {
             <span className={styles.statLabel}>Accuracy Rate</span>
           </div>
 
-          {/* Card 3 */}
           <div className={styles.statCard}>
             <div className={styles.statIconWrapper}>
               <IconActivity size={24} />
