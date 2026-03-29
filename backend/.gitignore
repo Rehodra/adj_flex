@@ -44,6 +44,10 @@ venv.bak/
 .env.production.local
 .env.*
 
+# Allow example env file
+!.env.example
+
+
 # Chroma Vector Database (Ignore binary/database files but keep source data if needed)
 data/vector_db/
 data/chroma/
