@@ -53,3 +53,4 @@ huggingface-hub==0.23.2
 markupsafe==3.0.3
 networkx==3.6.1
 sympy==1.14.0
+gTTS==2.5.4
