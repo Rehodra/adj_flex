@@ -1,6 +1,7 @@
 import { RouteObject } from "react-router-dom";
 //import Authentication from "../pages/Authentication";
 import Login from "../pages/Login/Login";
+import Signup from "../pages/SignUp/Signup";
 //import ProtectedRoute from "../components/ProtectedRoute";
 import IndividualSearchPage from "../pages/IndividualSearchPage/IndividualSearchPage";
 //import Main from "../pages/Main";
@@ -11,49 +12,66 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Simulator from "../pages/Simulator/Simulator";
 import LandingPage from "../pages/LandingPage/LandingPage";
 
-const routes : RouteObject[] = [
+/* If you already have a Leaderboard page, keep this import.
+   If not, create the page later — route will still compile once file exists. */
+import Leaderboard from "../pages/Leaderboard/Leaderboard";
+
+const routes: RouteObject[] = [
     {
         path: "/user",
-        element : <User />
+        element: <User />
     },
-    // {
-    //     path: "/",
-    //     element : <Authentication />
-    // },
+
     {
         path: "/search",
-        element : <Search />
+        element: <Search />
     },
+
     {
-        path : "/authentication",
+        path: "/authentication",
         element: <Login />
     },
+
     {
-        path : "/",
-        element: <LandingPage/>
-    }
-    ,
+        path: "/",
+        element: <LandingPage />
+    },
+
     {
-        path : "/document/:documentID",
+        path: "/document/:documentID",
         element: <IndividualSearchPage />
     },
+
     {
         path: "/judgementsearch",
-        element: <JudgementSearch/>
+        element: <JudgementSearch />
     },
+
     {
         path: "/cases",
         element: <Dashboard />
     },
+
+    {
+        path: "/dashboard",
+        element: <Dashboard />
+    },
+
+    {
+        path: "/leaderboard",
+        element: <Leaderboard />
+    },
+
     {
         path: "/simulate/:caseId",
         element: <Simulator />
     },
+
     {
         path: "/signup",
-        element: <Login />
+        element: <Signup />
     }
 
-]
+];
 
-export default routes
+export default routes;

@@ -23,7 +23,13 @@ const IconUser = ({ size = 24 }) => (
 const IconLogout = ({ size = 24 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
 );
-
+const IconLeaderboard = ({ size = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="10" width="4" height="11" rx="1"/>
+    <rect x="10" y="6" width="4" height="15" rx="1"/>
+    <rect x="17" y="2" width="4" height="19" rx="1"/>
+  </svg>
+);
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -49,10 +55,33 @@ const Navbar = () => {
       </motion.div>
 
       <div className={styles.navLinks}>
-        <Link to="/cases" className={styles.navLink}><IconGavel size={18} /> Simulator</Link>
-        <Link to="/judgementsearch" className={styles.navLink}><IconSearch size={18} /> Judgments</Link>
-        <Link to="/search" className={styles.navLink}><IconDashboard size={18} /> Search</Link>
-      </div>
+
+  <Link to="/cases" className={styles.navLink}>
+  <IconGavel size={18} />
+  Simulator
+</Link>
+
+  <Link to="/cases" className={styles.navLink}>
+    <IconSearch size={18} />
+    Cases
+  </Link>
+
+  <Link to="/dashboard" className={styles.navLink}>
+    <IconDashboard size={18} />
+    Dashboard
+  </Link>
+
+  <Link to="/leaderboard" className={styles.navLink}>
+    <IconLeaderboard size={18} />
+    Leaderboard
+  </Link>
+
+  <Link to="/user" className={styles.navLink}>
+    <IconUser size={18} />
+    Profile
+  </Link>
+
+</div>
 
       <div className={styles.authSection}>
         {isAuthenticated ? (
