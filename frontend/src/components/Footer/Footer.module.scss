@@ -1,102 +1,296 @@
+/* ────────────────────────────────────────────────────────
+   FOOTER — Premium Light SaaS Legal-Tech Theme
+──────────────────────────────────────────────────────── */
+
 .footer {
-  background: #0f172a;
-  color: #e2e8f0;
-  padding: 4rem 4rem 1rem 4rem;
-  margin-top: auto;
+  background: #ffffff;
+  font-family: 'Inter', -apple-system, sans-serif;
+  position: relative;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 3rem;
-  max-width: 1200px;
+/* Thin gradient top border */
+.topBorder {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #e2e8f0 20%, #cbd5e1 50%, #e2e8f0 80%, transparent 100%);
+}
+
+/* ── MAIN CONTENT AREA ── */
+.footerInner {
+  padding: 68px 48px 48px;
+  max-width: 1280px;
   margin: 0 auto;
+
+  @media (max-width: 968px) { padding: 52px 24px 40px; }
+  @media (max-width: 480px) { padding: 40px 16px 32px; }
 }
 
-.section {
-  h3 {
-    color: white;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+.footerGrid {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr;
+  gap: 56px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
 
-  h4 {
-    color: white;
-    margin-bottom: 1.2rem;
-    font-size: 1.1rem;
-  }
-
-  p {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: #94a3b8;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    
-    li {
-      margin-bottom: 0.8rem;
-      
-      a {
-        color: #94a3b8;
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: color 0.2s;
-
-        &:hover {
-          color: white;
-        }
-      }
-    }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: 36px;
   }
 }
 
-.socials {
+/* ── BRAND COLUMN ── */
+.brandCol {
   display: flex;
-  gap: 1.2rem;
-  margin-top: 1.5rem;
-  color: #94a3b8;
-  
-  svg {
-    cursor: pointer;
-    transition: color 0.2s;
-    &:hover {
-      color: white;
-    }
-  }
+  flex-direction: column;
+  gap: 0;
 }
 
-.contactItem {
+.brandLogo {
   display: flex;
   align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+.brandName {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.4px;
+  line-height: 1;
+}
+
+.brandTagline {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #2563eb;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.brandDesc {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.7;
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+
+/* Social icons */
+.socials {
+  display: flex;
+  gap: 8px;
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  }
+}
+
+/* ── LINKS COLUMNS ── */
+.linksCol {
+  display: flex;
+  gap: 40px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 28px;
+  }
+}
+
+.linksGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.colHeading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 16px;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  color: #94a3b8;
-}
 
-.bottom {
-  border-top: 1px solid #1e293b;
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  text-align: center;
-  
-  p {
-    font-size: 0.85rem;
+  li a {
+    font-size: 0.875rem;
     color: #64748b;
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.18s;
+
+    &:hover {
+      color: #2563eb;
+    }
   }
 }
 
-@media (max-width: 968px) {
-  .container {
-    grid-template-columns: repeat(2, 1fr);
+/* ── NEWSLETTER COLUMN ── */
+.newsletterCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsletterDesc {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.newsletterForm {
+  margin-bottom: 16px;
+}
+
+.inputRow {
+  display: flex;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8fafc;
+  transition: border-color 0.2s;
+
+  &:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+    background: #ffffff;
   }
 }
 
-@media (max-width: 576px) {
-  .container {
-    grid-template-columns: 1fr;
+.emailInput {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  border: none;
+  background: transparent;
+  color: #0f172a;
+  outline: none;
+
+  &::placeholder {
+    color: #94a3b8;
   }
+}
+
+.subscribeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+}
+
+.subscribedMsg {
+  font-size: 0.85rem;
+  color: #16a34a;
+  font-weight: 600;
+  padding: 10px 0;
+  margin-bottom: 16px;
+}
+
+.hackathonBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+
+  a {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #2563eb;
+    }
+  }
+
+  svg {
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+}
+
+/* ── BOTTOM BAR ── */
+.bottomBar {
+  border-top: 1px solid #f1f5f9;
+  background: #f8fafc;
+  padding: 20px 48px;
+
+  @media (max-width: 968px) { padding: 18px 24px; }
+  @media (max-width: 480px) { padding: 16px; }
+}
+
+.bottomInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.copyright {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+
+  strong {
+    color: #0f172a;
+    font-weight: 700;
+  }
+}
+
+.subCopy {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: 0;
+  font-style: italic;
 }

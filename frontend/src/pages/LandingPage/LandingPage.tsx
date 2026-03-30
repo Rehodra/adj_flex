@@ -207,32 +207,38 @@ const LandingPage = () => {
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             <motion.span
-              className={styles.badge}
+              className={styles.eyebrowBadge}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.6 }}
             >
-              ⚡ Next-Gen Legal Technology
+              NEXT-GEN LEGAL TECHNOLOGY
             </motion.span>
 
             <motion.h1
+              className={styles.heroHeadline}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.75, ease: 'easeOut' }}
             >
               Smart, Transparent &amp; <br />
-              AI-Powered{' '}
-              <span className={styles.gradientText}>Courtroom<br />Simulation</span>
+              AI-Powered <br />
+              <span className={styles.solidBlueText}>Courtroom Simulation</span>
             </motion.h1>
 
-            <motion.p
+            <motion.div
               className={styles.heroDesc}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.7 }}
             >
-              Train, argue, and win with confidence. Adjournment.ai simulates real courtroom scenarios using advanced AI—helping law students and professionals master legal reasoning, argument structure, and evidence-based advocacy.
-            </motion.p>
+              <p>
+                Train, argue, and win with confidence. Adjournment.ai simulates real courtroom scenarios using advanced AI—helping law students and professionals master legal reasoning, argument structure, and evidence-based advocacy.
+              </p>
+              <p>
+                Built for aspiring lawyers, law students, and legal professionals preparing for real-world litigation.
+              </p>
+            </motion.div>
 
             <motion.div
               className={styles.heroActions}
@@ -241,45 +247,86 @@ const LandingPage = () => {
               transition={{ delay: 0.5, duration: 0.7 }}
             >
               <Link to="/cases">
-                <button className={styles.primaryBtn}>
-                  Start Simulation <span className={styles.btnArrow}><IconArrowRight size={18} /></span>
+                <button className={styles.btnPrimary}>
+                  Start Simulation
                 </button>
               </Link>
               <Link to="/judgementsearch">
-                <button className={styles.secondaryBtn}>Explore Judgments</button>
+                <button className={styles.btnSecondary}>Explore Judgments</button>
               </Link>
             </motion.div>
 
             <motion.div
-              className={styles.trustBar}
+              className={styles.socialProof}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.75, duration: 0.8 }}
             >
-              <span className={styles.trustLabel}>TRUSTED BY 5,000+ LEARNERS AND LEGAL PROFESSIONALS</span>
-              <div className={styles.trustPills}>
-                <span className={styles.trustPill}><IconCheckCircle size={14} /> Real Courtroom Scenarios</span>
-                <span className={styles.trustPill}><IconShield size={14} /> AI-Powered Judge</span>
-                <span className={styles.trustPill}><IconActivity size={14} /> Instant Analytics</span>
+              <div className={styles.socialProofDivider} />
+              <span className={styles.trustedLabel}>TRUSTED BY 5,000+ LEARNERS AND LEGAL PROFESSIONALS</span>
+              <div className={styles.trustedDots}>
+                <span>Real Courtroom Scenarios</span>
+                <span className={styles.dotSeparator}>•</span>
+                <span>AI-Powered Judge Feedback</span>
+                <span className={styles.dotSeparator}>•</span>
+                <span>Instant Performance Analysis</span>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* RIGHT: LOTTIE ANIMATION */}
+          {/* RIGHT: UI DASHBOARD MOCKUP */}
           <motion.div
             className={styles.heroVisual}
-            initial={{ opacity: 0, x: 60 }}
+            initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 1, type: 'spring', stiffness: 55, damping: 18 }}
           >
-            <div className={styles.visualGlow} />
-            <motion.div
-              className={styles.lottieWrap}
-              animate={{ y: [0, -12, 0], scale: [1, 1.02, 1] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <LottieAnimation src="https://lottie.host/e109ed1b-4dd5-4c08-a93e-833e1730a18b/I4PD7iIlnI.lottie" />
-            </motion.div>
+            <div className={styles.chatMockupContainer}>
+              <div className={styles.chatMockupWindow}>
+                {/* Header */}
+                <div className={styles.mockupHeader}>
+                  <div className={styles.mockupTrafficLights}>
+                    <span className={styles.lightRed} />
+                    <span className={styles.lightYellow} />
+                    <span className={styles.lightGreen} />
+                  </div>
+                  <div className={styles.mockupHeaderText}>Simulator • State vs. Mehta</div>
+                </div>
+                
+                {/* Chat Body */}
+                <div className={styles.mockupChatBody}>
+                  {/* User Message */}
+                  <div className={styles.userBubble}>
+                    Your Honor, Exhibit A clearly contradicts the witness timeline.
+                  </div>
+                  
+                  {/* AI Feedback Message */}
+                  <div className={styles.aiBubble}>
+                    <div className={styles.aiBubbleHeader}>
+                      <span className={styles.aiLabel}>AI Judge Feedback</span>
+                      <span className={styles.feedbackBadge}>Good Reasoning</span>
+                    </div>
+                    <div className={styles.aiBubbleText}>
+                      Valid point. However, cite the relevant section of the Evidence Act to substantiate this claim.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Analytics */}
+                <div className={styles.mockupFooter}>
+                  <div className={styles.mockupStatRow}>
+                    <span className={styles.statLabel}>Legal Accuracy</span>
+                    <div className={styles.mockupProgressBar}><div className={styles.progressFillBlue} style={{width: '78%'}}></div></div>
+                    <span className={styles.statValue}>78%</span>
+                  </div>
+                  <div className={styles.mockupStatRow}>
+                    <span className={styles.statLabel}>Evidence Usage</span>
+                    <div className={styles.mockupProgressBar}><div className={styles.progressFillGreen} style={{width: '92%'}}></div></div>
+                    <span className={styles.statValue}>92%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>      {/* FEATURES SECTION — LIGHT THEME, ORBITAL LAYOUT */}
@@ -419,58 +466,90 @@ const LandingPage = () => {
 
 
 
-      {/* PREMIUM STATS SECTION */}
-      <motion.section
-        className={`${styles.section} ${styles.premiumStatsSection}`}
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <div className={styles.statsGlowContainer}>
-          <div className={styles.statsGlow} />
-        </div>
+      {/* ── PREMIUM STATS SECTION — LIGHT THEME ── */}
+      <section className={styles.premiumStatsSection}>
+        {/* Soft background glow */}
+        <div className={styles.statsBgGlow} />
+        <div className={styles.statsBgGrid} />
 
-        <div className={styles.statsHeader}>
-          <h2>Data-Driven Performance. <br/><span>Proven Results.</span></h2>
-          <p>Built for the modern legal professional, tested on thousands of real-world scenarios.</p>
-        </div>
+        <div className={styles.statsInner}>
+          {/* Section header */}
+          <motion.div
+            className={styles.statsHeader}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <span className={styles.sectionBadge}>Platform Performance</span>
+            <h2>Data-Driven Credibility. <br /><span className={styles.statsGradientText}>Proven at Scale.</span></h2>
+            <p>Built for the modern legal professional, validated on thousands of real‑world courtroom scenarios.</p>
+          </motion.div>
 
-        <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statIconWrapper}>
-              <IconDatabase size={24} />
-            </div>
-            <div className={styles.statDivider} />
-            <h4 className={styles.statNumber}>
-              <StatCounter endValue={5000} suffix="+" />
-            </h4>
-            <span className={styles.statLabel}>Judgments Indexed</span>
+          {/* 6-card grid */}
+          <div className={styles.statsGrid}>
+            {[
+              { icon: <IconDatabase size={22} />, value: 5000, suffix: '+', label: 'Judgments Indexed', sub: 'SC, HC & Tribunal archives' },
+              { icon: <IconCheckCircle size={22} />, value: 98, suffix: '%', label: 'AI Evaluation Accuracy', sub: 'Argument scoring precision' },
+              { icon: <IconActivity size={22} />, value: 10000, suffix: '+', label: 'Simulations Run', sub: 'Across all case types' },
+              { icon: <IconUsers size={22} />, value: 2000, suffix: '+', label: 'Law Students', sub: 'Trained via the platform' },
+              { icon: <IconShield size={22} />, value: 500, suffix: '+', label: 'Legal Professionals', sub: 'Advocates & educators' },
+              { icon: <IconBookOpen size={22} />, value: 50, suffix: '+', label: 'IPC / CrPC Modules', sub: 'Evidence Act included' },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                className={styles.statCard}
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: i * 0.08, duration: 0.6, ease: 'easeOut' }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              >
+                <div className={styles.statIconWrapper}>{stat.icon}</div>
+                <h4 className={styles.statNumber}>
+                  <StatCounter endValue={stat.value} suffix={stat.suffix} />
+                </h4>
+                <span className={styles.statLabel}>{stat.label}</span>
+                <span className={styles.statSub}>{stat.sub}</span>
+              </motion.div>
+            ))}
           </div>
 
-          <div className={styles.statCard}>
-            <div className={styles.statIconWrapper}>
-              <IconCheckCircle size={24} />
-            </div>
-            <div className={styles.statDivider} />
-            <h4 className={styles.statNumber}>
-              <StatCounter endValue={98} suffix="%" />
-            </h4>
-            <span className={styles.statLabel}>Accuracy Rate</span>
-          </div>
-
-          <div className={styles.statCard}>
-            <div className={styles.statIconWrapper}>
-              <IconActivity size={24} />
-            </div>
-            <div className={styles.statDivider} />
-            <h4 className={styles.statNumber}>
-              <StatCounter endValue={10} suffix="k+" />
-            </h4>
-            <span className={styles.statLabel}>Simulations Run</span>
-          </div>
+          {/* Credibility strip */}
+          <motion.div
+            className={styles.credibilityStrip}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            <div className={styles.credDivider} />
+            <span className={styles.credText}>Trusted by law students, advocates, and legal educators across India</span>
+            <div className={styles.credDivider} />
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
+
+      {/* ── PRE-FOOTER CTA STRIP ── */}
+      <section className={styles.ctaStrip}>
+        <div className={styles.ctaStripGlow} />
+        <div className={styles.ctaStripInner}>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <h2 className={styles.ctaStripHeading}>Ready to Master the Courtroom with AI?</h2>
+            <p className={styles.ctaStripSub}>Step into real scenarios, argue with confidence, and receive instant AI-powered feedback.</p>
+            <Link to="/cases">
+              <button className={styles.ctaStripBtn}>
+                Start Free Simulation <span className={styles.btnArrow}><IconArrowRight size={18} /></span>
+              </button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
       <Footer />
     </div>
