@@ -124,6 +124,8 @@ const Simulator = () => {
   // TTS State
   const ttsAudioRef = useRef<HTMLAudioElement | null>(null);
   const [playingMsgId, setPlayingMsgId] = useState<string | null>(null);
+  const playingRef = useRef<string | null>(null);
+
 
   // Realistic Courtroom Time
   const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes in seconds
@@ -212,62 +214,129 @@ const Simulator = () => {
   };
 
   // TTS: play opponent's text via /tts endpoint
-  const playOpponentTTS = async (msgId: string, text: string) => {
-    // Stop any currently playing audio first
-    if (ttsAudioRef.current) {
-      ttsAudioRef.current.pause();
-      ttsAudioRef.current.src = '';
-      ttsAudioRef.current = null;
-    }
+  // const playOpponentTTS = async (msgId: string, text: string) => {
+  //   // Stop any currently playing audio first
+  //   if (ttsAudioRef.current) {
+  //     ttsAudioRef.current.pause();
+  //     ttsAudioRef.current.src = '';
+  //     ttsAudioRef.current = null;
+  //   }
 
-    // If clicking the same message that was playing, just stop it
-    if (playingMsgId === msgId) {
-      setPlayingMsgId(null);
-      return;
-    }
+  //   // If clicking the same message that was playing, just stop it
+  //   if (playingMsgId === msgId) {
+  //     setPlayingMsgId(null);
+  //     return;
+  //   }
 
-    setPlayingMsgId(msgId);
+  //   setPlayingMsgId(msgId);
 
-    try {
-      const encodedText = encodeURIComponent(text);
-      const url = `http://localhost:8000/tts?text=${encodedText}&role=opponent`;
+  //   try {
+  //     const encodedText = encodeURIComponent(text);
+  //     const url = `http://localhost:8000/tts?text=${encodedText}&role=opponent`;
 
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`TTS request failed: ${response.status}`);
+  //     const response = await fetch(url);
+  //     if (!response.ok) throw new Error(`TTS request failed: ${response.status}`);
 
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
+  //     const audioBlob = await response.blob();
+  //     const audioUrl = URL.createObjectURL(audioBlob);
 
-      const audio = new Audio(audioUrl);
+  //     const audio = new Audio(audioUrl);
+  //     ttsAudioRef.current = audio;
+
+  //     audio.onended = () => {
+  //       setPlayingMsgId(null);
+  //       URL.revokeObjectURL(audioUrl);
+  //       ttsAudioRef.current = null;
+  //     };
+
+  //     audio.onerror = () => {
+  //       setPlayingMsgId(null);
+  //       URL.revokeObjectURL(audioUrl);
+  //       ttsAudioRef.current = null;
+  //     };
+
+  //     await audio.play();
+  //   } catch (err) {
+  //     console.error('TTS playback failed:', err);
+  //     setPlayingMsgId(null);
+  //   }
+  // };
+  
+const playFastTTS = async (msgId: string, text: string) => {
+  // Stop previous audio
+  if (ttsAudioRef.current) {
+    ttsAudioRef.current.pause();
+    ttsAudioRef.current = null;
+  }
+
+  // Toggle behavior
+  if (playingRef.current === msgId) {
+    playingRef.current = null;
+    setPlayingMsgId(null);
+    return;
+  }
+
+  playingRef.current = msgId;
+  setPlayingMsgId(msgId);
+
+  try {
+    const chunks = text.match(/.{1,200}(\s|$)/g) || [];
+
+    for (let i = 0; i < chunks.length; i++) {
+      // ✅ Use ref instead of state
+      if (playingRef.current !== msgId) break;
+
+      const encodedText = encodeURIComponent(chunks[i]);
+
+      const response = await fetch(
+        `http://localhost:8000/tts?text=${encodedText}&role=opponent`
+      );
+
+      if (!response.ok) throw new Error("TTS failed");
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const audio = new Audio(url);
       ttsAudioRef.current = audio;
 
-      audio.onended = () => {
-        setPlayingMsgId(null);
-        URL.revokeObjectURL(audioUrl);
-        ttsAudioRef.current = null;
-      };
-
-      audio.onerror = () => {
-        setPlayingMsgId(null);
-        URL.revokeObjectURL(audioUrl);
-        ttsAudioRef.current = null;
-      };
-
-      await audio.play();
-    } catch (err) {
-      console.error('TTS playback failed:', err);
-      setPlayingMsgId(null);
+      await new Promise<void>((resolve, reject) => {
+        audio.onended = () => {
+          URL.revokeObjectURL(url);
+          resolve();
+        };
+        audio.onerror = reject;
+        audio.play().catch(reject);
+      });
     }
-  };
+
+  } catch (err) {
+    console.error("Fast TTS error:", err);
+  } finally {
+    playingRef.current = null;
+    setPlayingMsgId(null);
+  }
+};
+
+  // const pauseTTS = () => {
+  //   if (ttsAudioRef.current) {
+  //     ttsAudioRef.current.pause();
+  //     ttsAudioRef.current.src = '';
+  //     ttsAudioRef.current = null;
+  //   }
+  //   setPlayingMsgId(null);
+  // };
 
   const pauseTTS = () => {
-    if (ttsAudioRef.current) {
-      ttsAudioRef.current.pause();
-      ttsAudioRef.current.src = '';
-      ttsAudioRef.current = null;
-    }
-    setPlayingMsgId(null);
-  };
+  if (ttsAudioRef.current) {
+    ttsAudioRef.current.pause();
+    ttsAudioRef.current.src = '';
+    ttsAudioRef.current = null;
+  }
+  playingRef.current = null; // ✅ important
+  setPlayingMsgId(null);
+};
+
 
   const processAudioUpload = async (audioBlob: Blob) => {
     const formData = new FormData();
@@ -439,7 +508,7 @@ const Simulator = () => {
                      <div className={styles.role}>Opposing Counsel</div>
                      <button
                        className={`${styles.ttsBtn} ${playingMsgId === m.id ? styles.ttsBtnPlaying : ''}`}
-                       onClick={() => playingMsgId === m.id ? pauseTTS() : playOpponentTTS(m.id, m.text)}
+                       onClick={() => playingMsgId === m.id ? pauseTTS() : playFastTTS(m.id, m.text)}
                        title={playingMsgId === m.id ? 'Pause' : 'Play voice'}
                      >
                        {playingMsgId === m.id
