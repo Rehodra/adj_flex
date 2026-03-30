@@ -122,11 +122,6 @@ const Navbar = () => {
           <IconLeaderboard size={18} />
           Leaderboard
         </Link>
-
-        <Link to="/user" className={styles.navLink}>
-          <IconUser size={18} />
-          Profile
-        </Link>
       </div>
 
       <div className={styles.authSection}>
