@@ -1,17 +1,18 @@
 /* ────────────────────────────────────────────────────────
-   FOOTER — Premium Light SaaS Legal-Tech Theme
+   FOOTER — Premium Deep Navy Dark Theme
 ──────────────────────────────────────────────────────── */
 
 .footer {
-  background: #ffffff;
+  background: #0f172a;
   font-family: 'Inter', -apple-system, sans-serif;
   position: relative;
+  color: #f8fafc;
 }
 
 /* Thin gradient top border */
 .topBorder {
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #e2e8f0 20%, #cbd5e1 50%, #e2e8f0 80%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, #1e293b 20%, #334155 50%, #1e293b 80%, transparent 100%);
 }
 
 /* ── MAIN CONTENT AREA ── */
@@ -26,7 +27,7 @@
 
 .footerGrid {
   display: grid;
-  grid-template-columns: 2fr 1.5fr 1.5fr;
+  grid-template-columns: 2fr 2fr 1fr;
   gap: 56px;
 
   @media (max-width: 1024px) {
@@ -63,59 +64,23 @@
 .brandName {
   font-size: 1.15rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
   letter-spacing: -0.4px;
   line-height: 1;
 }
 
-.brandTagline {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #2563eb;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-}
-
 .brandDesc {
   font-size: 0.875rem;
-  color: #64748b;
+  color: #94a3b8;
   line-height: 1.7;
   max-width: 320px;
   margin-bottom: 24px;
 }
 
-/* Social icons */
-.socials {
-  display: flex;
-  gap: 8px;
-}
-
-.socialIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  color: #64748b;
-  text-decoration: none;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #2563eb;
-    border-color: #2563eb;
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-  }
-}
-
 /* ── LINKS COLUMNS ── */
 .linksCol {
   display: flex;
-  gap: 40px;
+  gap: 64px;
 
   @media (max-width: 480px) {
     flex-direction: column;
@@ -131,7 +96,7 @@
 .colHeading {
   font-size: 0.72rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #cbd5e1;
   text-transform: uppercase;
   letter-spacing: 1.2px;
   margin-bottom: 16px;
@@ -147,115 +112,54 @@
 
   li a {
     font-size: 0.875rem;
-    color: #64748b;
+    color: #94a3b8;
     text-decoration: none;
     font-weight: 400;
     transition: color 0.18s;
 
     &:hover {
-      color: #2563eb;
+      color: #3b82f6;
     }
   }
 }
 
-/* ── NEWSLETTER COLUMN ── */
-.newsletterCol {
+/* ── SOCIAL COLUMN ── */
+.socialCol {
   display: flex;
   flex-direction: column;
 }
 
-.newsletterDesc {
-  font-size: 0.875rem;
-  color: #64748b;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-.newsletterForm {
-  margin-bottom: 16px;
-}
-
-.inputRow {
+.socials {
   display: flex;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #f8fafc;
-  transition: border-color 0.2s;
-
-  &:focus-within {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
-    background: #ffffff;
-  }
+  gap: 12px;
 }
 
-.emailInput {
-  flex: 1;
-  padding: 10px 14px;
-  font-size: 0.875rem;
-  border: none;
-  background: transparent;
-  color: #0f172a;
-  outline: none;
-
-  &::placeholder {
-    color: #94a3b8;
-  }
-}
-
-.subscribeBtn {
+.socialIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 14px;
-  background: #2563eb;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: #1d4ed8;
-  }
-}
-
-.subscribedMsg {
-  font-size: 0.85rem;
-  color: #16a34a;
-  font-weight: 600;
-  padding: 10px 0;
-  margin-bottom: 16px;
-}
-
-.hackathonBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 8px;
-
-  a {
-    font-size: 0.78rem;
-    color: #94a3b8;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
-
-    &:hover {
-      color: #2563eb;
-    }
-  }
-
-  svg {
-    color: #94a3b8;
-    flex-shrink: 0;
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
   }
 }
 
 /* ── BOTTOM BAR ── */
 .bottomBar {
-  border-top: 1px solid #f1f5f9;
-  background: #f8fafc;
+  border-top: 1px solid #1e293b;
+  background: #0b1c2c;
   padding: 20px 48px;
 
   @media (max-width: 968px) { padding: 18px 24px; }
@@ -279,18 +183,18 @@
 
 .copyright {
   font-size: 0.82rem;
-  color: #64748b;
+  color: #94a3b8;
   margin: 0;
 
   strong {
-    color: #0f172a;
+    color: #f8fafc;
     font-weight: 700;
   }
 }
 
 .subCopy {
   font-size: 0.78rem;
-  color: #94a3b8;
+  color: #64748b;
   margin: 0;
   font-style: italic;
 }

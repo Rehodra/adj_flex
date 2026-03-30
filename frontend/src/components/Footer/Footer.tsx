@@ -36,17 +36,6 @@ const LogoIcon = () => (
 );
 
 const Footer = () => {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setEmail('');
-    }
-  };
-
   return (
     <footer className={styles.footer}>
       {/* Top border accent */}
@@ -62,28 +51,11 @@ const Footer = () => {
               <LogoIcon />
               <div>
                 <span className={styles.brandName}>Adjournment.ai</span>
-                <span className={styles.brandTagline}>AI Legal Analytics &amp; Courtroom Simulation</span>
               </div>
             </div>
             <p className={styles.brandDesc}>
-              Empowering law students, advocates, and legal educators with AI‑powered courtroom simulations and intelligent judgment analytics.
+              Empowering the next generation of legal intelligence.
             </p>
-
-            {/* Social icons */}
-            <div className={styles.socials}>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="GitHub">
-                <IconGithub size={18} />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="LinkedIn">
-                <IconLinkedin size={18} />
-              </a>
-              <a href="mailto:support@adjournment.ai" className={styles.socialIcon} aria-label="Email">
-                <IconMail size={18} />
-              </a>
-              <a href="https://x.com" target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="X / Twitter">
-                <IconTwitterX size={18} />
-              </a>
-            </div>
           </div>
 
           {/* ── CENTER: Quick Links ── */}
@@ -93,57 +65,32 @@ const Footer = () => {
               <ul className={styles.linkList}>
                 <li><Link to="/cases">Simulator</Link></li>
                 <li><Link to="/judgementsearch">Judgments</Link></li>
-                <li><Link to="/dashboard">Dashboard</Link></li>
-                <li><Link to="/leaderboard">Leaderboard</Link></li>
                 <li><Link to="/pricing">Pricing</Link></li>
-                <li><Link to="/contact">Contact</Link></li>
               </ul>
             </div>
 
             <div className={styles.linksGroup}>
-              <h4 className={styles.colHeading}>Legal &amp; Trust</h4>
+              <h4 className={styles.colHeading}>Company</h4>
               <ul className={styles.linkList}>
                 <li><a href="/">Privacy Policy</a></li>
-                <li><a href="/">Terms of Use</a></li>
-                <li><a href="/">Data Security</a></li>
-                <li><a href="/">Legal Disclaimer</a></li>
+                <li><a href="/">Terms of Service</a></li>
+                <li><a href="/">Contact Us</a></li>
               </ul>
             </div>
           </div>
 
-          {/* ── RIGHT: Newsletter ── */}
-          <div className={styles.newsletterCol}>
-            <h4 className={styles.colHeading}>Stay Updated</h4>
-            <p className={styles.newsletterDesc}>
-              Stay updated with legal AI innovations, new modules, and platform releases.
-            </p>
-
-            {subscribed ? (
-              <div className={styles.subscribedMsg}>
-                ✓ You're subscribed! Thank you.
-              </div>
-            ) : (
-              <form className={styles.newsletterForm} onSubmit={handleSubscribe}>
-                <div className={styles.inputRow}>
-                  <input
-                    type="email"
-                    className={styles.emailInput}
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    required
-                  />
-                  <button type="submit" className={styles.subscribeBtn} aria-label="Subscribe">
-                    <IconSend size={15} />
-                  </button>
-                </div>
-              </form>
-            )}
-
-            <div className={styles.hackathonBadge}>
-              <IconExternalLink size={14} />
-              <a href="/" target="_blank" rel="noopener noreferrer">
-                View Hackathon Project
+          {/* ── RIGHT: Social Links ── */}
+          <div className={styles.socialCol}>
+            <h4 className={styles.colHeading}>Connect</h4>
+            <div className={styles.socials}>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="LinkedIn">
+                <IconLinkedin size={18} />
+              </a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="X / Twitter">
+                <IconTwitterX size={18} />
+              </a>
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="GitHub">
+                <IconGithub size={18} />
               </a>
             </div>
           </div>
@@ -154,7 +101,7 @@ const Footer = () => {
       <div className={styles.bottomBar}>
         <div className={styles.bottomInner}>
           <p className={styles.copyright}>
-            © 2026 <strong>Adjournment.ai</strong> — Empowering Legal Intelligence
+            © 2026 Adjournment.ai
           </p>
           <p className={styles.subCopy}>
             Built for Hackathons &bull; Designed for Real Courtrooms
