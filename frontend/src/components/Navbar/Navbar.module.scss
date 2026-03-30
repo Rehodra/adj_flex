@@ -81,10 +81,6 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-
-  &:hover .dropdown {
-    display: flex;
-  }
 }
 
 .profilePic {
@@ -101,7 +97,7 @@
 }
 
 .dropdown {
-  display: none;
+  display: flex; /* always flex; AnimatePresence controls DOM mount/unmount */
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
@@ -113,6 +109,7 @@
   min-width: 210px;
   border: 1px solid #f1f5f9;
   margin-top: 0;
+  z-index: 200;
 }
 
 .userInfo {
