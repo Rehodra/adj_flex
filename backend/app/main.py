@@ -17,6 +17,8 @@ from fastapi.responses import StreamingResponse
 from gtts import gTTS
 import io
 import requests
+import httpx
+import hashlib
 from app.config import get_settings
 from app.api.routes import cases, session, argument, audio, auth
 from app.db import connect_to_mongo, close_mongo_connection
@@ -249,16 +251,23 @@ async def http_exception_handler(request, exc: HTTPException):
 API_KEY = os.getenv("ELEVENLABS_API_KEY")
 
 @app.get("/tts")
-def elevenlabs_tts(text: str, role: str = "judge"):
-    # 🎭 Role-based voices
-    if role == "judge":
-        voice_id = "JBFqnCBsd6RMkjVDRZzb"  # example (Rachel)
-    elif role == "opponent":
-        voice_id = "JBFqnCBsd6RMkjVDRZzb"
-    else:
-        voice_id = "JBFqnCBsd6RMkjVDRZzb"
+async def elevenlabs_tts(text: str, role: str = "judge"):
 
-    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+    # 🔥 1. Limit text length (VERY IMPORTANT)
+    text = text[:300]
+
+    # 🔥 2. Cache key
+    key = hashlib.md5(text.encode()).hexdigest()
+    file_path = f"cache/{key}.mp3"
+
+    # 🔥 3. Return cached audio if exists
+    if os.path.exists(file_path):
+        return StreamingResponse(open(file_path, "rb"), media_type="audio/mpeg")
+
+    # 🎭 Role-based voice
+    voice_id = "JBFqnCBsd6RMkjVDRZzb"
+
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
 
     headers = {
         "xi-api-key": API_KEY,
@@ -266,24 +275,29 @@ def elevenlabs_tts(text: str, role: str = "judge"):
     }
 
     data = {
-         "text": text,
-        "model_id": "eleven_multilingual_v2",  # ✅ correct model
+        "text": text,
+        "model_id": "eleven_multilingual_v2",
         "voice_settings": {
-        "stability": 0.5,
-        "similarity_boost": 0.8
+            "stability": 0.3,   # ⚡ faster
+            "similarity_boost": 0.7
         }
     }
 
-    response = requests.post(url, json=data, headers=headers)
+    # 🔥 4. Async streaming request
+    async with httpx.AsyncClient(timeout=None) as client:
+        response = await client.post(url, json=data, headers=headers)
 
-    print("STATUS:", response.status_code)
-    print("CONTENT TYPE:", response.headers.get("content-type"))
-    print("RESPONSE TEXT:", response.text[:200])  # debug
+    # 🔥 5. Save to cache
+    with open(file_path, "wb") as f:
+        f.write(response.content)
 
+    # 🔥 6. Stream to frontend
     return StreamingResponse(
-        io.BytesIO(response.content),
+        iter([response.content]),
         media_type="audio/mpeg"
     )
+
+
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
