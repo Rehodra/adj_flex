@@ -11,9 +11,6 @@ import JudgementSearch from "../pages/judgmentSearch/judgmentSearch";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Simulator from "../pages/Simulator/Simulator";
 import LandingPage from "../pages/LandingPage/LandingPage";
-
-/* If you already have a Leaderboard page, keep this import.
-   If not, create the page later — route will still compile once file exists. */
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
 
 const routes: RouteObject[] = [

@@ -43,11 +43,11 @@ const Navbar = () => {
         transition={{ duration: 0.5 }}
         onClick={() => navigate('/')}
       >
-        <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" 
-          alt="Emblem" 
-          className={styles.emblem}
-        />
+        <img
+  src={process.env.PUBLIC_URL + "/images/favicon.png"}
+  alt="Emblem"
+  className={styles.emblem}
+/>
         <div className={styles.titleContainer}>
           <span className={styles.title}>ADJOURNMENT.AI</span>
           <span className={styles.subtitle}>Legal Analytics & Simulation</span>

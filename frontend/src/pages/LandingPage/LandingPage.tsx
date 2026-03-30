@@ -281,52 +281,7 @@ const LandingPage = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 1, type: 'spring', stiffness: 55, damping: 18 }}
           >
-            <div className={styles.chatMockupContainer}>
-              <div className={styles.chatMockupWindow}>
-                {/* Header */}
-                <div className={styles.mockupHeader}>
-                  <div className={styles.mockupTrafficLights}>
-                    <span className={styles.lightRed} />
-                    <span className={styles.lightYellow} />
-                    <span className={styles.lightGreen} />
-                  </div>
-                  <div className={styles.mockupHeaderText}>Simulator • State vs. Mehta</div>
-                </div>
-                
-                {/* Chat Body */}
-                <div className={styles.mockupChatBody}>
-                  {/* User Message */}
-                  <div className={styles.userBubble}>
-                    Your Honor, Exhibit A clearly contradicts the witness timeline.
-                  </div>
-                  
-                  {/* AI Feedback Message */}
-                  <div className={styles.aiBubble}>
-                    <div className={styles.aiBubbleHeader}>
-                      <span className={styles.aiLabel}>AI Judge Feedback</span>
-                      <span className={styles.feedbackBadge}>Good Reasoning</span>
-                    </div>
-                    <div className={styles.aiBubbleText}>
-                      Valid point. However, cite the relevant section of the Evidence Act to substantiate this claim.
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer Analytics */}
-                <div className={styles.mockupFooter}>
-                  <div className={styles.mockupStatRow}>
-                    <span className={styles.statLabel}>Legal Accuracy</span>
-                    <div className={styles.mockupProgressBar}><div className={styles.progressFillBlue} style={{width: '78%'}}></div></div>
-                    <span className={styles.statValue}>78%</span>
-                  </div>
-                  <div className={styles.mockupStatRow}>
-                    <span className={styles.statLabel}>Evidence Usage</span>
-                    <div className={styles.mockupProgressBar}><div className={styles.progressFillGreen} style={{width: '92%'}}></div></div>
-                    <span className={styles.statValue}>92%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <LottieAnimation src="https://lottie.host/34bf57ec-2af0-4c07-b528-7c8dbaa6c522/9KbV6JAHuh.lottie" />
           </motion.div>
         </div>
       </section>      {/* FEATURES SECTION — LIGHT THEME, ORBITAL LAYOUT */}
