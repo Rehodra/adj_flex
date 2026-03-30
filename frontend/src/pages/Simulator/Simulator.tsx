@@ -70,7 +70,14 @@ const IconLightbulb = ({ size = 24, className = "" }) => (
     <path d="M10 22h4"/>
   </svg>
 );
-// Interfaces matching backend schemas
+const IconVolume2 = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+);
+
+const IconPause = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+);
+
 interface CaseFacts {
   title: string;
   type: string;
@@ -113,6 +120,10 @@ const Simulator = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // TTS State
+  const ttsAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [playingMsgId, setPlayingMsgId] = useState<string | null>(null);
 
   // Realistic Courtroom Time
   const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes in seconds
@@ -198,6 +209,64 @@ const Simulator = () => {
 
   const toggleRecording = () => {
     isRecording ? stopRecording() : startRecording();
+  };
+
+  // TTS: play opponent's text via /tts endpoint
+  const playOpponentTTS = async (msgId: string, text: string) => {
+    // Stop any currently playing audio first
+    if (ttsAudioRef.current) {
+      ttsAudioRef.current.pause();
+      ttsAudioRef.current.src = '';
+      ttsAudioRef.current = null;
+    }
+
+    // If clicking the same message that was playing, just stop it
+    if (playingMsgId === msgId) {
+      setPlayingMsgId(null);
+      return;
+    }
+
+    setPlayingMsgId(msgId);
+
+    try {
+      const encodedText = encodeURIComponent(text);
+      const url = `http://localhost:8000/tts?text=${encodedText}&role=opponent`;
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`TTS request failed: ${response.status}`);
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      const audio = new Audio(audioUrl);
+      ttsAudioRef.current = audio;
+
+      audio.onended = () => {
+        setPlayingMsgId(null);
+        URL.revokeObjectURL(audioUrl);
+        ttsAudioRef.current = null;
+      };
+
+      audio.onerror = () => {
+        setPlayingMsgId(null);
+        URL.revokeObjectURL(audioUrl);
+        ttsAudioRef.current = null;
+      };
+
+      await audio.play();
+    } catch (err) {
+      console.error('TTS playback failed:', err);
+      setPlayingMsgId(null);
+    }
+  };
+
+  const pauseTTS = () => {
+    if (ttsAudioRef.current) {
+      ttsAudioRef.current.pause();
+      ttsAudioRef.current.src = '';
+      ttsAudioRef.current = null;
+    }
+    setPlayingMsgId(null);
   };
 
   const processAudioUpload = async (audioBlob: Blob) => {
@@ -364,7 +433,22 @@ const Simulator = () => {
             {messages.map((m) => (
               <div key={m.id} className={`${styles.messageCard} ${styles[m.type]}`}>
                  {m.type === 'user' && <div className={styles.role}>Your Argument</div>}
-                 {m.type === 'opponent' && <div className={styles.role}>Opposing Counsel</div>}
+                 
+                 {m.type === 'opponent' && (
+                   <div className={styles.opponentHeader}>
+                     <div className={styles.role}>Opposing Counsel</div>
+                     <button
+                       className={`${styles.ttsBtn} ${playingMsgId === m.id ? styles.ttsBtnPlaying : ''}`}
+                       onClick={() => playingMsgId === m.id ? pauseTTS() : playOpponentTTS(m.id, m.text)}
+                       title={playingMsgId === m.id ? 'Pause' : 'Play voice'}
+                     >
+                       {playingMsgId === m.id
+                         ? <IconPause size={14} />
+                         : <IconVolume2 size={14} />}
+                       {playingMsgId === m.id ? 'Pause' : 'Speak'}
+                     </button>
+                   </div>
+                 )}
                  
                  {m.type === 'judge' ? (
                    <JudgeResponse m={m} />

@@ -281,7 +281,52 @@ const LandingPage = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 1, type: 'spring', stiffness: 55, damping: 18 }}
           >
-            <LottieAnimation src="https://lottie.host/34bf57ec-2af0-4c07-b528-7c8dbaa6c522/9KbV6JAHuh.lottie" />
+            <div className={styles.chatMockupContainer}>
+              <div className={styles.chatMockupWindow}>
+                {/* Header */}
+                <div className={styles.mockupHeader}>
+                  <div className={styles.mockupTrafficLights}>
+                    <span className={styles.lightRed} />
+                    <span className={styles.lightYellow} />
+                    <span className={styles.lightGreen} />
+                  </div>
+                  <div className={styles.mockupHeaderText}>Simulator • State vs. Mehta</div>
+                </div>
+                
+                {/* Chat Body */}
+                <div className={styles.mockupChatBody}>
+                  {/* User Message */}
+                  <div className={styles.userBubble}>
+                    Your Honor, Exhibit A clearly contradicts the witness timeline.
+                  </div>
+                  
+                  {/* AI Feedback Message */}
+                  <div className={styles.aiBubble}>
+                    <div className={styles.aiBubbleHeader}>
+                      <span className={styles.aiLabel}>AI Judge Feedback</span>
+                      <span className={styles.feedbackBadge}>Good Reasoning</span>
+                    </div>
+                    <div className={styles.aiBubbleText}>
+                      Valid point. However, cite the relevant section of the Evidence Act to substantiate this claim.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Analytics */}
+                <div className={styles.mockupFooter}>
+                  <div className={styles.mockupStatRow}>
+                    <span className={styles.statLabel}>Legal Accuracy</span>
+                    <div className={styles.mockupProgressBar}><div className={styles.progressFillBlue} style={{width: '78%'}}></div></div>
+                    <span className={styles.statValue}>78%</span>
+                  </div>
+                  <div className={styles.mockupStatRow}>
+                    <span className={styles.statLabel}>Evidence Usage</span>
+                    <div className={styles.mockupProgressBar}><div className={styles.progressFillGreen} style={{width: '92%'}}></div></div>
+                    <span className={styles.statValue}>92%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>      {/* FEATURES SECTION — LIGHT THEME, ORBITAL LAYOUT */}
@@ -444,28 +489,94 @@ const LandingPage = () => {
           {/* 6-card grid */}
           <div className={styles.statsGrid}>
             {[
-              { icon: <IconDatabase size={22} />, value: 5000, suffix: '+', label: 'Judgments Indexed', sub: 'SC, HC & Tribunal archives' },
-              { icon: <IconCheckCircle size={22} />, value: 98, suffix: '%', label: 'AI Evaluation Accuracy', sub: 'Argument scoring precision' },
-              { icon: <IconActivity size={22} />, value: 10000, suffix: '+', label: 'Simulations Run', sub: 'Across all case types' },
-              { icon: <IconUsers size={22} />, value: 2000, suffix: '+', label: 'Law Students', sub: 'Trained via the platform' },
-              { icon: <IconShield size={22} />, value: 500, suffix: '+', label: 'Legal Professionals', sub: 'Advocates & educators' },
-              { icon: <IconBookOpen size={22} />, value: 50, suffix: '+', label: 'IPC / CrPC Modules', sub: 'Evidence Act included' },
+              { colSpan: 2, icon: <IconDatabase size={22} />, value: 25000, suffix: '+', label: 'Precedents Analyzed', sub: 'Real-time database covering decades of Supreme Court & High Court jurisprudence.' },
+              { colSpan: 2, icon: <IconCheckCircle size={22} />, value: 98, suffix: '%', label: 'AI Evaluation Accuracy', sub: 'Validated by legal experts for argument scoring and citation mapping precision.' },
+              { colSpan: 1, icon: <IconActivity size={22} />, value: 10000, suffix: '+', label: 'Simulations Run', sub: 'Helping users master courtroom advocacy through repetitive, high-stakes practice.' },
+              { colSpan: 1, icon: <IconUsers size={22} />, value: 2000, suffix: '+', label: 'Law Students', sub: 'Active learners from top-tier national law universities.' },
+              { colSpan: 1, icon: <IconShield size={22} />, value: 500, suffix: '+', label: 'Legal Professionals', sub: 'Advocates utilizing AI to refine litigation strategies.' },
+              { colSpan: 1, icon: <IconBookOpen size={22} />, value: 50, suffix: '+', label: 'IPC / CrPC Modules', sub: 'Training modules covering major Indian penal codes.' },
             ].map((stat, i) => (
               <motion.div
                 key={i}
-                className={styles.statCard}
+                className={`${styles.statCard} ${stat.colSpan === 2 ? styles.cardSpan2 : ''}`}
                 initial={{ opacity: 0, y: 32 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ delay: i * 0.08, duration: 0.6, ease: 'easeOut' }}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
               >
-                <div className={styles.statIconWrapper}>{stat.icon}</div>
-                <h4 className={styles.statNumber}>
-                  <StatCounter endValue={stat.value} suffix={stat.suffix} />
-                </h4>
-                <span className={styles.statLabel}>{stat.label}</span>
-                <span className={styles.statSub}>{stat.sub}</span>
+                <div className={styles.bentoBgPattern} />
+                <div className={styles.statCardContent}>
+                  <div className={styles.statContentTop}>
+                    <div className={styles.statIconWrapper}>{stat.icon}</div>
+                    <div className={styles.statTextBackdrop}>
+                      <h4 className={styles.statNumber}>
+                        <StatCounter endValue={stat.value} suffix={stat.suffix} />
+                      </h4>
+                      <span className={styles.statLabel}>{stat.label}</span>
+                      <span className={styles.statSub}>{stat.sub}</span>
+                    </div>
+                  </div>
+
+                  {i === 0 && (
+                    <div className={styles.visualEnhancement}>
+                      <div className={styles.indexingGridWrapper}>
+                        <div className={styles.indexingGridSweep} />
+                        <div className={styles.indexingGrid}>
+                          {Array.from({ length: 45 }).map((_, idx) => (
+                            <div key={idx} className={`${styles.node} ${Math.random() < 0.2 ? styles.nodeActive : ''}`} />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {i === 1 && (
+                    <div className={styles.visualEnhancement}>
+                      <div className={styles.steepChartWrapper}>
+                        <span className={styles.benchmarkLabel}>Human Average (85%)</span>
+                        <svg viewBox="0 0 100 40" className={styles.steepChartSvg} preserveAspectRatio="none">
+                          <defs>
+                            <linearGradient id="steepGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="rgba(59, 130, 246, 0.4)" />
+                              <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
+                            </linearGradient>
+                          </defs>
+                          {/* Benchmark dotted line at 60% height (y=24) -> actually accuracy is higher, let's put benchmark at y=20 */}
+                          <line x1="0" y1="20" x2="100" y2="20" stroke="#94a3b8" strokeDasharray="1.5,1.5" strokeWidth="0.5" />
+                          <motion.path 
+                            d="M0,24 C40,24 60,4 96,2" 
+                            fill="none" 
+                            stroke="#3b82f6" 
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            initial={{ pathLength: 0 }}
+                            whileInView={{ pathLength: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1.5, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                          />
+                          <path d="M0,24 C40,24 60,4 96,2 L96,40 L0,40 Z" fill="url(#steepGrad)" stroke="none" />
+                          <motion.circle 
+                            cx="96" cy="2" r="1.5"
+                            fill="#3b82f6"
+                            initial={{ scale: 0, opacity: 0 }}
+                            whileInView={{ scale: [1, 1.5, 1], opacity: [0.8, 1, 0.8] }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 1.5, duration: 2, repeat: Infinity }}
+                          />
+                          <motion.circle 
+                            cx="96" cy="2" r="4"
+                            fill="rgba(59, 130, 246, 0.4)"
+                            initial={{ scale: 0, opacity: 0 }}
+                            whileInView={{ scale: [1, 1.8, 1], opacity: [0.4, 0, 0.4] }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 1.5, duration: 2, repeat: Infinity }}
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+
+                </div>
               </motion.div>
             ))}
           </div>
@@ -485,26 +596,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ── PRE-FOOTER CTA STRIP ── */}
-      <section className={styles.ctaStrip}>
-        <div className={styles.ctaStripGlow} />
-        <div className={styles.ctaStripInner}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <h2 className={styles.ctaStripHeading}>Ready to Master the Courtroom with AI?</h2>
-            <p className={styles.ctaStripSub}>Step into real scenarios, argue with confidence, and receive instant AI-powered feedback.</p>
-            <Link to="/cases">
-              <button className={styles.ctaStripBtn}>
-                Start Free Simulation <span className={styles.btnArrow}><IconArrowRight size={18} /></span>
-              </button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+
 
       <Footer />
     </div>
