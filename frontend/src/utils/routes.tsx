@@ -5,13 +5,14 @@ import Signup from "../pages/SignUp/Signup";
 //import ProtectedRoute from "../components/ProtectedRoute";
 import IndividualSearchPage from "../pages/IndividualSearchPage/IndividualSearchPage";
 //import Main from "../pages/Main";
-import Search from "../pages/Search/Search";
+import Search from "../pages/Search/Search";                                                                                                                                                                                                    
 import User from "../pages/User/User";
 import JudgementSearch from "../pages/judgmentSearch/judgmentSearch";
-import Dashboard from "../pages/Dashboard/Dashboard";
-import Simulator from "../pages/Simulator/Simulator";
+import Cases from "../pages/Cases/Cases";
 import LandingPage from "../pages/LandingPage/LandingPage";
+import Dashboard from "../pages/Dashboard/Dashboard";
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
+import Simulator from "../pages/Simulator/Simulator";
 
 const routes: RouteObject[] = [
     {
@@ -46,7 +47,7 @@ const routes: RouteObject[] = [
 
     {
         path: "/cases",
-        element: <Dashboard />
+        element: <Cases />
     },
 
     {
@@ -60,8 +61,13 @@ const routes: RouteObject[] = [
     },
 
     {
-        path: "/simulate/:caseId",
+        path: "/simulator/:caseId",
         element: <Simulator />
+    },
+
+    {
+        path: "/simulator",
+        element: <Cases />
     },
 
     {

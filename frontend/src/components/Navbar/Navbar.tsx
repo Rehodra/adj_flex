@@ -103,7 +103,7 @@ const Navbar = () => {
       </motion.div>
 
       <div className={styles.navLinks}>
-        <Link to="/cases" className={styles.navLink}>
+        <Link to="/simulator" className={styles.navLink}>
           <IconGavel size={18} />
           Simulator
         </Link>

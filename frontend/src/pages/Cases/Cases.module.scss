@@ -1,0 +1,53 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.container h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.container p {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.casesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.caseCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.caseCard h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.caseCard p {
+  margin: 5px 0;
+}
+
+.simulateButton {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.simulateButton:hover {
+  background-color: #2563eb;
+}

@@ -106,6 +106,7 @@ interface ChatMessage {
 const Simulator = () => {
   const { caseId } = useParams<{ caseId: string }>();
   const navigate = useNavigate();
+
   const [sessionId, setSessionId] = useState<string>('');
   const [caseFacts, setCaseFacts] = useState<CaseFacts | null>(null);
   const [phase, setPhase] = useState<string>('opening_statement');
@@ -174,6 +175,21 @@ const Simulator = () => {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  if (!caseId) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <h2>Select a Case to Simulate</h2>
+        <p>Please go to the Cases page to select a case for simulation.</p>
+        <button 
+          onClick={() => navigate('/simulator')} 
+          style={{ padding: '10px 20px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        >
+          Go to Cases
+        </button>
+      </div>
+    );
+  }
 
   // 2. Handle Audio Recording
   const startRecording = async () => {
@@ -414,11 +430,14 @@ const playFastTTS = async (msgId: string, text: string) => {
         });
 
         if (opponent_response) {
-          newMessages.push({
+          const oppMsg: ChatMessage = {
             id: Date.now().toString() + '_opp',
             type: 'opponent',
             text: opponent_response
-          });
+          };
+          newMessages.push(oppMsg);
+          // Auto-play TTS for opponent response
+          setTimeout(() => playFastTTS(oppMsg.id, oppMsg.text), 500);
         }
         
         return newMessages;
@@ -438,7 +457,7 @@ const playFastTTS = async (msgId: string, text: string) => {
 
   const terminateSession = () => {
     if (window.confirm("Are you sure you want to terminate this courtroom session? Any unsaved progress will be lost.")) {
-      navigate('/cases');
+      navigate('/simulator');
     }
   };
 
