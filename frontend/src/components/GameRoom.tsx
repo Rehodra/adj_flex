@@ -56,7 +56,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({ sessionId, userId, role }) =
   const [currentTurn, setCurrentTurn] = useState<string>("plaintiff");
   const [round, setRound] = useState(1);
   const [scores, setScores] = useState({ plaintiff: 0, defense: 0 });
-  const [arguments, setArguments] = useState<any[]>([]);
+  const [argList, setArgList] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
@@ -113,7 +113,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({ sessionId, userId, role }) =
     // When an argument is submitted
     gameSocket.onArgumentReceived((data) => {
       console.log("Argument received:", data);
-      setArguments((prev) => [
+      setArgList((prev) => [
         ...prev,
         {
           role: data.role,
@@ -127,7 +127,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({ sessionId, userId, role }) =
     gameSocket.onArgumentEvaluated((data) => {
       console.log("Argument evaluated:", data);
       setScores(data.scores);
-      setArguments((prev) =>
+      setArgList((prev) =>
         prev.map((arg, idx) =>
           idx === prev.length - 1
             ? {
@@ -142,7 +142,7 @@ export const GameRoom: React.FC<GameRoomProps> = ({ sessionId, userId, role }) =
     // Opponent's response
     gameSocket.onOpponentResponse((data) => {
       console.log("Opponent response:", data);
-      setArguments((prev) => [
+      setArgList((prev) => [
         ...prev,
         {
           role: data.role,
@@ -353,11 +353,11 @@ export const GameRoom: React.FC<GameRoomProps> = ({ sessionId, userId, role }) =
       )}
 
       {/* Arguments History */}
-      <Card title={`Argument History (${arguments.length})`}>
-        {arguments.length === 0 ? (
+      <Card title={`Argument History (${argList.length})`}>
+        {argList.length === 0 ? (
           <p style={{ color: "#999" }}>No arguments yet</p>
         ) : (
-          arguments.map((arg, idx) => (
+          argList.map((arg, idx) => (
             <ArgumentBox key={idx}>
               <div className="role">{arg.role.toUpperCase()}</div>
               <div className="text">{arg.text}</div>

@@ -13,17 +13,13 @@ from datetime import datetime
 import json
 import os # Added for os.path.exists check
 import logging # Added for logger
-<<<<<<< HEAD
 from fastapi.responses import StreamingResponse
 from gtts import gTTS
 import io
 import requests
 import httpx
 import hashlib
-=======
 from socketio import ASGIApp
-
->>>>>>> shreya
 from app.config import get_settings
 from app.api.routes import cases, session, argument, audio, auth
 from app.db import connect_to_mongo, close_mongo_connection
