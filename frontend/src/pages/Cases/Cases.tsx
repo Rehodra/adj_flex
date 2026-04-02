@@ -5,15 +5,87 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 
 const cases = [
-  { id: 'CIVIL_EASY_1', title: 'Civil Case - Easy 1', type: 'Civil', difficulty: 'Easy', wins: 128, accuracy: '91%' },
-  { id: 'CIVIL_MED_1', title: 'Civil Case - Medium 1', type: 'Civil', difficulty: 'Medium', wins: 84, accuracy: '76%' },
-  { id: 'CIVIL_HARD_1', title: 'Civil Case - Hard 1', type: 'Civil', difficulty: 'Hard', wins: 43, accuracy: '58%' },
-  { id: 'CRIM_EASY_1', title: 'Criminal Case - Easy 1', type: 'Criminal', difficulty: 'Easy', wins: 112, accuracy: '89%' },
-  { id: 'CRIM_MED_1', title: 'Criminal Case - Medium 1', type: 'Criminal', difficulty: 'Medium', wins: 67, accuracy: '72%' },
-  { id: 'CRIM_HARD_1', title: 'Criminal Case - Hard 1', type: 'Criminal', difficulty: 'Hard', wins: 31, accuracy: '54%' },
-  { id: 'CONST_EASY_1', title: 'Constitutional - Easy 1', type: 'Constitutional', difficulty: 'Easy', wins: 98, accuracy: '85%' },
-  { id: 'CONST_MED_1', title: 'Constitutional - Medium 1', type: 'Constitutional', difficulty: 'Medium', wins: 55, accuracy: '69%' },
-  { id: 'CONST_HARD_1', title: 'Constitutional - Hard 1', type: 'Constitutional', difficulty: 'Hard', wins: 22, accuracy: '47%' },
+  {
+    id: 'CIVIL_EASY_1',
+    title: 'Ramesh Kumar vs. Suresh Gupta – Property Boundary Dispute',
+    description: 'A civil dispute over encroachment and boundary demarcation between neighboring properties.',
+    type: 'Civil',
+    difficulty: 'Easy',
+    wins: 128,
+    accuracy: '91%'
+  },
+  {
+    id: 'CIVIL_MED_1',
+    title: 'Priya Sharma vs. ABC Builders – Delay in Possession',
+    description: 'A homebuyer files a case against a builder for delayed delivery of an apartment.',
+    type: 'Civil',
+    difficulty: 'Medium',
+    wins: 84,
+    accuracy: '76%'
+  },
+  {
+    id: 'CIVIL_HARD_1',
+    title: 'Anil Verma vs. State Bank – Loan Recovery Dispute',
+    description: 'A borrower challenges the bank’s recovery proceedings and interest calculations.',
+    type: 'Civil',
+    difficulty: 'Hard',
+    wins: 43,
+    accuracy: '58%'
+  },
+  {
+    id: 'CRIM_EASY_1',
+    title: 'State of Karnataka vs. Arjun Mehta – Chain Snatching',
+    description: 'An accused is charged with snatching a gold chain from a pedestrian in a busy market.',
+    type: 'Criminal',
+    difficulty: 'Easy',
+    wins: 112,
+    accuracy: '89%'
+  },
+  {
+    id: 'CRIM_MED_1',
+    title: 'State of Maharashtra vs. Vikram Yadav – Bar Brawl Assault',
+    description: 'A physical altercation in a bar results in grievous injuries and criminal charges.',
+    type: 'Criminal',
+    difficulty: 'Medium',
+    wins: 67,
+    accuracy: '72%'
+  },
+  {
+    id: 'CRIM_HARD_1',
+    title: 'State of Delhi vs. Neha Sharma – Online Shopping Fraud',
+    description: 'A fraudulent e-commerce website deceives customers into paying for non-existent products.',
+    type: 'Criminal',
+    difficulty: 'Hard',
+    wins: 31,
+    accuracy: '54%'
+  },
+  {
+    id: 'CONST_EASY_1',
+    title: 'Rahul Das vs. State of West Bengal – Freedom of Speech',
+    description: 'A citizen challenges restrictions imposed on public speech under constitutional rights.',
+    type: 'Constitutional',
+    difficulty: 'Easy',
+    wins: 98,
+    accuracy: '85%'
+  },
+  {
+    id: 'CONST_MED_1',
+    title: 'Ananya Roy vs. Union of India – Right to Privacy',
+    description: 'A petition questions government surveillance practices violating privacy rights.',
+    type: 'Constitutional',
+    difficulty: 'Medium',
+    wins: 55,
+    accuracy: '69%'
+  },
+  {
+    id: 'CONST_HARD_1',
+    title: 'Citizens Forum vs. State – Reservation Policy Challenge',
+    description: 'A constitutional challenge to reservation quotas based on equality principles.',
+    type: 'Constitutional',
+    difficulty: 'Hard',
+    wins: 22,
+    accuracy: '47%'
+  },
 ];
 
 const difficultyConfig: any = {
@@ -172,6 +244,11 @@ export default function Cases() {
                   <div className={styles.cardType}>
                     {c.type} Law
                   </div>
+
+                  {/* NEW — one line description */}
+                  <p className={styles.cardDescription}>
+                    {c.description}
+                  </p>
 
                 </div>
 

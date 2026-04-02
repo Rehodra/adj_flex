@@ -445,7 +445,111 @@ const JudgeResponse = ({ m }: { m: ChatMessage }) => {
     </div>
   );
 };
+// ── CASE DESCRIPTION PREVIEW MODAL ─────────────────────────────
 
+const CasePreviewModal = ({
+  caseFacts,
+  onStart,
+}: {
+  caseFacts: CaseFacts;
+  onStart: () => void;
+}) => {
+  return (
+    <AnimatePresence>
+      <motion.div
+        className={styles.modalOverlay}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className={styles.modeModal}
+          initial={{ opacity: 0, y: 36, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.97 }}
+          transition={{ type: "spring", stiffness: 240, damping: 24 }}
+        >
+          <div className={styles.modalHeader}>
+            <span className={styles.modalEyebrow}>
+              Case Description
+            </span>
+
+            <h2 className={styles.modalTitle}>
+              {caseFacts.title}
+            </h2>
+          </div>
+
+          <div
+            style={{
+              padding: "18px 22px",
+              maxHeight: "420px",
+              overflowY: "auto",
+            }}
+          >
+            {/* OVERVIEW */}
+
+            <div className={styles.infoSection}>
+              <h3>Overview</h3>
+              <p>{caseFacts.facts}</p>
+            </div>
+
+            {/* EVIDENCE */}
+
+            <div className={styles.infoSection}>
+              <h3>Evidence & Exhibits</h3>
+
+              <ul className={styles.evidenceList}>
+                {caseFacts.evidence?.map((e, i) => (
+                  <li key={i}>{e}</li>
+                ))}
+              </ul>
+            </div>
+
+            {/* LEGAL PROVISIONS */}
+
+            {caseFacts.legal_provisions?.length > 0 && (
+              <div className={styles.infoSection}>
+                <h3>Legal Provisions</h3>
+
+                <div className={styles.provisionTags}>
+                  {caseFacts.legal_provisions.map(
+                    (p, i) => (
+                      <span
+                        key={i}
+                        className={
+                          styles.provisionTag
+                        }
+                      >
+                        {p}
+                      </span>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* START BUTTON */}
+
+          <div
+            style={{
+              padding: "16px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <button
+              onClick={onStart}
+              className={styles.beginButton}
+            >
+              Start Simulation
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
 // ── MAIN SIMULATOR ────────────────────────────────────────────────────────────
 const Simulator = () => {
   const { caseId } = useParams<{ caseId: string }>();
@@ -453,6 +557,7 @@ const Simulator = () => {
 
   const [gameMode, setGameMode] = useState<GameMode>(null);
   const [showModeModal, setShowModeModal] = useState(true);
+  const [showCasePreview, setShowCasePreview] = useState(false);
 
   const [sessionId, setSessionId] = useState<string>('');
   const [caseFacts, setCaseFacts] = useState<CaseFacts | null>(null);
@@ -509,9 +614,10 @@ const Simulator = () => {
   }, [messages]);
 
   const handleModeSelect = (mode: GameMode) => {
-    setGameMode(mode);
-    setShowModeModal(false);
-  };
+  setGameMode(mode);
+  setShowModeModal(false);
+  setShowCasePreview(true); // show case description popup
+};
 
   const startRecording = async () => {
     try {
@@ -672,6 +778,14 @@ const Simulator = () => {
           />
         )}
       </AnimatePresence>
+      <AnimatePresence>
+  {showCasePreview && caseFacts && (
+    <CasePreviewModal
+      caseFacts={caseFacts}
+      onStart={() => setShowCasePreview(false)}
+    />
+  )}
+</AnimatePresence>
 
       {gameMode && caseFacts && (
         <div className={styles.simulatorContainer}>
