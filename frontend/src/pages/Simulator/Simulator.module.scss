@@ -1015,6 +1015,71 @@ $red-dim:     rgba(239, 68, 68, 0.08);
     &:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37,99,235,0.34); }
   }
 }
+.languageRow {
+  padding: 14px 22px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.languageLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.languageDropdown {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid #e4e8f0;
+  font-size: 0.85rem;
+  background: #f8fafc;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+.languageDropdown:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.beginContainer {
+  padding: 10px 22px 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.beginButton {
+  padding: 10px 28px;
+  background: linear-gradient(
+    135deg,
+    #1535a0 0%,
+    #2563eb 100%
+  );
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.beginButton:hover {
+  transform: translateY(-1px);
+}
+
+.beginButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.modeSelected {
+  border-color: #2563eb;
+  background: white;
+}
 
 // ── RESPONSIVE ────────────────────────────────────────────────────────────────
 @media (max-width: 900px) {
@@ -1024,3 +1089,4 @@ $red-dim:     rgba(239, 68, 68, 0.08);
   .inputArea { padding: 11px 14px 15px; }
   .userBubble, .opponentBubble { max-width: 88%; }
 }
+
