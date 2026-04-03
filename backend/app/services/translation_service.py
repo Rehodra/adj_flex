@@ -41,6 +41,22 @@ class TranslationService:
         "Sanskrit": "sa"
     }
     
+    # Language code mappings for Sarvam AI Translate
+    SARVAM_LANGUAGE_CODES = {
+        "English": "en-IN",
+        "Hindi": "hi-IN",
+        "Bengali": "bn-IN",
+        "Telugu": "te-IN",
+        "Marathi": "mr-IN",
+        "Tamil": "ta-IN",
+        "Gujarati": "gu-IN",
+        "Kannada": "kn-IN",
+        "Odia": "od-IN",
+        "Odiya": "od-IN",
+        "Malayalam": "ml-IN",
+        "Punjabi": "pa-IN"
+    }
+    
     def __init__(self):
         """Initialize translation service"""
         self.available = True
@@ -68,24 +84,49 @@ class TranslationService:
         if source_language == target_language:
             return text
             
-        # If target is English, return original text
-        if target_language == "English":
-            return text
-            
+        # Try Sarvam AI First
+        sarvam_source = self.SARVAM_LANGUAGE_CODES.get(source_language)
+        sarvam_target = self.SARVAM_LANGUAGE_CODES.get(target_language)
+        
+        if sarvam_source and sarvam_target:
+            try:
+                from app.config import get_settings
+                settings = get_settings()
+                if settings.SARVAM_API_KEY:
+                    async with httpx.AsyncClient() as client:
+                        translate_url = "https://api.sarvam.ai/translate"
+                        headers = {
+                            "Content-Type": "application/json",
+                            "api-subscription-key": settings.SARVAM_API_KEY
+                        }
+                        payload = {
+                            "input": text,
+                            "source_language_code": sarvam_source,
+                            "target_language_code": sarvam_target,
+                            "speaker_gender": "Male",
+                            "model": "mayura:v1",
+                            "mode": "formal",
+                            "algo": "nmt"
+                        }
+                        
+                        response = await client.post(translate_url, headers=headers, json=payload, timeout=self.timeout)
+                        if response.status_code == 200:
+                            data = response.json()
+                            translated_text = data.get("translated_text")
+                            if translated_text:
+                                logger.info(f"Successfully translated using Sarvam AI")
+                                return translated_text
+                        logger.warning(f"Sarvam Translate failed: {response.status_code} {response.text}, falling back to Google Translate.")
+            except Exception as e:
+                logger.warning(f"Sarvam translation exception: {str(e)}, falling back to Google Translate.")
+
+        # Fallback to Google Translate
         try:
             source_code = self.LANGUAGE_CODES.get(source_language, "en")
             target_code = self.LANGUAGE_CODES.get(target_language, "en")
             
             # Use Google Translate API via simple HTTP request
             async with httpx.AsyncClient() as client:
-                # Using Google Translate API endpoint
-                url = "https://translate.googleapis.com/translate_a/element.js"
-                params = {
-                    "cb": "googleTranslateElementInit"
-                }
-                
-                # Alternative: Use the simple translation API
-                # This is a workaround that doesn't require authentication
                 encoded_text = urllib.parse.quote(text)
                 translate_url = f"https://translate.google.com/translate_a/single?client=gtx&sl={source_code}&tl={target_code}&dt=t&q={encoded_text}"
                 
@@ -101,6 +142,7 @@ class TranslationService:
                             for item in data[0]:
                                 if item[0]:
                                     translated_text += item[0]
+                            logger.info(f"Successfully translated using Google Translate fallback")
                             return translated_text if translated_text else text
                     except Exception as e:
                         logger.warning(f"Error parsing translation response: {e}")

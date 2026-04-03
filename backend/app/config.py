@@ -17,6 +17,13 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str = Field(default="", env="GROQ_API_KEY")
     GROQ_MODEL: str = Field(default="llama-3.3-70b-versatile", env="GROQ_MODEL")
     
+    # Separate keys/models for agents
+    JUDGE_API_KEY: str = Field(default="", env="JUDGE_API_KEY")
+    JUDGE_MODEL: str = Field(default="mixtral-8x7b-32768", env="JUDGE_MODEL")
+    
+    OPPONENT_API_KEY: str = Field(default="", env="OPPONENT_API_KEY")
+    OPPONENT_MODEL: str = Field(default="llama-3.1-8b-instant", env="OPPONENT_MODEL")
+    
     # Application
     ENV: str = Field(default="development", env="ENV")
     DEBUG: bool = Field(default=False, env="DEBUG")

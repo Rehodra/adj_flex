@@ -93,7 +93,7 @@ async def text_to_speech(
     role: str = Query("opponent")
 ):
     """
-    Convert text to speech in the specified language
+    Convert text to speech in the specified language using Sarvam AI with gTTS fallback.
     
     Args:
         text: Text to convert to speech
@@ -101,12 +101,74 @@ async def text_to_speech(
         role: Role/persona (for future use)
         
     Returns:
-        Audio stream (MP3)
+        Audio stream (MP3 or WAV)
     """
     try:
         if not text or not text.strip():
             raise HTTPException(status_code=400, detail="Text is required")
         
+        # Sarvam AI TTS mapping with recommended speakers
+        # Using Female voices (ishita/priya/roopa/neha/pooja) as default for opponent
+        sarvam_tts_languages = {
+            "English": {"code": "en-IN", "speaker": "ishita"},
+            "Hindi": {"code": "hi-IN", "speaker": "priya"},
+            "Bengali": {"code": "bn-IN", "speaker": "roopa"},
+            "Telugu": {"code": "te-IN", "speaker": "priya"},
+            "Marathi": {"code": "mr-IN", "speaker": "priya"},
+            "Tamil": {"code": "ta-IN", "speaker": "ishita"},
+            "Gujarati": {"code": "gu-IN", "speaker": "priya"},
+            "Kannada": {"code": "kn-IN", "speaker": "neha"},
+            "Odia": {"code": "od-IN", "speaker": "pooja"},
+            "Odiya": {"code": "od-IN", "speaker": "pooja"},
+            "Malayalam": {"code": "ml-IN", "speaker": "pooja"},
+            "Punjabi": {"code": "pa-IN", "speaker": "roopa"}
+        }
+
+        sarvam_lang = sarvam_tts_languages.get(language)
+
+        if sarvam_lang and _settings.SARVAM_API_KEY:
+            try:
+                # Sarvam AI TTS REST API has a limit of 2500 characters
+                text_to_synthesize = text[:2500]
+                
+                payload = {
+                    "inputs": [text_to_synthesize],
+                    "target_language_code": sarvam_lang["code"],
+                    "speaker": sarvam_lang["speaker"],
+                    "model": "bulbul:v3"
+                }
+
+                logger.info(f"Attempting Sarvam AI TTS for language: {language}")
+                
+                response = requests.post(
+                    "https://api.sarvam.ai/text-to-speech",
+                    headers={
+                        "api-subscription-key": _settings.SARVAM_API_KEY,
+                        "Content-Type": "application/json"
+                    },
+                    json=payload,
+                    timeout=15
+                )
+
+                if response.status_code == 200:
+                    result = response.json()
+                    audio_base64 = result.get("audios", [None])[0]
+                    if audio_base64:
+                        import base64
+                        audio_data = base64.b64decode(audio_base64)
+                        logger.info(f"Successfully generated Sarvam TTS")
+                        return StreamingResponse(
+                            iter([audio_data]),
+                            media_type="audio/wav",
+                            headers={"Content-Disposition": "inline; filename=audio.wav"}
+                        )
+                else:
+                    logger.warning(f"Sarvam AI TTS Error: {response.text}. Falling back to gTTS.")
+
+            except Exception as e:
+                logger.warning(f"Sarvam API exception: {str(e)}. Falling back to gTTS.")
+
+        # Fallback to gTTS
         # Get language code for gTTS
         lang_code = LANGUAGE_CODES_TTS.get(language, "en")
         
@@ -118,7 +180,7 @@ async def text_to_speech(
         tts.write_to_fp(audio_buffer)
         audio_buffer.seek(0)
         
-        logger.info(f"Generated TTS for language: {language} (code: {lang_code})")
+        logger.info(f"Generated gTTS fallback for language: {language} (code: {lang_code})")
         
         return StreamingResponse(
             iter([audio_buffer.getvalue()]),
