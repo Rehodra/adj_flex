@@ -857,17 +857,24 @@ const Simulator = () => {
             </div>
 
             <div className={styles.paneScroll}>
+              <div className={styles.infoSection}>
+                <h3>Overview</h3>
+                <p>
+                  {caseFacts.facts}
+                </p>
+              </div>
 
-  <div className={styles.infoSection}>
-  <h3>Overview</h3>
-
-  <p>
-    {caseFacts.facts}
-  </p>
-
-</div>
-
-</div>
+              {caseFacts.evidence && caseFacts.evidence.length > 0 && (
+                <div className={styles.infoSection}>
+                  <h3>Evidence & Exhibits</h3>
+                  <ul className={styles.evidenceList}>
+                    {caseFacts.evidence.map((ev, i) => (
+                      <li key={i}>{ev}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
 
             <div className={styles.sideControls}>
               <div className={`${styles.timer} ${timeLeft < 300 ? styles.timerUrgent : ''}`}>

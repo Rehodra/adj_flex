@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -36,48 +37,7 @@ const GlobalFonts = createGlobalStyle`
 
 /* ─── DATA ────────────────────────────────────────────────── */
 
-const historyData = [
-  {
-    id: 1,
-    case: "Cyber Fraud – Fake E-commerce Website",
-    mode: "AI",
-    score: 86,
-    tier: "Advanced Advocate",
-    accuracy: 91,
-    date: "12 Apr 2026",
-    duration: "18 min",
-  },
-  {
-    id: 2,
-    case: "Chain Snatching Case",
-    mode: "Multiplayer",
-    score: 74,
-    tier: "Intermediate",
-    accuracy: 82,
-    date: "10 Apr 2026",
-    duration: "22 min",
-  },
-  {
-    id: 3,
-    case: "Land Dispute Between Siblings",
-    mode: "AI",
-    score: 92,
-    tier: "Expert Litigator",
-    accuracy: 96,
-    date: "07 Apr 2026",
-    duration: "15 min",
-  },
-  {
-    id: 4,
-    case: "Online Payment Fraud",
-    mode: "AI",
-    score: 68,
-    tier: "Beginner",
-    accuracy: 75,
-    date: "05 Apr 2026",
-    duration: "20 min",
-  },
-];
+
 
 interface Badge {
   Icon: LucideIcon;
@@ -108,13 +68,39 @@ function scoreColor(score: number) {
 /* ─── COMPONENT ───────────────────────────────────────────── */
 
 const JudgementSearch = () => {
-  const [expanded, setExpanded]     = useState<number | null>(null);
+  const [expanded, setExpanded]     = useState<number | string | null>(null);
   const [search, setSearch]         = useState("");
   const [modeFilter, setModeFilter] = useState("All");
   const [tierFilter, setTierFilter] = useState("All");
+  const [historyData, setHistoryData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const toggle = (id: number) => setExpanded((p) => (p === id ? null : id));
+  React.useEffect(() => {
+    axios.get("http://localhost:8000/api/session/user/demo_user_001")
+      .then(res => {
+        const mapped = res.data.sessions.map((s: any) => {
+          const created = new Date(s.created_at);
+          const active = new Date(s.last_activity);
+          const durationMins = Math.max(1, Math.round((active.getTime() - created.getTime()) / 60000));
+          return {
+            id: s.session_id,
+            case: s.case_id.replace(/_/g, ' ').toUpperCase(),
+            mode: s.mode.toLowerCase().includes('ai') || s.mode.toLowerCase().includes('criminal') ? 'AI' : 'Multiplayer',
+            score: Math.round(s.score || 0),
+            tier: s.performance_tier,
+            accuracy: Math.round(s.score || 0),
+            date: created.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+            duration: `${durationMins} min`,
+          };
+        });
+        setHistoryData(mapped);
+      })
+      .catch(err => console.error("Error fetching sessions", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const toggle = (id: string | number) => setExpanded((p) => (p === id ? null : id));
 
   const filtered = useMemo(() => {
     return historyData.filter((g) => {
@@ -125,7 +111,7 @@ const JudgementSearch = () => {
     });
   }, [search, modeFilter, tierFilter]);
 
-  const avgScore    = Math.round(historyData.reduce((a, g) => a + g.score, 0) / historyData.length);
+  const avgScore    = historyData.length > 0 ? Math.round(historyData.reduce((a, g) => a + g.score, 0) / historyData.length) : 0;
   const earnedCount = BADGES.filter((b) => b.earned).length;
   const isFiltered  = search || modeFilter !== "All" || tierFilter !== "All";
   const clearAll    = () => { setSearch(""); setModeFilter("All"); setTierFilter("All"); };
@@ -149,19 +135,39 @@ const JudgementSearch = () => {
             <HeroStats>
               <Stat>
                 <StatIcon><BookOpen size={15} strokeWidth={1.8} /></StatIcon>
-                <StatNumber>{historyData.length}</StatNumber>
+                <StatNumber>{loading ? "-" : historyData.length}</StatNumber>
                 <StatLabel>Total Games</StatLabel>
               </Stat>
               <HeroDivider />
               <Stat>
                 <StatIcon><BarChart2 size={15} strokeWidth={1.8} /></StatIcon>
-                <StatNumber>{avgScore}%</StatNumber>
+                <StatNumber>{loading ? "-" : `${avgScore}%`}</StatNumber>
                 <StatLabel>Avg Score</StatLabel>
               </Stat>
               <HeroDivider />
               <Stat>
                 <StatIcon><ShieldCheck size={15} strokeWidth={1.8} /></StatIcon>
-                <StatNumber>Expert</StatNumber>
+                <StatNumber>
+                  {loading ? "-" : (
+                    historyData.length > 0
+                      ? historyData.reduce((best, curr) => {
+                          const tiers: Record<string, number> = {
+                            "Law Student": 1,
+                            "Junior Advocate": 2,
+                            "Competent Advocate": 3,
+                            "Senior Counsel": 4,
+                            "Expert Litigator": 5, // Just in case from older data
+                            "Beginner": 1,
+                            "Intermediate": 3,
+                            "Advanced Advocate": 4
+                          };
+                          const bestVal = tiers[best.tier] || 0;
+                          const currVal = tiers[curr.tier] || 0;
+                          return currVal > bestVal ? curr : best;
+                        }, historyData[0]).tier
+                      : "None"
+                  )}
+                </StatNumber>
                 <StatLabel>Best Tier</StatLabel>
               </Stat>
               <HeroDivider />
@@ -241,7 +247,18 @@ const JudgementSearch = () => {
 
             <Card>
               <AnimatePresence mode="popLayout">
-                {filtered.length === 0 ? (
+                {loading ? (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <EmptyState>
+                      <EmptyMsg>Loading your game records...</EmptyMsg>
+                    </EmptyState>
+                  </motion.div>
+                ) : filtered.length === 0 ? (
 
                   <motion.div
                     key="empty"
