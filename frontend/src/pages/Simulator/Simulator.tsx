@@ -657,19 +657,14 @@ const Simulator = () => {
       const chunks = text.match(/.{1,200}(\s|$)/g) || [];
       for (const chunk of chunks) {
         if (playingRef.current !== msgId) break;
-<<<<<<< HEAD
-        const res = await fetch(`http://localhost:8000/tts?text=${encodeURIComponent(chunk)}&role=opponent`);
+        const langParam = encodeURIComponent(selectedLanguage);
+        const textParam = encodeURIComponent(chunk);
+        const res = await fetch(`http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
         if (!res.ok) {
           const err = await res.json();
           console.error("TTS Error:", err);
           throw new Error("TTS failed");
-      }
-=======
-        const langParam = encodeURIComponent(selectedLanguage);
-        const textParam = encodeURIComponent(chunk);
-        const res = await fetch(`http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
-        if (!res.ok) throw new Error();
->>>>>>> language
+        }
         const url = URL.createObjectURL(await res.blob());
         const audio = new Audio(url);
         ttsAudioRef.current = audio;
