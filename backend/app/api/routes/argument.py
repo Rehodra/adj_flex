@@ -6,6 +6,7 @@ Handles argument evaluation, opponent responses, and scoring
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Dict, List
 from datetime import datetime
+import asyncio
 
 from app.models.schemas import (
     ArgumentRequest,
@@ -21,6 +22,7 @@ from app.ai_system.agents.judge_agent import JudgeAgent
 from app.ai_system.agents.opponent_agent import OpponentAgent
 from app.ai_system.rag.retriever import RAGRetriever
 from app.services.scoring_service import ScoringService
+from app.services.translation_service import get_translation_service
 from app.config import get_settings
 from app.api.routes.session import get_valid_session
 
@@ -95,7 +97,7 @@ async def submit_argument(
     Submit argument and get evaluation + opponent response
     
     Args:
-        request: Argument submission request
+        request: Argument submission request with optional language parameter
         
     Returns:
         EvaluationResponse with scores, feedback, and opponent response
@@ -103,6 +105,20 @@ async def submit_argument(
     try:
         # Validate session from the request body
         session_data = await get_valid_session(request.session_id)
+        
+        # Get translation service
+        translation_service = get_translation_service()
+        language = request.language or "English"
+        
+        # If language is not English, translate argument to English for processing
+        argument_to_process = request.argument_text
+        if language != "English":
+            print(f"Translating argument from {language} to English")
+            argument_to_process = await translation_service.translate_to_english(
+                request.argument_text,
+                language
+            )
+        
         # Get AI agents
         judge = get_judge_agent()
         opponent = get_opponent_agent()
@@ -110,9 +126,9 @@ async def submit_argument(
         # Determine opponent position based on case type and session phase
         opponent_position = determine_opponent_position(session_data, request.phase)
         
-        # 1. Judge evaluates the argument
+        # 1. Judge evaluates the argument (always in English internally)
         evaluation = judge.evaluate_argument(
-            user_argument=request.argument_text,
+            user_argument=argument_to_process,
             cited_sections=request.cited_sections,
             case_facts=session_data["case_facts"],
             phase=request.phase.value if request.phase else session_data["current_phase"].value
@@ -123,20 +139,37 @@ async def submit_argument(
         
         # 3. Opponent generates counter-argument
         opponent_response = opponent.generate_counter_argument(
-            user_argument=request.argument_text,
+            user_argument=argument_to_process,
             case_facts=session_data["case_facts"],
             position=opponent_position,
             phase=request.phase.value if request.phase else session_data["current_phase"].value
         )
         
-        # 4. Update session data
+        # 4. Translate responses back to user's language if needed
+        judge_feedback = evaluation["feedback"]
+        opponent_response_text = opponent_response
+        
+        if language != "English":
+            print(f"Translating responses to {language}")
+            judge_feedback = await translation_service.translate_from_english(
+                evaluation["feedback"],
+                language
+            )
+            opponent_response_text = await translation_service.translate_from_english(
+                opponent_response,
+                language
+            )
+        
+        # 5. Update session data
         argument_record = {
             "argument_id": str(len(session_data["arguments"]) + 1),
             "argument_text": request.argument_text,
+            "argument_text_english": argument_to_process,
             "cited_sections": request.cited_sections,
             "evidence_references": request.evidence_references,
             "evaluation": evaluation,
             "opponent_response": opponent_response,
+            "language": language,
             "turn_score": turn_score,
             "phase": request.phase.value if request.phase else session_data["current_phase"].value,
             "timestamp": datetime.utcnow()
@@ -145,31 +178,34 @@ async def submit_argument(
         session_data["arguments"].append(argument_record)
         session_data["total_score"] += turn_score
         session_data["last_activity"] = datetime.utcnow()
+        session_data["language"] = language  # Store language in session
         
-        # 5. Calculate performance metrics
+        # 6. Calculate performance metrics
         num_arguments = len(session_data["arguments"])
         avg_score = session_data["total_score"] / num_arguments
         performance_tier = ScoringService.get_performance_tier(avg_score)
         
-        # 6. Build response
+        # 7. Build response (feedback and opponent_response in user's language)
         return EvaluationResponse(
             legal_accuracy_score=evaluation["legal_accuracy_score"],
             reasoning_score=evaluation["reasoning_score"],
             evidence_score=evaluation["evidence_score"],
             overall_score=evaluation["overall_score"],
-            feedback=evaluation["feedback"],
+            feedback=judge_feedback,
             correct_sections=evaluation["correct_sections"],
             incorrect_sections=evaluation["incorrect_sections"],
             suggestions=evaluation["suggestions"],
             turn_score=turn_score,
             cumulative_score=session_data["total_score"],
             performance_tier=performance_tier,
-            opponent_response=opponent_response
+            opponent_response=opponent_response_text
         )
         
     except Exception as e:
         # Log error for debugging
         print(f"Error in submit_argument: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(
             status_code=500,
             detail=f"Error processing argument: {str(e)}"

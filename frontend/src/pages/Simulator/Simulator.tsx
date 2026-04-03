@@ -99,14 +99,14 @@ interface ChatMessage {
 type GameMode = 'ai' | 'opponent' | null;
 
 // ── MODE SELECTION MODAL ──────────────────────────────────────────────────────
-// ── MODE SELECTION MODAL ──────────────────────────────────────────────────────
+// ── MODE SELECTION MODAL ─────────────────────────────────────────────────────
 const ModeSelectionModal = ({
   caseTitle,
   onSelect,
   onClose,
 }: {
   caseTitle: string;
-  onSelect: (mode: GameMode) => void;
+  onSelect: (mode: GameMode, language: string) => void;
   onClose: () => void;
 }) => {
 
@@ -141,7 +141,7 @@ const ModeSelectionModal = ({
 
   const handleBegin = () => {
     if (!selectedMode) return;
-    onSelect(selectedMode);
+    onSelect(selectedMode, language);
   };
 
   return (
@@ -551,7 +551,9 @@ const CasePreviewModal = ({
   );
 };
 // ── MAIN SIMULATOR ────────────────────────────────────────────────────────────
+
 const Simulator = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
   const { caseId } = useParams<{ caseId: string }>();
   const navigate = useNavigate();
 
@@ -613,10 +615,11 @@ const Simulator = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleModeSelect = (mode: GameMode) => {
+  const handleModeSelect = (mode: GameMode, language: string) => {
   setGameMode(mode);
+  setSelectedLanguage(language);
   setShowModeModal(false);
-  setShowCasePreview(true); // show case description popup
+  setShowCasePreview(true);
 };
 
   const startRecording = async () => {
@@ -654,7 +657,9 @@ const Simulator = () => {
       const chunks = text.match(/.{1,200}(\s|$)/g) || [];
       for (const chunk of chunks) {
         if (playingRef.current !== msgId) break;
-        const res = await fetch(`http://localhost:8000/tts?text=${encodeURIComponent(chunk)}&role=opponent`);
+        const langParam = encodeURIComponent(selectedLanguage);
+        const textParam = encodeURIComponent(chunk);
+        const res = await fetch(`http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
         if (!res.ok) throw new Error();
         const url = URL.createObjectURL(await res.blob());
         const audio = new Audio(url);
@@ -679,7 +684,8 @@ const Simulator = () => {
     const fd = new FormData();
     fd.append('file', blob, 'recording.wav');
     try {
-      const res = await axios.post("http://localhost:8000/api/audio/speech-to-text", fd);
+      const langParam = encodeURIComponent(selectedLanguage);
+      const res = await axios.post(`http://localhost:8000/api/audio/speech-to-text?language=${langParam}`, fd);
       if (res.data.transcript) {
         setInputText(res.data.transcript);
         setAudioStatus('Transcription complete.');
@@ -710,7 +716,8 @@ const Simulator = () => {
         argument_text: newMsg.text,
         cited_sections: cited,
         evidence_references: [],
-        phase: mappedPhase
+        phase: mappedPhase,
+        language: selectedLanguage
       });
 
       const { feedback, legal_accuracy_score, reasoning_score, evidence_score, overall_score, opponent_response } = res.data;
