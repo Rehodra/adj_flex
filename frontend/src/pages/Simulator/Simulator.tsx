@@ -655,7 +655,11 @@ const Simulator = () => {
       for (const chunk of chunks) {
         if (playingRef.current !== msgId) break;
         const res = await fetch(`http://localhost:8000/tts?text=${encodeURIComponent(chunk)}&role=opponent`);
-        if (!res.ok) throw new Error();
+        if (!res.ok) {
+          const err = await res.json();
+          console.error("TTS Error:", err);
+          throw new Error("TTS failed");
+      }
         const url = URL.createObjectURL(await res.blob());
         const audio = new Audio(url);
         ttsAudioRef.current = audio;
@@ -736,7 +740,12 @@ const Simulator = () => {
         if (opponent_response) {
           const opp: ChatMessage = { id: Date.now().toString() + '_o', type: 'opponent', text: opponent_response };
           next.push(opp);
-          setTimeout(() => playFastTTS(opp.id, opp.text), 500);
+          
+          const AUTO_PLAY = false;
+
+          if (AUTO_PLAY) {
+            setTimeout(() => playFastTTS(opp.id, opp.text), 500);
+          }
         }
         return next;
       });

@@ -256,20 +256,23 @@ API_KEY = os.getenv("ELEVENLABS_API_KEY")
 @app.get("/tts")
 async def elevenlabs_tts(text: str, role: str = "judge"):
 
-    # 🔥 1. Limit text length (VERY IMPORTANT)
-    text = text[:300]
+    # 1. Trim text
+    text = text.strip()[:300]
 
-    # 🔥 2. Cache key
+    # 2. Ensure cache folder exists
+    os.makedirs("cache", exist_ok=True)
+
+    # 3. Cache key
     key = hashlib.md5(text.encode()).hexdigest()
     file_path = f"cache/{key}.mp3"
 
-    # 🔥 3. Return cached audio if exists
-    if os.path.exists(file_path):
+    # 4. Return cached audio
+    if os.path.exists(file_path) and os.path.getsize(file_path) > 1000:
         return StreamingResponse(open(file_path, "rb"), media_type="audio/mpeg")
 
-    # 🎭 Role-based voice
     voice_id = "JBFqnCBsd6RMkjVDRZzb"
 
+    # ✅ IMPORTANT: use /stream
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
 
     headers = {
@@ -281,25 +284,47 @@ async def elevenlabs_tts(text: str, role: str = "judge"):
         "text": text,
         "model_id": "eleven_multilingual_v2",
         "voice_settings": {
-            "stability": 0.3,   # ⚡ faster
+            "stability": 0.3,
             "similarity_boost": 0.7
         }
     }
 
-    # 🔥 4. Async streaming request
-    async with httpx.AsyncClient(timeout=None) as client:
-        response = await client.post(url, json=data, headers=headers)
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(url, json=data, headers=headers)
 
-    # 🔥 5. Save to cache
-    with open(file_path, "wb") as f:
-        f.write(response.content)
+        # ❌ Handle API errors
+        if response.status_code != 200:
+            print("❌ ElevenLabs error:", response.text)
+            return JSONResponse(
+                {"error": "TTS failed", "details": response.text},
+                status_code=500
+            )
 
-    # 🔥 6. Stream to frontend
-    return StreamingResponse(
-        iter([response.content]),
-        media_type="audio/mpeg"
-    )
+        # ❌ Check empty/bad audio
+        if not response.content or len(response.content) < 1000:
+            print("❌ Empty audio received")
+            return JSONResponse(
+                {"error": "Empty audio"},
+                status_code=500
+            )
 
+        # 5. Save valid audio
+        with open(file_path, "wb") as f:
+            f.write(response.content)
+
+        # 6. Return audio
+        return StreamingResponse(
+            iter([response.content]),
+            media_type="audio/mpeg"
+        )
+
+    except Exception as e:
+        print("❌ TTS Exception:", str(e))
+        return JSONResponse(
+            {"error": "Internal TTS error"},
+            status_code=500
+        )
 
 
 @app.exception_handler(Exception)
