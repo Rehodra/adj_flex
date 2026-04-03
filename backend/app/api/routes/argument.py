@@ -53,8 +53,8 @@ def get_judge_agent() -> JudgeAgent:
     if _judge_agent is None:
         provider = getattr(_settings, "AI_PROVIDER", "gemini").lower()
         if provider == "groq":
-            api_key = _settings.GROQ_API_KEY
-            model_name = _settings.GROQ_MODEL
+            api_key = getattr(_settings, "JUDGE_API_KEY", "") or getattr(_settings, "GROQ_API_KEY", "")
+            model_name = getattr(_settings, "JUDGE_MODEL", "mixtral-8x7b-32768")
         else:
             api_key = _settings.GEMINI_API_KEY
             model_name = _settings.GEMINI_MODEL
@@ -74,8 +74,8 @@ def get_opponent_agent() -> OpponentAgent:
     if _opponent_agent is None:
         provider = getattr(_settings, "AI_PROVIDER", "gemini").lower()
         if provider == "groq":
-            api_key = _settings.GROQ_API_KEY
-            model_name = _settings.GROQ_MODEL
+            api_key = getattr(_settings, "OPPONENT_API_KEY", "") or getattr(_settings, "GROQ_API_KEY", "")
+            model_name = getattr(_settings, "OPPONENT_MODEL", "llama-3.1-8b-instant")
         else:
             api_key = _settings.GEMINI_API_KEY
             model_name = _settings.GEMINI_MODEL
