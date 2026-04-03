@@ -1090,3 +1090,52 @@ $red-dim:     rgba(239, 68, 68, 0.08);
   .userBubble, .opponentBubble { max-width: 88%; }
 }
 
+/* SELECTED MODE STYLES */
+
+.modeSelectedAI {
+  border-color: #2563eb !important;
+  background: #ffffff;
+  box-shadow: 0 10px 32px rgba(37, 99, 235, 0.25);
+  transform: translateY(-3px);
+}
+
+.modeSelectedAI::before {
+  opacity: 1;
+  background: linear-gradient(
+    90deg,
+    #3b82f6,
+    #1e40af
+  );
+}
+
+.modeSelectedAI .modeCardIcon {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+
+
+/* MULTIPLAYER SELECTED */
+
+.modeSelectedOpponent {
+  border-color: #f59e0b !important;
+  background: #ffffff;
+  box-shadow: 0 10px 32px rgba(245, 158, 11, 0.25);
+  transform: translateY(-3px);
+}
+
+.modeSelectedOpponent::before {
+  opacity: 1;
+  background: linear-gradient(
+    90deg,
+    #fbbf24,
+    #f59e0b
+  );
+}
+
+.modeSelectedOpponent .modeCardIcon {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.25);
+}

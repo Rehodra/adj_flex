@@ -226,12 +226,13 @@ const ModeSelectionModal = ({
 
           <div className={styles.modeCards}>
 
-            <motion.button
-              className={styles.modeCard}
-              data-mode="ai"
-              onClick={() => setSelectedMode("ai")}
-              whileTap={{ scale: 0.98 }}
-            >
+           <motion.button
+  className={`${styles.modeCard} ${
+    selectedMode === "ai" ? styles.modeSelectedAI : ""
+  }`}
+  data-mode="ai"
+  onClick={() => setSelectedMode("ai")}
+>
               <div className={styles.modeCardIcon}>
                 <IconRobot size={26} />
               </div>
@@ -259,11 +260,14 @@ const ModeSelectionModal = ({
             </motion.button>
 
             <motion.button
-              className={styles.modeCard}
-              data-mode="opponent"
-              onClick={() => setSelectedMode("opponent")}
-              whileTap={{ scale: 0.98 }}
-            >
+  className={`${styles.modeCard} ${
+    selectedMode === "opponent"
+      ? styles.modeSelectedOpponent
+      : ""
+  }`}
+  data-mode="opponent"
+  onClick={() => setSelectedMode("opponent")}
+>
               <div className={styles.modeCardIcon}>
                 <IconUsers size={26} />
               </div>
@@ -789,8 +793,14 @@ const Simulator = () => {
   };
 
   const terminateSession = () => {
-    if (window.confirm("Terminate this session? Unsaved progress will be lost.")) navigate('/simulator');
-  };
+  if (
+    window.confirm(
+      "Terminate this session? Unsaved progress will be lost."
+    )
+  ) {
+    navigate('/judgementsearch');
+  }
+};
 
   if (!caseId) return (
     <div className={styles.emptyState}>

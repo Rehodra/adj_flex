@@ -151,49 +151,49 @@ const Navbar = () => {
 
       <div className={styles.navLinks}>
 
-        {/* NEW HOME BUTTON */}
+  <Link
+    to="/"
+    className={styles.navLink}
+  >
+    <IconHome size={18} />
+    Home
+  </Link>
 
-        <Link
-          to="/"
-          className={styles.navLink}
-        >
-          <IconHome size={18} />
-          Home
-        </Link>
+  
 
-        <Link
-          to="/simulator"
-          className={styles.navLink}
-        >
-          <IconGavel size={18} />
-          Simulator
-        </Link>
+  <Link
+    to="/cases"
+    className={styles.navLink}
+  >
+    <IconSearch size={18} />
+    Cases
+  </Link>
 
-        <Link
-          to="/cases"
-          className={styles.navLink}
-        >
-          <IconSearch size={18} />
-          Cases
-        </Link>
+  <Link
+    to="/judgementsearch"
+    className={styles.navLink}
+  >
+    <IconGavel size={18} />
+    Judgements
+  </Link>
 
-        <Link
-          to="/dashboard"
-          className={styles.navLink}
-        >
-          <IconDashboard size={18} />
-          Dashboard
-        </Link>
+  <Link
+    to="/dashboard"
+    className={styles.navLink}
+  >
+    <IconDashboard size={18} />
+    Dashboard
+  </Link>
 
-        <Link
-          to="/leaderboard"
-          className={styles.navLink}
-        >
-          <IconLeaderboard size={18} />
-          Leaderboard
-        </Link>
+  <Link
+    to="/leaderboard"
+    className={styles.navLink}
+  >
+    <IconLeaderboard size={18} />
+    Leaderboard
+  </Link>
 
-      </div>
+</div>
 
       {/* USER SECTION */}
 
