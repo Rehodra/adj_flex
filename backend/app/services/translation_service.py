@@ -99,24 +99,52 @@ class TranslationService:
                             "Content-Type": "application/json",
                             "api-subscription-key": settings.SARVAM_API_KEY
                         }
-                        payload = {
-                            "input": text,
-                            "source_language_code": sarvam_source,
-                            "target_language_code": sarvam_target,
-                            "speaker_gender": "Male",
-                            "model": "mayura:v1",
-                            "mode": "formal",
-                            "algo": "nmt"
-                        }
+                        # Prepare chunks <= 950 characters
+                        words = text.split()
+                        chunks = []
+                        current_chunk = []
+                        for word in words:
+                            if len(' '.join(current_chunk + [word])) <= 950:
+                                current_chunk.append(word)
+                            else:
+                                if current_chunk:
+                                    chunks.append(' '.join(current_chunk))
+                                current_chunk = [word]
+                        if current_chunk:
+                            chunks.append(' '.join(current_chunk))
+                            
+                        translated_chunks = []
+                        has_error = False
                         
-                        response = await client.post(translate_url, headers=headers, json=payload, timeout=self.timeout)
-                        if response.status_code == 200:
-                            data = response.json()
-                            translated_text = data.get("translated_text")
-                            if translated_text:
-                                logger.info(f"Successfully translated using Sarvam AI")
-                                return translated_text
-                        logger.warning(f"Sarvam Translate failed: {response.status_code} {response.text}, falling back to Google Translate.")
+                        for chunk in chunks:
+                            payload = {
+                                "input": chunk,
+                                "source_language_code": sarvam_source,
+                                "target_language_code": sarvam_target,
+                                "speaker_gender": "Male",
+                                "model": "mayura:v1",
+                                "mode": "formal",
+                                "algo": "nmt"
+                            }
+                            
+                            response = await client.post(translate_url, headers=headers, json=payload, timeout=self.timeout)
+                            if response.status_code == 200:
+                                data = response.json()
+                                chunk_translated = data.get("translated_text")
+                                if chunk_translated:
+                                    translated_chunks.append(chunk_translated)
+                                else:
+                                    has_error = True
+                                    break
+                            else:
+                                logger.warning(f"Sarvam Translate chunk failed: {response.status_code} {response.text}")
+                                has_error = True
+                                break
+                                
+                        if not has_error and translated_chunks:
+                            logger.info(f"Successfully translated using Sarvam AI chunks")
+                            return " ".join(translated_chunks)
+                        logger.warning(f"Sarvam Translate completely failed, falling back to Google Translate.")
             except Exception as e:
                 logger.warning(f"Sarvam translation exception: {str(e)}, falling back to Google Translate.")
 

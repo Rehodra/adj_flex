@@ -680,7 +680,7 @@ const Simulator = () => {
       }
       const url = URL.createObjectURL(await res.blob());
       const audio = new Audio(url);
-      audio.playbackRate = 1.4; // 1.4x Speed requirement
+      audio.playbackRate = 1.25; // 1.25x Speed requirement
       
       ttsAudioRef.current = audio;
       await new Promise<void>((resolve, reject) => {

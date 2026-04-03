@@ -152,41 +152,83 @@ async def text_to_speech(
                 # Decide speaker based on role: judge = Male, opponent = Female
                 speaker_choice = sarvam_lang["female"] if role == "opponent" else sarvam_lang["male"]
                 
-                payload = {
-                    "inputs": [text_to_synthesize],
-                    "target_language_code": sarvam_lang["code"],
-                    "speaker": speaker_choice,
-                    "model": "bulbul:v3"
-                }
-
-                logger.info(f"Attempting Sarvam AI TTS for language: {language}, speaker: {speaker_choice}")
+                # Split text into chunks <= 450 chars to perfectly respect Sarvam's 500 char limit
+                words = text_to_synthesize.split()
+                chunks = []
+                current_chunk = []
+                for word in words:
+                    if len(' '.join(current_chunk + [word])) <= 450:
+                        current_chunk.append(word)
+                    else:
+                        if current_chunk:
+                            chunks.append(' '.join(current_chunk))
+                        current_chunk = [word]
+                if current_chunk:
+                    chunks.append(' '.join(current_chunk))
                 
-                response = requests.post(
-                    "https://api.sarvam.ai/text-to-speech",
-                    headers={
-                        "api-subscription-key": _settings.SARVAM_API_KEY,
-                        "Content-Type": "application/json"
-                    },
-                    json=payload,
-                    timeout=15
-                )
+                wav_components = []
+                has_error = False
+                for chunk in chunks:
+                    if not chunk.strip():
+                        continue
+                    payload = {
+                        "inputs": [chunk],
+                        "target_language_code": sarvam_lang["code"],
+                        "speaker": speaker_choice,
+                        "model": "bulbul:v3"
+                    }
+                    logger.info(f"Attempting Sarvam AI TTS chunk length {len(chunk)} for language: {language}")
+                    
+                    response = requests.post(
+                        "https://api.sarvam.ai/text-to-speech",
+                        headers={
+                            "api-subscription-key": _settings.SARVAM_API_KEY,
+                            "Content-Type": "application/json"
+                        },
+                        json=payload,
+                        timeout=15
+                    )
 
-                if response.status_code == 200:
-                    result = response.json()
-                    audio_base64 = result.get("audios", [None])[0]
-                    if audio_base64:
-                        import base64
-                        audio_data = base64.b64decode(audio_base64)
-                        logger.info(f"Successfully generated Sarvam TTS. Saving to cache.")
+                    if response.status_code == 200:
+                        result = response.json()
+                        audio_base64 = result.get("audios", [None])[0]
+                        if audio_base64:
+                            import base64
+                            wav_components.append(base64.b64decode(audio_base64))
+                    else:
+                        logger.warning(f"Sarvam AI TTS Error on chunk: {response.text}")
+                        has_error = True
+                        break
+
+                if not has_error and wav_components:
+                    logger.info(f"Successfully generated {len(wav_components)} Sarvam TTS chunks. Consolidating...")
+                    
+                    import wave
+                    def concatenate_wavs(wav_bytes_list):
+                        if not wav_bytes_list: return b""
+                        with wave.open(io.BytesIO(wav_bytes_list[0]), 'rb') as w_in:
+                            params = w_in.getparams()
+                        out_buffer = io.BytesIO()
+                        with wave.open(out_buffer, 'wb') as w_out:
+                            w_out.setparams(params)
+                            for wav_bytes in wav_bytes_list:
+                                try:
+                                    with wave.open(io.BytesIO(wav_bytes), 'rb') as w:
+                                        w_out.writeframes(w.readframes(w.getnframes()))
+                                except Exception:
+                                    pass
+                        return out_buffer.getvalue()
                         
-                        # Save to cache file
-                        with open(sarvam_file_path, "wb") as f:
-                            f.write(audio_data)
-                            
-                        # Serve the file
-                        return FileResponse(sarvam_file_path, media_type="audio/wav")
+                    final_wav = concatenate_wavs(wav_components)
+                    
+                    # Save to cache file
+                    with open(sarvam_file_path, "wb") as f:
+                        f.write(final_wav)
+                        
+                    # Serve the file
+                    return FileResponse(sarvam_file_path, media_type="audio/wav")
                 else:
-                    logger.warning(f"Sarvam AI TTS Error: {response.text}. Falling back to gTTS.")
+                    logger.warning(f"Falling back to gTTS due to Sarvam API chunk errors.")
 
             except Exception as e:
                 logger.warning(f"Sarvam API exception: {str(e)}. Falling back to gTTS.")
