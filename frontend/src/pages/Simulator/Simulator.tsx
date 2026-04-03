@@ -99,95 +99,242 @@ interface ChatMessage {
 type GameMode = 'ai' | 'opponent' | null;
 
 // ── MODE SELECTION MODAL ──────────────────────────────────────────────────────
+// ── MODE SELECTION MODAL ─────────────────────────────────────────────────────
 const ModeSelectionModal = ({
   caseTitle,
   onSelect,
   onClose,
 }: {
   caseTitle: string;
-  onSelect: (mode: GameMode) => void;
+  onSelect: (mode: GameMode, language: string) => void;
   onClose: () => void;
-}) => (
-  <AnimatePresence>
-    <motion.div
-      className={styles.modalOverlay}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
+}) => {
+
+  const [selectedMode, setSelectedMode] = useState<GameMode>(null);
+  const [language, setLanguage] = useState("English");
+
+  const languages = [
+    "English",
+    "Hindi",
+    "Bengali",
+    "Telugu",
+    "Marathi",
+    "Tamil",
+    "Urdu",
+    "Gujarati",
+    "Kannada",
+    "Odia",
+    "Malayalam",
+    "Punjabi",
+    "Assamese",
+    "Maithili",
+    "Santali",
+    "Kashmiri",
+    "Nepali",
+    "Sindhi",
+    "Dogri",
+    "Konkani",
+    "Manipuri",
+    "Bodo",
+    "Sanskrit"
+  ];
+
+  const handleBegin = () => {
+    if (!selectedMode) return;
+    onSelect(selectedMode, language);
+  };
+
+  return (
+    <AnimatePresence>
       <motion.div
-        className={styles.modeModal}
-        initial={{ opacity: 0, y: 36, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 20, scale: 0.97 }}
-        transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+        className={styles.modalOverlay}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
       >
-        {/* Navy hero strip */}
-        <div className={styles.modalGavel}>
-          <IconScale size={34} />
-        </div>
+        <motion.div
+          className={styles.modeModal}
+          initial={{ opacity: 0, y: 36, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+        >
 
-        <button className={styles.modalClose} onClick={onClose}>
-          <IconX size={16} />
-        </button>
+          <div className={styles.modalGavel}>
+            <IconScale size={34} />
+          </div>
 
-        <div className={styles.modalHeader}>
-          <span className={styles.modalEyebrow}>Select Simulation Mode</span>
-          <h2 className={styles.modalTitle}>{caseTitle}</h2>
-          <p className={styles.modalSub}>How would you like to argue this case?</p>
-        </div>
+          <button className={styles.modalClose} onClick={onClose}>
+            <IconX size={16} />
+          </button>
 
-        <div className={styles.modeCards}>
-          <motion.button
-            className={styles.modeCard}
-            data-mode="ai"
-            onClick={() => onSelect('ai')}
-            whileTap={{ scale: 0.98 }}
+          <div className={styles.modalHeader}>
+            <span className={styles.modalEyebrow}>
+              Select Simulation Mode
+            </span>
+
+            <h2 className={styles.modalTitle}>
+              {caseTitle}
+            </h2>
+
+            <p className={styles.modalSub}>
+              Choose language and simulation type
+            </p>
+          </div>
+
+          {/* LANGUAGE DROPDOWN */}
+
+          <div style={{ padding: "14px 22px 4px" }}>
+
+            <label
+              style={{
+                fontSize: "0.7rem",
+                fontWeight: 700,
+                letterSpacing: "1px",
+                textTransform: "uppercase",
+                color: "#64748b",
+                display: "block",
+                marginBottom: "6px"
+              }}
+            >
+              Choose Language
+            </label>
+
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "9px 12px",
+                borderRadius: "8px",
+                border: "1px solid #e4e8f0",
+                fontSize: "0.85rem",
+                background: "#f8fafc",
+                cursor: "pointer"
+              }}
+            >
+              {languages.map((lang) => (
+                <option key={lang}>
+                  {lang}
+                </option>
+              ))}
+            </select>
+
+          </div>
+
+          {/* MODE CARDS */}
+
+          <div className={styles.modeCards}>
+
+            <motion.button
+              className={styles.modeCard}
+              data-mode="ai"
+              onClick={() => setSelectedMode("ai")}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className={styles.modeCardIcon}>
+                <IconRobot size={26} />
+              </div>
+
+              <div className={styles.modeCardBody}>
+                <h3>Play vs AI</h3>
+
+                <p>
+                  Argue against an AI-powered opposing counsel
+                  with real-time judge feedback.
+                </p>
+
+                <ul className={styles.modeFeatures}>
+                  <li>AI opponent adapts to your arguments</li>
+                  <li>Instant scoring & analysis</li>
+                  <li>Voice-to-text support</li>
+                </ul>
+              </div>
+
+              <div className={styles.modeCardCta}>
+                Select Mode
+                <IconArrowRight size={14} />
+              </div>
+
+            </motion.button>
+
+            <motion.button
+              className={styles.modeCard}
+              data-mode="opponent"
+              onClick={() => setSelectedMode("opponent")}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className={styles.modeCardIcon}>
+                <IconUsers size={26} />
+              </div>
+
+              <div className={styles.modeCardBody}>
+                <h3>Play vs Opponent</h3>
+
+                <p>
+                  Challenge a real person to a live courtroom debate.
+                </p>
+
+                <ul className={styles.modeFeatures}>
+                  <li>Real-time multiplayer session</li>
+                  <li>Shareable session link</li>
+                  <li>AI judge evaluates both sides</li>
+                </ul>
+              </div>
+
+              <div className={styles.modeCardCta}>
+                Select Mode
+                <IconArrowRight size={14} />
+              </div>
+
+            </motion.button>
+
+          </div>
+
+          {/* BEGIN BUTTON */}
+
+          <div
+            style={{
+              padding: "10px 22px 18px",
+              display: "flex",
+              justifyContent: "center"
+            }}
           >
-            <div className={styles.modeCardIcon}><IconRobot size={26} /></div>
-            <div className={styles.modeCardBody}>
-              <h3>Play vs AI</h3>
-              <p>Argue against an AI-powered opposing counsel with real-time judge feedback, scoring, and strategy tips.</p>
-              <ul className={styles.modeFeatures}>
-                <li>AI opponent adapts to your arguments</li>
-                <li>Instant scoring & analysis</li>
-                <li>Voice-to-text support</li>
-              </ul>
-            </div>
-            <div className={styles.modeCardCta}>
-              Begin Simulation <IconArrowRight size={14} />
-            </div>
-          </motion.button>
 
-          <motion.button
-            className={styles.modeCard}
-            data-mode="opponent"
-            onClick={() => onSelect('opponent')}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className={styles.modeCardIcon}><IconUsers size={26} /></div>
-            <div className={styles.modeCardBody}>
-              <h3>Play vs Opponent</h3>
-              <p>Challenge a real person to a live courtroom debate — share a session link and argue opposite sides.</p>
-              <ul className={styles.modeFeatures}>
-                <li>Real-time multiplayer session</li>
-                <li>Shareable session link</li>
-                <li>AI judge evaluates both sides</li>
-              </ul>
-            </div>
-            <div className={styles.modeCardCta}>
-              Create Session <IconArrowRight size={14} />
-            </div>
-          </motion.button>
-        </div>
+            <button
+              onClick={handleBegin}
+              disabled={!selectedMode}
+              style={{
+                padding: "10px 28px",
+                background:
+                  "linear-gradient(135deg,#1535a0 0%,#2563eb 100%)",
+                color: "white",
+                border: "none",
+                borderRadius: "10px",
+                fontSize: "0.85rem",
+                fontWeight: 700,
+                cursor: selectedMode
+                  ? "pointer"
+                  : "not-allowed",
+                opacity: selectedMode ? 1 : 0.4
+              }}
+            >
+              Begin Simulation
+            </button>
 
-        <div className={styles.modalFooter}>
-          <span>All sessions are logged for performance tracking</span>
-        </div>
+          </div>
+
+          <div className={styles.modalFooter}>
+            <span>
+              All sessions are logged for performance tracking
+            </span>
+          </div>
+
+        </motion.div>
       </motion.div>
-    </motion.div>
-  </AnimatePresence>
-);
+    </AnimatePresence>
+  );
+};
 
 // ── JUDGE RESPONSE ────────────────────────────────────────────────────────────
 const JudgeResponse = ({ m }: { m: ChatMessage }) => {
@@ -298,14 +445,121 @@ const JudgeResponse = ({ m }: { m: ChatMessage }) => {
     </div>
   );
 };
+// ── CASE DESCRIPTION PREVIEW MODAL ─────────────────────────────
 
+const CasePreviewModal = ({
+  caseFacts,
+  onStart,
+}: {
+  caseFacts: CaseFacts;
+  onStart: () => void;
+}) => {
+  return (
+    <AnimatePresence>
+      <motion.div
+        className={styles.modalOverlay}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className={styles.modeModal}
+          initial={{ opacity: 0, y: 36, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.97 }}
+          transition={{ type: "spring", stiffness: 240, damping: 24 }}
+        >
+          <div className={styles.modalHeader}>
+            <span className={styles.modalEyebrow}>
+              Case Description
+            </span>
+
+            <h2 className={styles.modalTitle}>
+              {caseFacts.title}
+            </h2>
+          </div>
+
+          <div
+            style={{
+              padding: "18px 22px",
+              maxHeight: "420px",
+              overflowY: "auto",
+            }}
+          >
+            {/* OVERVIEW */}
+
+            <div className={styles.infoSection}>
+              <h3>Overview</h3>
+              <p>{caseFacts.facts}</p>
+            </div>
+
+            {/* EVIDENCE */}
+
+            <div className={styles.infoSection}>
+              <h3>Evidence & Exhibits</h3>
+
+              <ul className={styles.evidenceList}>
+                {caseFacts.evidence?.map((e, i) => (
+                  <li key={i}>{e}</li>
+                ))}
+              </ul>
+            </div>
+
+            {/* LEGAL PROVISIONS */}
+
+            {caseFacts.legal_provisions?.length > 0 && (
+              <div className={styles.infoSection}>
+                <h3>Legal Provisions</h3>
+
+                <div className={styles.provisionTags}>
+                  {caseFacts.legal_provisions.map(
+                    (p, i) => (
+                      <span
+                        key={i}
+                        className={
+                          styles.provisionTag
+                        }
+                      >
+                        {p}
+                      </span>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* START BUTTON */}
+
+          <div
+            style={{
+              padding: "16px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <button
+              onClick={onStart}
+              className={styles.beginButton}
+            >
+              Start Simulation
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
 // ── MAIN SIMULATOR ────────────────────────────────────────────────────────────
+
 const Simulator = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
   const { caseId } = useParams<{ caseId: string }>();
   const navigate = useNavigate();
 
   const [gameMode, setGameMode] = useState<GameMode>(null);
   const [showModeModal, setShowModeModal] = useState(true);
+  const [showCasePreview, setShowCasePreview] = useState(false);
 
   const [sessionId, setSessionId] = useState<string>('');
   const [caseFacts, setCaseFacts] = useState<CaseFacts | null>(null);
@@ -361,10 +615,12 @@ const Simulator = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleModeSelect = (mode: GameMode) => {
-    setGameMode(mode);
-    setShowModeModal(false);
-  };
+  const handleModeSelect = (mode: GameMode, language: string) => {
+  setGameMode(mode);
+  setSelectedLanguage(language);
+  setShowModeModal(false);
+  setShowCasePreview(true);
+};
 
   const startRecording = async () => {
     try {
@@ -401,8 +657,14 @@ const Simulator = () => {
       const chunks = text.match(/.{1,200}(\s|$)/g) || [];
       for (const chunk of chunks) {
         if (playingRef.current !== msgId) break;
-        const res = await fetch(`http://localhost:8000/tts?text=${encodeURIComponent(chunk)}&role=opponent`);
-        if (!res.ok) throw new Error();
+        const langParam = encodeURIComponent(selectedLanguage);
+        const textParam = encodeURIComponent(chunk);
+        const res = await fetch(`http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
+        if (!res.ok) {
+          const err = await res.json();
+          console.error("TTS Error:", err);
+          throw new Error("TTS failed");
+        }
         const url = URL.createObjectURL(await res.blob());
         const audio = new Audio(url);
         ttsAudioRef.current = audio;
@@ -426,7 +688,8 @@ const Simulator = () => {
     const fd = new FormData();
     fd.append('file', blob, 'recording.wav');
     try {
-      const res = await axios.post("http://localhost:8000/api/audio/speech-to-text", fd);
+      const langParam = encodeURIComponent(selectedLanguage);
+      const res = await axios.post(`http://localhost:8000/api/audio/speech-to-text?language=${langParam}`, fd);
       if (res.data.transcript) {
         setInputText(res.data.transcript);
         setAudioStatus('Transcription complete.');
@@ -457,7 +720,8 @@ const Simulator = () => {
         argument_text: newMsg.text,
         cited_sections: cited,
         evidence_references: [],
-        phase: mappedPhase
+        phase: mappedPhase,
+        language: selectedLanguage
       });
 
       const { feedback, legal_accuracy_score, reasoning_score, evidence_score, overall_score, opponent_response } = res.data;
@@ -483,7 +747,12 @@ const Simulator = () => {
         if (opponent_response) {
           const opp: ChatMessage = { id: Date.now().toString() + '_o', type: 'opponent', text: opponent_response };
           next.push(opp);
-          setTimeout(() => playFastTTS(opp.id, opp.text), 500);
+          
+          const AUTO_PLAY = false;
+
+          if (AUTO_PLAY) {
+            setTimeout(() => playFastTTS(opp.id, opp.text), 500);
+          }
         }
         return next;
       });
@@ -525,6 +794,14 @@ const Simulator = () => {
           />
         )}
       </AnimatePresence>
+      <AnimatePresence>
+  {showCasePreview && caseFacts && (
+    <CasePreviewModal
+      caseFacts={caseFacts}
+      onStart={() => setShowCasePreview(false)}
+    />
+  )}
+</AnimatePresence>
 
       {gameMode && caseFacts && (
         <div className={styles.simulatorContainer}>
@@ -543,27 +820,17 @@ const Simulator = () => {
             </div>
 
             <div className={styles.paneScroll}>
-              <div className={styles.infoSection}>
-                <h3><IconShieldAlert size={13} /> Brief Facts</h3>
-                <p>{caseFacts.facts}</p>
-              </div>
-              <div className={styles.infoSection}>
-                <h3>Evidence & Exhibits</h3>
-                <ul className={styles.evidenceList}>
-                  {caseFacts.evidence?.map((item, idx) => <li key={idx}>{item}</li>)}
-                </ul>
-              </div>
-              {caseFacts.legal_provisions?.length > 0 && (
-                <div className={styles.infoSection}>
-                  <h3>Legal Provisions</h3>
-                  <div className={styles.provisionTags}>
-                    {caseFacts.legal_provisions.map((p, idx) => (
-                      <span key={idx} className={styles.provisionTag}>{p}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+
+  <div className={styles.infoSection}>
+  <h3>Overview</h3>
+
+  <p>
+    {caseFacts.facts}
+  </p>
+
+</div>
+
+</div>
 
             <div className={styles.sideControls}>
               <div className={`${styles.timer} ${timeLeft < 300 ? styles.timerUrgent : ''}`}>

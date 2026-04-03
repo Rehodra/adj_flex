@@ -177,3 +177,24 @@
     border-color: rgba(255, 255, 255, 0.35);
   }
 }
+.backHomeBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  padding: 7px 16px;
+  border-radius: 8px;
+
+  font-weight: 600;
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition: background 0.2s,
+              border-color 0.2s;
+}
+
+.backHomeBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}

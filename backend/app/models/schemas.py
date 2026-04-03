@@ -43,7 +43,8 @@ class ArgumentRequest(BaseModel):
     argument_text: str = Field(..., min_length=10, max_length=2000, description="Legal argument text")
     cited_sections: List[str] = Field(default_factory=list, description="List of cited legal sections")
     evidence_references: List[str] = Field(default_factory=list, description="List of evidence references")
-    phase: Optional[ CourtPhase] = Field(CourtPhase.ARGUMENT, description="Current courtroom phase")
+    phase: Optional[CourtPhase] = Field(CourtPhase.ARGUMENT, description="Current courtroom phase")
+    language: Optional[str] = Field("English", description="Communication language")
 
 
 class SessionCreateRequest(BaseModel):

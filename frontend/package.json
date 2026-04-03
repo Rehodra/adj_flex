@@ -30,9 +30,15 @@
     "react-scripts": "5.0.1",
     "recharts": "^3.8.1",
     "sass": "^1.98.0",
+    "socket.io-client": "^4.8.3",
     "styled-components": "^6.3.12",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "workbox-core": "^6.5.4",
+    "workbox-expiration": "^6.5.4",
+    "workbox-precaching": "^6.5.4",
+    "workbox-routing": "^6.5.4",
+    "workbox-strategies": "^6.5.4"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styled, { createGlobalStyle, keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar/Navbar";
 
 /* ─── GLOBAL FONTS ─── */
 const GlobalFonts = createGlobalStyle`
@@ -37,98 +37,171 @@ const avatarBg = (rank: number) => {
   return "linear-gradient(135deg,#60a5fa,#93c5fd)";
 };
 
-/* ─── ANIMATIONS ─── */
-const pulse = keyframes`
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
-`;
-
-const shimmer = keyframes`
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-`;
-
 /* ─── ICONS ─── */
+
 const ChevronDown = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="6 9 12 15 18 9"/>
-  </svg>
-);
-const ChevronUp = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="18 15 12 9 6 15"/>
-  </svg>
-);
-const Plus = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polyline points="6 9 12 15 18 9" />
   </svg>
 );
 
-/* ══════════════════════════════════════════
-   COMPONENT
-══════════════════════════════════════════ */
+const ChevronUp = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polyline points="18 15 12 9 6 15" />
+  </svg>
+);
+
+const Plus = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+);
+
 const Leaderboard = () => {
-  const navigate = useNavigate();
   const [expanded, setExpanded] = useState<number | null>(null);
-  const toggle = (rank: number) => setExpanded(p => p === rank ? null : rank);
+
+  const toggle = (rank: number) =>
+    setExpanded((p) => (p === rank ? null : rank));
 
   const totalCases = dummyData.reduce((a, u) => a + u.casesFought, 0);
   const totalWins  = dummyData.reduce((a, u) => a + u.wins, 0);
-  const avgAccuracy = Math.round(dummyData.reduce((a, u) => a + u.accuracy, 0) / dummyData.length);
+  const avgAccuracy = Math.round(
+    dummyData.reduce((a, u) => a + u.accuracy, 0) / dummyData.length
+  );
 
   return (
     <>
+      <Navbar />
       <GlobalFonts />
+
       <Container>
 
-        {/* ── NAVBAR ── */}
-        <Navbar>
-          <Logo>
-            <LogoIcon>⚖️</LogoIcon>
-            adjournment <LogoSpan>AI</LogoSpan>
-          </Logo>
-          <BackButton onClick={() => navigate("/")}>Back to Home</BackButton>
-        </Navbar>
-
-        {/* ── HERO BANNER ── */}
-        <HeroBanner
-          as={motion.div}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
+        {/* HERO */}
+        <HeroBanner>
           <HeroBannerInner>
             <HeroLeft>
-              <HeroTitle>🏆 Leaderboard</HeroTitle>
-              <HeroSub>Compete with the best legal minds and climb the ranks!</HeroSub>
+              
+              <HeroTitle>Leaderboard</HeroTitle>
+              <HeroSub>
+                Compete with the best legal minds and climb the ranks!
+              </HeroSub>
+
               <HeroStats>
-                <HeroStat><HeroStatNum>{dummyData.length}</HeroStatNum><HeroStatLabel>Active Players</HeroStatLabel></HeroStat>
+                <HeroStat>
+                  <HeroStatNum>{dummyData.length}</HeroStatNum>
+                  <HeroStatLabel>Active Players</HeroStatLabel>
+                </HeroStat>
+
                 <HeroStatDivider />
-                <HeroStat><HeroStatNum>{totalCases.toLocaleString()}</HeroStatNum><HeroStatLabel>Cases Fought</HeroStatLabel></HeroStat>
+
+                <HeroStat>
+                  <HeroStatNum>
+                    {totalCases.toLocaleString()}
+                  </HeroStatNum>
+                  <HeroStatLabel>Cases Fought</HeroStatLabel>
+                </HeroStat>
+
                 <HeroStatDivider />
-                <HeroStat><HeroStatNum>{avgAccuracy}%</HeroStatNum><HeroStatLabel>Avg Accuracy</HeroStatLabel></HeroStat>
+
+                <HeroStat>
+                  <HeroStatNum>{avgAccuracy}%</HeroStatNum>
+                  <HeroStatLabel>Avg Accuracy</HeroStatLabel>
+                </HeroStat>
               </HeroStats>
             </HeroLeft>
             <HeroRight>
-              {/* Mini podium — 2nd, 1st, 3rd */}
-              {[dummyData[1], dummyData[0], dummyData[2]].map((u, i) => {
-                const isCenter = i === 1;
-                return (
-                  <PodiumItem key={u.rank} $center={isCenter}>
-                    {isCenter && <CrownEmoji>👑</CrownEmoji>}
-                    <PodiumAvatar $center={isCenter} style={{ background: avatarBg(u.rank) }}>
-                      {u.initial}
-                    </PodiumAvatar>
-                    <PodiumName $center={isCenter}>{u.name.split(" ")[0]}</PodiumName>
-                    <PodiumScore>{u.score} pts</PodiumScore>
-                    <PodiumBlock $rank={u.rank} $center={isCenter}>
-                      #{u.rank}
-                    </PodiumBlock>
-                  </PodiumItem>
-                );
-              })}
-            </HeroRight>
+
+  {/* 2nd Place */}
+  <PodiumItem>
+    <PodiumAvatar style={{ background: avatarBg(2) }}>
+      {dummyData[1].initial}
+    </PodiumAvatar>
+
+    <PodiumName>
+      {dummyData[1].name}
+    </PodiumName>
+
+    <PodiumScore>
+      {dummyData[1].score} pts
+    </PodiumScore>
+
+    <PodiumBlock $rank={2}>
+      2nd
+    </PodiumBlock>
+  </PodiumItem>
+
+  {/* 1st Place */}
+  <PodiumItem $center>
+    <CrownEmoji>👑</CrownEmoji>
+
+    <PodiumAvatar
+      $center
+      style={{ background: avatarBg(1) }}
+    >
+      {dummyData[0].initial}
+    </PodiumAvatar>
+
+    <PodiumName $center>
+      {dummyData[0].name}
+    </PodiumName>
+
+    <PodiumScore>
+      {dummyData[0].score} pts
+    </PodiumScore>
+
+    <PodiumBlock $rank={1} $center>
+      1st
+    </PodiumBlock>
+  </PodiumItem>
+
+  {/* 3rd Place */}
+  <PodiumItem>
+    <PodiumAvatar style={{ background: avatarBg(3) }}>
+      {dummyData[2].initial}
+    </PodiumAvatar>
+
+    <PodiumName>
+      {dummyData[2].name}
+    </PodiumName>
+
+    <PodiumScore>
+      {dummyData[2].score} pts
+    </PodiumScore>
+
+    <PodiumBlock $rank={3}>
+      3rd
+    </PodiumBlock>
+  </PodiumItem>
+
+</HeroRight>
           </HeroBannerInner>
         </HeroBanner>
 
@@ -167,6 +240,8 @@ const Leaderboard = () => {
                       <Avatar style={{ background: avatarBg(user.rank) }}>
                         {user.initial}
                       </Avatar>
+
+                      
 
                       <NameCol>
                         <UserName>{user.name}</UserName>
@@ -379,24 +454,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-/* ── Navbar ── */
-const Navbar = styled.nav`
-  height: 56px;
-  background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 100%);
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 24px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-`;
-const LogoIcon = styled.span`margin-right: 6px;`;
-const Logo = styled.div`font-size:17px;font-weight:700;display:flex;align-items:center;color:#fff;`;
-const LogoSpan = styled.span`color:#60a5fa;margin-left:4px;`;
-const BackButton = styled.button`background:transparent;border:none;color:#e2e8f0;cursor:pointer;font-size:14px;`;
 
 /* ── Hero banner ── */
 const HeroBanner = styled.div`
