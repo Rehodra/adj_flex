@@ -578,6 +578,7 @@ const Simulator = () => {
   const ttsAudioRef = useRef<HTMLAudioElement | null>(null);
   const [playingMsgId, setPlayingMsgId] = useState<string | null>(null);
   const playingRef = useRef<string | null>(null);
+  const loadedMsgIdRef = useRef<string | null>(null);
 
   const [timeLeft, setTimeLeft] = useState(1800);
 
@@ -649,37 +650,63 @@ const Simulator = () => {
   const toggleRecording = () => { isRecording ? stopRecording() : startRecording(); };
 
   const playFastTTS = async (msgId: string, text: string) => {
-    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
-    if (playingRef.current === msgId) { playingRef.current = null; setPlayingMsgId(null); return; }
+    // If we are already loaded with this audio, just resume it
+    if (loadedMsgIdRef.current === msgId && ttsAudioRef.current) {
+      playingRef.current = msgId;
+      setPlayingMsgId(msgId);
+      ttsAudioRef.current.play().catch(() => {});
+      return;
+    }
+
+    // Otherwise, stop any current audio and load the new one
+    if (ttsAudioRef.current) { 
+      ttsAudioRef.current.pause(); 
+    }
+    
+    loadedMsgIdRef.current = msgId;
     playingRef.current = msgId;
     setPlayingMsgId(msgId);
+    
     try {
-      const chunks = text.match(/.{1,200}(\s|$)/g) || [];
-      for (const chunk of chunks) {
-        if (playingRef.current !== msgId) break;
-        const langParam = encodeURIComponent(selectedLanguage);
-        const textParam = encodeURIComponent(chunk);
-        const res = await fetch(`http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
-        if (!res.ok) {
-          const err = await res.json();
-          console.error("TTS Error:", err);
-          throw new Error("TTS failed");
-        }
-        const url = URL.createObjectURL(await res.blob());
-        const audio = new Audio(url);
-        ttsAudioRef.current = audio;
-        await new Promise<void>((resolve, reject) => {
-          audio.onended = () => { URL.revokeObjectURL(url); resolve(); };
-          audio.onerror = reject;
-          audio.play().catch(reject);
-        });
+      const langParam = encodeURIComponent(selectedLanguage);
+      const textParam = encodeURIComponent(text.trim().substring(0, 2500));
+      const res = await fetch(`http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
+      if (!res.ok) {
+        throw new Error("TTS failed");
       }
+      const url = URL.createObjectURL(await res.blob());
+      const audio = new Audio(url);
+      audio.playbackRate = 1.4; // 1.4x Speed requirement
+      
+      ttsAudioRef.current = audio;
+      await new Promise<void>((resolve, reject) => {
+        audio.onended = () => { 
+          URL.revokeObjectURL(url); 
+          playingRef.current = null;
+          setPlayingMsgId(null);
+          // Keep loadedMsgIdRef intact so they can't resume after it ends naturally unless designed,
+          // but clearing it requires them to fetch again. We'll clear it:
+          loadedMsgIdRef.current = null;
+          resolve(); 
+        };
+        audio.onerror = reject;
+        audio.play().catch(reject);
+      });
     } catch { /* silent */ }
-    finally { playingRef.current = null; setPlayingMsgId(null); }
+    finally { 
+      // If the audio ends naturally, clean up state
+      if (playingRef.current === msgId) {
+        playingRef.current = null; 
+        setPlayingMsgId(null); 
+      }
+    }
   };
 
   const pauseTTS = () => {
-    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current.src = ''; ttsAudioRef.current = null; }
+    if (ttsAudioRef.current) { 
+      ttsAudioRef.current.pause(); 
+      // Do NOT set src to '' or null out the ref! We need it to resume!
+    }
     playingRef.current = null;
     setPlayingMsgId(null);
   };
