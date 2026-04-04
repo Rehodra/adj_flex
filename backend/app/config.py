@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     
     # Separate keys/models for agents
     JUDGE_API_KEY: str = Field(default="", env="JUDGE_API_KEY")
-    JUDGE_MODEL: str = Field(default="mixtral-8x7b-32768", env="JUDGE_MODEL")
+    JUDGE_MODEL: str = Field(default="llama-3.3-70b-versatile", env="JUDGE_MODEL")
     
     OPPONENT_API_KEY: str = Field(default="", env="OPPONENT_API_KEY")
     OPPONENT_MODEL: str = Field(default="llama-3.1-8b-instant", env="OPPONENT_MODEL")

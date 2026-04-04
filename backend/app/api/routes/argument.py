@@ -3,7 +3,7 @@ Argument Submission API Routes for AI Legal Courtroom Simulator
 Handles argument evaluation, opponent responses, and scoring
 """
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from typing import Dict, List
 from datetime import datetime
 import asyncio
@@ -54,7 +54,7 @@ def get_judge_agent() -> JudgeAgent:
         provider = getattr(_settings, "AI_PROVIDER", "gemini").lower()
         if provider == "groq":
             api_key = getattr(_settings, "JUDGE_API_KEY", "") or getattr(_settings, "GROQ_API_KEY", "")
-            model_name = getattr(_settings, "JUDGE_MODEL", "mixtral-8x7b-32768")
+            model_name = getattr(_settings, "JUDGE_MODEL", "llama-3.3-70b-versatile")
         else:
             api_key = _settings.GEMINI_API_KEY
             model_name = _settings.GEMINI_MODEL
@@ -91,7 +91,8 @@ def get_opponent_agent() -> OpponentAgent:
 
 @router.post("/submit", response_model=EvaluationResponse)
 async def submit_argument(
-    request: ArgumentRequest
+    request: ArgumentRequest,
+    background_tasks: BackgroundTasks
 ):
     """
     Submit argument and get evaluation + opponent response
@@ -150,15 +151,16 @@ async def submit_argument(
         opponent_response_text = opponent_response
         
         if language != "English":
-            print(f"Translating responses to {language}")
-            judge_feedback = await translation_service.translate_from_english(
-                evaluation["feedback"],
-                language
-            )
+            print(f"Translating opponent response to {language}")
+            # Keep judge feedback in English
             opponent_response_text = await translation_service.translate_from_english(
                 opponent_response,
                 language
             )
+
+        # Trigger TTS caching in the background for the opponent's translated string
+        from app.api.routes.audio import text_to_speech
+        background_tasks.add_task(text_to_speech, text=opponent_response_text, language=language, role="opponent")
         
         # 5. Update session data
         argument_record = {
