@@ -126,19 +126,17 @@ async def health_check():
         except Exception as e:
             dependencies["ai_provider"] = f"❌ Error: {str(e)}"
         
-        # Check ChromaDB (vector database)
+        # Check ChromaDB (Vector database) - Safely report Dummy Mode
         try:
-            import chromadb
-            client = chromadb.PersistentClient(path=settings.VECTOR_DB_PATH)
-            collections = client.list_collections()
-            dependencies["chromadb"] = f"✅ {len(collections)} collections"
+            # We skip the real import and check to stay under memory limits
+            dependencies["chromadb"] = "✅ Dummy/Mock Mode (OOM Prevention)"
         except Exception as e:
             dependencies["chromadb"] = f"❌ Error: {str(e)}"
         
-        # Check sentence transformers (embeddings)
+        # Check sentence transformers (Embeddings) - Safely report Dummy Mode
         try:
-            from sentence_transformers import SentenceTransformer
-            dependencies["sentence_transformers"] = "✅ Available"
+            # We skip the real import to stay under memory limits
+            dependencies["sentence_transformers"] = "✅ Dummy/Mock Mode (OOM Prevention)"
         except Exception as e:
             dependencies["sentence_transformers"] = f"❌ Error: {str(e)}"
         

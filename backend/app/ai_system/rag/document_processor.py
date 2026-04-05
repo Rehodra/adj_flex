@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from enum import Enum
 import hashlib
 import re
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer (Disabled for memory optimization)
 
 
 class LegalDocumentType(Enum):
