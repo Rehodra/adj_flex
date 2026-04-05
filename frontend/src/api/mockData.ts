@@ -10,7 +10,7 @@ export const MOCK_CASES: Record<string, any> = {
       parties: "Ramesh Kumar (Plaintiff) vs. Suresh Gupta (Defendant)",
       background: "A civil dispute over encroachment and boundary demarcation between neighboring properties in a residential colony.",
       incident: "The defendant Suresh Gupta allegedly built a new boundary wall that encroaches 2 feet into the plaintiff's registered property.",
-      legal_provisions: "Transfer of Property Act, Section 52; Specific Relief Act, Section 6."
+      legal_provisions: ["Transfer of Property Act, Section 52", "Specific Relief Act, Section 6"]
     }
   },
   'CRIM_EASY_1': {
@@ -19,7 +19,7 @@ export const MOCK_CASES: Record<string, any> = {
       parties: "State of Karnataka (Prosecution) vs. Arjun Mehta (Accused)",
       background: "An accused is charged with snatching a gold chain from a pedestrian in a busy market under section 379 of IPC.",
       incident: "On Jan 10th, the victim was walking in Brigade Road when the accused allegedly snatched a 20gm gold chain and attempted to flee on a motorcycle.",
-      legal_provisions: "Indian Penal Code (IPC), Section 379 (Theft), Section 356 (Assault in attempt to commit theft)."
+      legal_provisions: ["Indian Penal Code (IPC), Section 379 (Theft)", "Indian Penal Code (IPC), Section 356 (Assault in attempt to commit theft)"]
     }
   },
   'CONST_EASY_1': {
@@ -28,7 +28,7 @@ export const MOCK_CASES: Record<string, any> = {
       parties: "Rahul Das (Petitioner) vs. State of West Bengal (Respondent)",
       background: "A citizen challenges restrictions imposed on public speech under Article 19(1)(a) of the Constitution.",
       incident: "The petitioner was prevented from holding a peaceful demonstration against local administrative policies citing public order concerns.",
-      legal_provisions: "Constitution of India, Article 19(1)(a), Article 19(2)."
+      legal_provisions: ["Constitution of India, Article 19(1)(a)", "Constitution of India, Article 19(2)"]
     }
   }
 };
@@ -40,7 +40,7 @@ export const DEFAULT_MOCK_CASE = {
     parties: "Party A vs. Party B",
     background: "General background of the legal dispute.",
     incident: "Details of the incident or cause of action.",
-    legal_provisions: "Relevant sections of the law."
+    legal_provisions: ["Sample Legal Provision"]
   }
 };
 
