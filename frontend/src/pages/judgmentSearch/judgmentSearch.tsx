@@ -77,7 +77,8 @@ const JudgementSearch = () => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    axios.get("http://localhost:8000/api/session/user/demo_user_001")
+    const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8000";
+    axios.get(`${BASE_URL}/api/session/user/demo_user_001`)
       .then(res => {
         const mapped = res.data.sessions.map((s: any) => {
           const created = new Date(s.created_at);

@@ -24,8 +24,8 @@ from app.config import get_settings
 from app.api.routes import cases, session, argument, audio, auth
 from app.db import connect_to_mongo, close_mongo_connection
 from app.models.schemas import HealthResponse, ErrorResponse
-from app.sockets.socket_manager import get_sio
-from app.sockets import events as socket_events
+# from app.sockets.socket_manager import get_sio
+# from app.sockets import events as socket_events
 
 load_dotenv()
 # Initialize logger
@@ -396,9 +396,9 @@ if settings.ENV.lower() == "production":
     pass
 
 
-# Socket.io integration with ASGI
-sio = get_sio()
-socket_asgi_app = ASGIApp(sio, app)
+# Socket.io integration with ASGI (DISABLED FOR DEPLOYMENT)
+# sio = get_sio()
+# socket_asgi_app = ASGIApp(sio, app)
 
 
 # Run the application
@@ -410,7 +410,7 @@ if __name__ == "__main__":
     print(f"🔌 WebSocket: ws://localhost:8000/socket.io")
     
     uvicorn.run(
-        socket_asgi_app,
+        "app.main:app",
         host="0.0.0.0",
         port=8000,
         reload=settings.DEBUG,

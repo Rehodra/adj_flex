@@ -17,6 +17,10 @@ export class GameSocketService {
    * Initialize and connect to the WebSocket server
    */
   connect(): Promise<void> {
+    if (process.env.REACT_APP_DISABLE_SOCKET === "true") {
+      console.log("[Socket] Socket.io is disabled via environment variable.");
+      return Promise.resolve();
+    }
     return new Promise((resolve, reject) => {
       try {
         this.socket = io(SOCKET_URL, {
@@ -69,6 +73,7 @@ export class GameSocketService {
     role: "plaintiff" | "defense" | "spectator",
     userId?: string
   ): void {
+    if (!this.socket) return;
     this.socket.emit("join_session", {
       session_id: sessionId,
       role,
@@ -80,6 +85,7 @@ export class GameSocketService {
    * Leave current session
    */
   leaveSession(sessionId: string): void {
+    if (!this.socket) return;
     this.socket.emit("leave_session", {
       session_id: sessionId,
     });
@@ -93,6 +99,7 @@ export class GameSocketService {
     argumentText: string,
     caseId?: string
   ): void {
+    if (!this.socket) return;
     this.socket.emit("submit_argument", {
       session_id: sessionId,
       argument_text: argumentText,
@@ -104,6 +111,7 @@ export class GameSocketService {
    * Request a hint on a specific legal topic
    */
   requestHint(sessionId: string, question: string): void {
+    if (!this.socket) return;
     this.socket.emit("request_hint", {
       session_id: sessionId,
       question,
@@ -114,6 +122,7 @@ export class GameSocketService {
    * Notify others that you're typing
    */
   notifyTyping(sessionId: string): void {
+    if (!this.socket) return;
     this.socket.emit("typing", {
       session_id: sessionId,
     });
@@ -125,6 +134,7 @@ export class GameSocketService {
    * Listen for session joined confirmation
    */
   onSessionJoined(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("session_joined", callback);
   }
 
@@ -132,6 +142,7 @@ export class GameSocketService {
    * Listen for player joined event
    */
   onPlayerJoined(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("player_joined", callback);
   }
 
@@ -139,6 +150,7 @@ export class GameSocketService {
    * Listen for player left event
    */
   onPlayerLeft(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("player_left", callback);
   }
 
@@ -146,6 +158,7 @@ export class GameSocketService {
    * Listen for argument received confirmation
    */
   onArgumentReceived(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("argument_received", callback);
   }
 
@@ -153,6 +166,7 @@ export class GameSocketService {
    * Listen for argument evaluation result
    */
   onArgumentEvaluated(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("argument_evaluated", callback);
   }
 
@@ -160,6 +174,7 @@ export class GameSocketService {
    * Listen for opponent's response
    */
   onOpponentResponse(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("opponent_response", callback);
   }
 
@@ -167,6 +182,7 @@ export class GameSocketService {
    * Listen for turn change event
    */
   onTurnChanged(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("turn_changed", callback);
   }
 
@@ -174,6 +190,7 @@ export class GameSocketService {
    * Listen for game verdict/winner announcement
    */
   onVerdictReached(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("verdict_reached", callback);
   }
 
@@ -181,6 +198,7 @@ export class GameSocketService {
    * Listen for hint response
    */
   onHintResponse(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("hint_response", callback);
   }
 
@@ -188,6 +206,7 @@ export class GameSocketService {
    * Listen for player typing indicator
    */
   onPlayerTyping(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("player_typing", callback);
   }
 
@@ -195,6 +214,7 @@ export class GameSocketService {
    * Listen for errors
    */
   onError(callback: (data: any) => void): void {
+    if (!this.socket) return;
     this.socket.on("error", callback);
   }
 
@@ -202,6 +222,7 @@ export class GameSocketService {
    * Remove an event listener
    */
   offEvent(eventName: string): void {
+    if (!this.socket) return;
     this.socket.off(eventName);
   }
 

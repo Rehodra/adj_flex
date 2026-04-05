@@ -113,7 +113,8 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     // We will redirect to backend OAuth endpoint
-    window.location.href = "http://localhost:8000/api/auth/google";
+    const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8000";
+    window.location.href = `${BASE_URL}/api/auth/google`;
   };
 
   const handleBypass = (e: React.FormEvent) => {

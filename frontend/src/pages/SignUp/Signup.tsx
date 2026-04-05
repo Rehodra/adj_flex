@@ -137,7 +137,8 @@ const Signup = () => {
 
   const handleGoogleSignup = () => {
     const frontendRedirect = `${window.location.origin}/signup`;
-    window.location.href = `http://localhost:8000/api/auth/google?frontend_redirect=${encodeURIComponent(frontendRedirect)}`;
+    const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8000";
+    window.location.href = `${BASE_URL}/api/auth/google?frontend_redirect=${encodeURIComponent(frontendRedirect)}`;
   };
 
   const handleSubmit = (e: React.FormEvent) => {

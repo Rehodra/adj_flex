@@ -60,7 +60,7 @@ const UploadPDF = () => {
   const props: UploadProps = {
     name: "user_file",
     multiple: true,
-    action: `http://localhost:8000/upload?licenseID=${licenseID}`,
+    action: `${process.env.REACT_APP_API_BASE_URL || "http://localhost:8000"}/upload?licenseID=${licenseID}`,
     onChange(info) {
       console.log(info);
 

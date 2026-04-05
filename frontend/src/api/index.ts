@@ -3,12 +3,14 @@ import { queryClient } from "../AppRoutes";
 
 export const API_URL = process.env.REACT_APP_API_BASE_URL
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8000";
+
 const api: AxiosInstance = axios.create({
-    baseURL : "http://localhost:8000",
+    baseURL : BASE_URL,
 })
 
 export const apiML: AxiosInstance = axios.create({
-  baseURL : "http://localhost:8000",
+  baseURL : BASE_URL,
 })
 
 export function authHeader() : object {
