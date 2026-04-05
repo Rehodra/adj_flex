@@ -14,8 +14,3 @@ httpx
 requests
 gTTS
 python-multipart
-sentence-transformers
-chromadb
-torch
-numpy
-transformers

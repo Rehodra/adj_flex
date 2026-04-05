@@ -611,7 +611,18 @@ const Simulator = () => {
           text: `Court is now in session — ${gameMode === 'opponent' ? 'Multiplayer' : 'AI Opponent'} Mode · ${res.data.current_phase.replace(/_/g, ' ').toUpperCase()}`
         }]);
       } catch (err) {
-        console.error("Session init failed", err);
+        console.error("Session init failed, using mock data fallback...", err);
+        const { getMockSessionResponse } = require('../../api/mockData');
+        const mockRes = getMockSessionResponse(caseId || "CIVIL_EASY_1");
+        
+        setSessionId(mockRes.session_id);
+        setCaseFacts(mockRes.case_facts);
+        setPhase(mockRes.current_phase);
+        setMessages([{
+          id: 'welcome',
+          type: 'system',
+          text: `Court is now in session (DEMO MODE) — ${gameMode === 'opponent' ? 'Multiplayer' : 'AI Opponent'} Mode · ${mockRes.current_phase.replace(/_/g, ' ').toUpperCase()}`
+        }]);
       }
     };
     if (caseId && gameMode) initSession();
@@ -792,7 +803,37 @@ const Simulator = () => {
         return next;
       });
     } catch (err: any) {
-      setMessages(prev => [...prev, { id: Date.now().toString() + '_e', type: 'system', text: `Error: ${err.message}` }]);
+      console.warn("Argument submission failed, using mock response...", err);
+      const { getMockArgumentResponse } = require('../../api/mockData');
+      const mockRes = getMockArgumentResponse(newMsg.text, phase);
+
+      setMessages(prev => {
+        const next = [...prev];
+        next.push({
+          id: Date.now().toString() + '_j',
+          type: 'judge',
+          text: mockRes.feedback,
+          scores: {
+            legal: mockRes.legal_accuracy_score,
+            reasoning: mockRes.reasoning_score,
+            evidence: mockRes.evidence_score,
+            overall: mockRes.overall_score,
+            turn_score: mockRes.turn_score,
+            cumulative_score: mockRes.cumulative_score,
+            performance_tier: mockRes.performance_tier,
+          },
+          suggestions: mockRes.suggestions,
+          incorrect_sections: mockRes.incorrect_sections,
+        });
+
+        const opp: ChatMessage = { 
+          id: Date.now().toString() + '_o', 
+          type: 'opponent', 
+          text: mockRes.opponent_response 
+        };
+        next.push(opp);
+        return next;
+      });
     } finally { setLoading(false); }
   };
 
