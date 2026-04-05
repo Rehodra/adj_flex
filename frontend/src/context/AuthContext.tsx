@@ -17,38 +17,29 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  // Hardcoded Demo User for standalone frontend deployment
+  const [user, setUser] = useState<User | null>({
+    id: "demo_advocate_001",
+    email: "advocate@adjournment.ai",
+    name: "Demo Advocate",
+    picture: "https://ui-avatars.com/api/?name=Demo+Advocate&background=2563eb&color=fff"
+  });
 
   useEffect(() => {
-    // Check local storage for existing session on load
-    const token = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-    
-    if (token && storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        console.error("Failed to parse stored user", e);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      }
-    }
+    // We keep this empty for demo mode to ignore local storage redirects
   }, []);
 
   const login = (token: string, userData: User) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
+    // In demo mode, logout does nothing or resets to demo user
+    console.log("Logout triggered in demo mode");
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: true, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

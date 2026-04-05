@@ -731,14 +731,14 @@ const LandingPage = () => {
                 <span className={styles.gsBtnIconWrap}>
                   <IconRocket size={26} />
                 </span>
-                <span>Get Started — It's Free</span>
+                <span>Launch Demo Simulator</span>
                 <span className={styles.gsBtnArrow}>
                   <IconUpRight size={20} />
                 </span>
               </motion.button>
             </Link>
             <p className={styles.gsHint}>
-              🛡️ No credit card required · Free forever for students
+              ⚖️ Full access enabled for Demo Mode · No account needed
             </p>
           </motion.div>
 
