@@ -25,7 +25,7 @@ const Authentication = () => {
 
         <img style={{
           height:"700px"
-        }} src = {process.env.PUBLIC_URL + '/images/court.jpg'} alt='no image' />
+        }} src={'/images/court.jpg'} alt='no image' />
     </div>
   )
 }

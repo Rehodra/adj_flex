@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
+import type { AxiosResponse } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import api, { authHeader } from "./index";

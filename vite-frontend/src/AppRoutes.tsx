@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import type { AxiosError } from "axios";
 import { IconContext } from "react-icons";
 import { MutationCache , QueryClient ,QueryClientProvider} from "@tanstack/react-query";
 import { message } from "antd";

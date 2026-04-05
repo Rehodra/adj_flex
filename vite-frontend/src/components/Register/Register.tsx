@@ -122,7 +122,7 @@ const Register = ({ state }: registerProps) => {
             >
               <Upload.Dragger name="files" action="/upload.do">
                 <p className="ant-upload-drag-icon">
-                  <InboxOutlined />
+                  <InboxOutlined {...({} as any)} />
                 </p>
                 <p className="ant-upload-text">
                   Click or drag file to this area to upload
