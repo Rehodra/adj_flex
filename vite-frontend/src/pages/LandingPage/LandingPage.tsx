@@ -6,13 +6,12 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import type { Variants } from "framer-motion";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import styles from "./LandingPage.module.scss";
 
 // ─── SVG ICON COMPONENTS ──────────────────────────────────────────────────────
-// Each icon is unique — no two share the same path shape
-
 const IconGavel = ({ size = 22 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <path d="m14 13-7.5 7.5c-.8.8-2.1.8-2.9 0l-1.1-1.1c-.8-.8-.8-2.1 0-2.9L10 9" />
@@ -156,12 +155,6 @@ const IconBarChart = ({ size = 16 }: { size?: number }) => (
   </svg>
 );
 
-const IconLightning = ({ size = 14 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" />
-  </svg>
-);
-
 const IconChevronRight = ({ size = 16 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="9 18 15 12 9 6" />
@@ -273,7 +266,7 @@ const LandingPage = () => {
   const { scrollY } = useScroll();
   const heroParallax = useTransform(scrollY, [0, 600], [0, 60]);
 
-  const fadeUp = {
+  const fadeUp: Variants = {
     hidden: { opacity: 0, y: 36 },
     visible: (d = 0) => ({
       opacity: 1,
@@ -387,18 +380,13 @@ const LandingPage = () => {
     <div className={styles.container}>
       <Navbar />
 
-      {/* ══════════════════════════════════════════════════════
-          SECTION 1 — HERO   (dark navy)
-      ══════════════════════════════════════════════════════ */}
       <section className={styles.heroSection}>
-        {/* backgrounds */}
         <div className={styles.heroAurora1} />
         <div className={styles.heroAurora2} />
         <div className={styles.heroAurora3} />
         <div className={styles.heroGrid} />
         <FloatingParticles />
 
-        {/* floating orbs */}
         {[
           { cls: styles.orbA },
           { cls: styles.orbB },
@@ -410,7 +398,6 @@ const LandingPage = () => {
         ))}
 
         <motion.div className={styles.heroInner} style={{ y: heroParallax }}>
-          {/* ── LEFT CONTENT ── */}
           <div className={styles.heroLeft}>
             <motion.span
               className={styles.heroEyebrow}
@@ -430,7 +417,9 @@ const LandingPage = () => {
               animate="visible"
               variants={fadeUp}
             >
-              Smart, Transparent &amp;
+              Smart,
+              <br />
+              Transparent &amp;
               <br />
               AI-Powered
               <br />
@@ -515,7 +504,6 @@ const LandingPage = () => {
             </motion.div>
           </div>
 
-          {/* ── RIGHT MOCKUP ── */}
           <motion.div
             className={styles.heroRight}
             initial={{ opacity: 0, x: 48 }}
@@ -524,7 +512,6 @@ const LandingPage = () => {
           >
             <div className={styles.mockupGlow} />
             <div className={styles.chatWindow}>
-              {/* header */}
               <div className={styles.chatHeader}>
                 <div className={styles.trafficLights}>
                   <span className={styles.tlRed} />
@@ -538,7 +525,6 @@ const LandingPage = () => {
                 <span className={styles.liveBadge}>LIVE</span>
               </div>
 
-              {/* body */}
               <div className={styles.chatBody}>
                 <motion.div
                   className={styles.bubbleUser}
@@ -576,7 +562,6 @@ const LandingPage = () => {
                 </motion.div>
               </div>
 
-              {/* metrics footer */}
               <div className={styles.chatMetrics}>
                 <div className={styles.metricsTitle}>
                   <span className={styles.metricsDot} />
@@ -604,7 +589,6 @@ const LandingPage = () => {
               </div>
             </div>
 
-            {/* floating badges */}
             <motion.div
               className={styles.floatBadge1}
               animate={{ y: [0, -9, 0] }}
@@ -624,9 +608,6 @@ const LandingPage = () => {
         </motion.div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
-          SECTION 2 — GET STARTED   (white / light-blue)
-      ══════════════════════════════════════════════════════ */}
       <section className={styles.gsSection}>
         <div className={styles.gsBgDots} />
         <div className={styles.gsBgBlob1} />
@@ -673,7 +654,6 @@ const LandingPage = () => {
             confidence to dominate in real courtrooms.
           </motion.p>
 
-          {/* Benefits */}
           <motion.div
             className={styles.gsBenefits}
             initial="hidden"
@@ -706,7 +686,6 @@ const LandingPage = () => {
             ))}
           </motion.div>
 
-          {/* CTA */}
           <motion.div
             className={styles.gsCtaWrapper}
             initial="hidden"
@@ -742,7 +721,6 @@ const LandingPage = () => {
             </p>
           </motion.div>
 
-          {/* Avatars */}
           <motion.div
             className={styles.gsAvatarRow}
             initial="hidden"
@@ -778,7 +756,6 @@ const LandingPage = () => {
             </div>
           </motion.div>
 
-          {/* Mini feature cards */}
           <motion.div
             className={styles.gsCards}
             initial="hidden"
@@ -793,8 +770,6 @@ const LandingPage = () => {
                 iconBg: "#fffbeb",
                 iconColor: "#b45309",
                 tag: "Most Popular",
-                tagColor: "#b45309",
-                tagBorder: "#fcd34d",
                 accent: "linear-gradient(90deg,#f59e0b,#fcd34d)",
                 title: "Start a Case",
                 desc: "Pick from 100+ real Indian court scenarios and argue your position with live AI feedback.",
@@ -804,8 +779,6 @@ const LandingPage = () => {
                 iconBg: "#eff6ff",
                 iconColor: "#1d4ed8",
                 tag: "AI-Powered",
-                tagColor: "#1d4ed8",
-                tagBorder: "#93c5fd",
                 accent: "linear-gradient(90deg,#3b82f6,#06b6d4)",
                 title: "Track Progress",
                 desc: "See your skill growth across argument clarity, evidence usage, and legal reasoning.",
@@ -815,8 +788,6 @@ const LandingPage = () => {
                 iconBg: "#f0fdf4",
                 iconColor: "#065f46",
                 tag: "Competitive",
-                tagColor: "#065f46",
-                tagBorder: "#6ee7b7",
                 accent: "linear-gradient(90deg,#10b981,#34d399)",
                 title: "Climb Rankings",
                 desc: "Compete on the leaderboard and earn certifications for your hard-won achievements.",
@@ -836,7 +807,6 @@ const LandingPage = () => {
                 </div>
                 <span
                   className={styles.gsCardTag}
-                  style={{ color: c.tagColor, borderColor: c.tagBorder }}
                 >
                   {c.tag}
                 </span>
@@ -851,9 +821,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
-          SECTION 3 — FEATURES   (dark navy)
-      ══════════════════════════════════════════════════════ */}
       <section className={styles.featSection}>
         <div className={styles.featMesh} />
         <div className={styles.featGlow} />
@@ -879,7 +846,6 @@ const LandingPage = () => {
           </motion.div>
 
           <div className={styles.orbLayout}>
-            {/* top row */}
             <div className={styles.orbRow}>
               {orbFeatures.map((f, i) => (
                 <motion.div
@@ -904,7 +870,6 @@ const LandingPage = () => {
               ))}
             </div>
 
-            {/* middle row with center orb */}
             <div className={styles.orbMiddle}>
               {[
                 {
@@ -936,7 +901,6 @@ const LandingPage = () => {
                 </motion.div>
               ))}
 
-              {/* Center icon */}
               <motion.div
                 className={styles.orbCenter}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -987,7 +951,6 @@ const LandingPage = () => {
               ))}
             </div>
 
-            {/* bottom row */}
             <div className={styles.orbRow}>
               {orbBottom.map((f, i) => (
                 <motion.div
@@ -1015,9 +978,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
-          SECTION 4 — STATS / CREDIBILITY   (white / light-blue)
-      ══════════════════════════════════════════════════════ */}
       <section className={styles.statsSection}>
         <div className={styles.statsBgGlow} />
         <div className={styles.statsBgGrid} />

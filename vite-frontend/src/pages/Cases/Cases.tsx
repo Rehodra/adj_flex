@@ -101,9 +101,7 @@ const typeIcons: any = {
 };
 
 export default function Cases() {
-
   const navigate = useNavigate();
-
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState('All');
   const [filterDiff, setFilterDiff] = useState('All');
@@ -112,118 +110,76 @@ export default function Cases() {
     const matchSearch =
       c.title.toLowerCase().includes(search.toLowerCase()) ||
       c.type.toLowerCase().includes(search.toLowerCase());
-
-    const matchType =
-      filterType === 'All' || c.type === filterType;
-
-    const matchDiff =
-      filterDiff === 'All' || c.difficulty === filterDiff;
-
+    const matchType = filterType === 'All' || c.type === filterType;
+    const matchDiff = filterDiff === 'All' || c.difficulty === filterDiff;
     return matchSearch && matchType && matchDiff;
   });
 
   return (
     <>
       <Navbar />
-
       <div className={styles.page}>
-
         <div className={styles.hero}>
           <div className={styles.gridOverlay} />
-
           <div className={styles.heroContent}>
             <div className={styles.heroHeader}>
-
               <Landmark size={36} style={{ color: "white" }} />
-
               <div>
-                <h1 className={styles.heroTitle}>
-                  Case Simulator
-                </h1>
-
-                <p className={styles.heroSubtitle}>
-                  Choose a case and test your legal reasoning skills
-                </p>
+                <h1 className={styles.heroTitle}>Case Simulator</h1>
+                <p className={styles.heroSubtitle}>Choose a case and test your legal reasoning skills</p>
               </div>
-
             </div>
           </div>
         </div>
 
         <div className={styles.searchWrapper}>
           <div className={styles.searchBox}>
-
             <div className={styles.searchInputWrapper}>
-
-              <Search
-                size={16}
-                className={styles.searchIcon}
-              />
-
+              <Search size={16} className={styles.searchIcon} />
               <input
                 className={styles.searchInput}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search cases by name or type..."
               />
-
             </div>
-
             <div className={styles.filterGroup}>
               {['All', 'Civil', 'Criminal', 'Constitutional'].map(t => (
                 <button
                   key={t}
                   onClick={() => setFilterType(t)}
-                  className={
-                    filterType === t
-                      ? styles.activeFilter
-                      : styles.filterButton
-                  }
+                  className={filterType === t ? styles.activeFilter : styles.filterButton}
                 >
                   {t}
                 </button>
               ))}
             </div>
-
             <div className={styles.filterGroup}>
               {['All', 'Easy', 'Medium', 'Hard'].map(d => (
                 <button
                   key={d}
                   onClick={() => setFilterDiff(d)}
-                  className={
-                    filterDiff === d
-                      ? styles.activeFilter
-                      : styles.filterButton
-                  }
+                  className={filterDiff === d ? styles.activeFilter : styles.filterButton}
                 >
                   {d}
                 </button>
               ))}
             </div>
-
           </div>
         </div>
 
         <div className={styles.grid}>
           {filtered.map((c, i) => {
             const diff = difficultyConfig[c.difficulty];
-
             return (
               <div
                 key={c.id}
                 className={styles.card}
-                style={{
-                  animationDelay: `${i * 0.06}s`
-                }}
+                style={{ animationDelay: `${i * 0.06}s` }}
               >
                 <div className={styles.cardHeader}>
-
                   <div className={styles.cardHeaderTop}>
-
-                    <span className={styles.typeIcon}>
-                      {typeIcons[c.type]}
-                    </span>
-
+                    <span className={styles.typeIcon}>{typeIcons[c.type]}</span>
                     <span
                       className={styles.difficultyBadge}
                       style={{
@@ -234,82 +190,48 @@ export default function Cases() {
                     >
                       {c.difficulty}
                     </span>
-
                   </div>
-
-                  <h3 className={styles.cardTitle}>
-                    {c.title}
-                  </h3>
-
-                  <div className={styles.cardType}>
-                    {c.type} Law
-                  </div>
-
-                  {/* NEW — one line description */}
-                  <p className={styles.cardDescription}>
-                    {c.description}
-                  </p>
-
+                  <h3 className={styles.cardTitle}>{c.title}</h3>
+                  <div className={styles.cardType}>{c.type} Law</div>
+                  <p className={styles.cardDescription}>{c.description}</p>
                 </div>
-
                 <div className={styles.cardBody}>
-
                   <div className={styles.stats}>
                     <div>
-                      <div className={styles.statNumber}>
-                        {c.wins}
-                      </div>
-
-                      <div className={styles.statText}>
-                        TOTAL WINS
-                      </div>
+                      <div className={styles.statNumber}>{c.wins}</div>
+                      <div className={styles.statText}>TOTAL WINS</div>
                     </div>
-
                     <div>
-                      <div className={styles.statNumber}>
-                        {c.accuracy}
-                      </div>
-
-                      <div className={styles.statText}>
-                        ACCURACY
-                      </div>
+                      <div className={styles.statNumber}>{c.accuracy}</div>
+                      <div className={styles.statText}>ACCURACY</div>
                     </div>
                   </div>
-
                   <div className={styles.difficultyBarWrapper}>
                     <div className={styles.barHeader}>
                       <span>Difficulty</span>
-
-                      <span style={{ color: diff.color }}>
-                        {diff.bar}%
-                      </span>
+                      <span style={{ color: diff.color }}>{diff.bar}%</span>
                     </div>
-
                     <div className={styles.barBackground}>
                       <div
                         className={styles.barFill}
                         style={{
                           width: `${diff.bar}%`,
-                          background:
-                            `linear-gradient(90deg, ${diff.color}88, ${diff.color})`
+                          background: `linear-gradient(90deg, ${diff.color}88, ${diff.color})`
                         }}
                       />
                     </div>
                   </div>
-
                   <button
                     className={styles.startButton}
                     onClick={() => navigate(`/simulator/${c.id}`)}
                   >
                     Start Simulation
                   </button>
-
                 </div>
               </div>
             );
           })}
         </div>
-
       </div>
     </>
   );

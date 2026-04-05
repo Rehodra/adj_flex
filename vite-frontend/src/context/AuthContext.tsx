@@ -30,6 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (token: string, userData: User) => {
+    console.log("Login triggered with token:", token);
     setUser(userData);
   };
 

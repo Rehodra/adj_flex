@@ -25,40 +25,32 @@ const Search = () => {
   const getautoComplete = AutoCompleteQuery();
 
   const licenseID = localStorage.getItem("LicenseKey");
-
   const navigate = useNavigate();
 
   const handleSearch = () => {
     setLoader(true);
-
     const newArray: string[] = [];
-    tagsList.map((tags) => {
-      newArray.push(tags.tagName);
+    tagsList.forEach((tag) => {
+      newArray.push(tag.tagName);
     });
-
-    console.log(newArray);
 
     fetchResult.mutateAsync(newArray, {
       onSuccess: (data) => {
-        console.log(data?.data?.docs);
-
-        const docsData = data?.data?.docs;
-
+        const docsData = data?.data?.docs || [];
         setSearchData(docsData);
         setTimeout(() => {
           setLoader(false);
         }, 2000);
-
         setFirstSearch(false);
       },
     });
   };
 
   const handleOnDragEnd = (result: any) => {
+    if (!result.destination) return;
     const items = Array.from(tagsList);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-
     setTagsList(items);
   };
 
@@ -69,33 +61,25 @@ const Search = () => {
   };
 
   const handleAddTags = (value: string) => {
-    // if (event.key === "Enter") {
     const newList = Array.from(tagsList);
     if (value !== "") {
       newList.push({ tagName: value, id: value });
       setTagsList(newList);
       setnewTag("");
-      // }
     }
   };
-
-  // const handleSearch =() => {
-  //   useFetchSearchQuery(tagsList)
-  // }
 
   return (
     <div className={styles.parentContainer}>
       <div className={styles.top}>
-      <img
-              style={{ width: "30px", marginRight: "2rem" }}
-            />
+        <img
+          style={{ width: "30px", marginRight: "2rem" }}
+          src="/images/Logo.png"
+          alt="Logo"
+        />
         <div className={styles.navButtons}>
-          <Link className={styles.navButtonsLinks} to={"/user"}>
-            Upload
-          </Link>
-          <Link className={styles.navButtonsLinks} to={"/judgementsearch"}>
-            Suggest Actions
-          </Link>
+          <Link className={styles.navButtonsLinks} to={"/user"}>Upload</Link>
+          <Link className={styles.navButtonsLinks} to={"/judgementsearch"}>Suggest Actions</Link>
         </div>
 
         {licenseID !== null && (
@@ -110,6 +94,8 @@ const Search = () => {
             </button>
             <img
               style={{ width: "40px", marginRight: "2rem" }}
+              src="/images/avataaars.png"
+              alt="Avatar"
             />
           </div>
         )}
@@ -117,7 +103,7 @@ const Search = () => {
       <div className={styles.bottom}>
         <div className={styles.search_container}>
           <div className={styles.search_box}>
-          <h1 className='heading-n'>Adjournment.ai</h1>
+            <h1 className='heading-n'>Adjournment.ai</h1>
             <h5>Search </h5>
             <div className={styles.input_section}>
               <AutoComplete
@@ -125,6 +111,7 @@ const Search = () => {
                 placeholder="Search Tags"
                 options={getautoComplete}
                 filterOption={true}
+                value={newTag}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
                     const newList = Array.from(tagsList);
@@ -145,9 +132,6 @@ const Search = () => {
               />
               <IoIosOptions
                 title="Advance Search Options"
-                // onClick={() => {
-                //   handleAddTags();
-                // }}
                 style={{
                   backgroundColor: "rgb(220, 220, 220)",
                   fontSize: "1.2rem",
@@ -159,7 +143,7 @@ const Search = () => {
               />
             </div>
             <button
-              disabled={tagsList.length === 0 ? true : false}
+              disabled={tagsList.length === 0}
               className={`${styles.button} button`}
               onClick={() => handleSearch()}
             >
@@ -232,7 +216,6 @@ const Search = () => {
         ) : (
           <div className={styles.results_container}>
             <h3>Your Search Results</h3>
-
             <div className={styles.results}>
               {searchData.map((data, index) => {
                 return <ResultCard key={index} data={data} />;
@@ -240,23 +223,6 @@ const Search = () => {
             </div>
           </div>
         )}
-        {/* <div className={styles.results_container}>
-         
-          <h3>Your Searches</h3>
-    
-          <div className={styles.results}>
-                  {
-                  searchData.map((data , index) => {
-                    return (
-                      <ResultCard key={index} data = {data}/>
-                    )
-                  })
-                }
-              </div>
-          
-          
-          
-        </div> */}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
-import axios , {AxiosError , AxiosInstance , AxiosResponse} from "axios";
+import axios from "axios";
+import type {AxiosError , AxiosInstance , AxiosResponse} from "axios";
 import { queryClient } from "../AppRoutes";
 
 export const API_URL = import.meta.env.VITE_API_BASE_URL

@@ -1,32 +1,10 @@
 import React from "react";
-import { Tabs } from "antd";
-import type { TabsProps } from "antd";
 import styles from "./User.module.scss";
-import { Navigate, redirect, useNavigate } from "react-router";
-import { FetchMySubmission } from "../../api/upload";
+import { Navigate, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-
-const onChange = (key: string) => {
-  console.log(key);
-};
-
-// const items: TabsProps["items"] = [
-//   {
-//     key: "1",
-//     label: `Upload PDF`,
-//     children: <UploadPDF></UploadPDF>,
-//   },
-//   {
-//     key: "2",
-//     label: `View Submissions`,
-//     children: <Submissions />,
-//   },
-// ];
 
 const User = () => {
   const localStorageLicenseKey = localStorage.getItem("LicenseKey");
-  console.log(localStorageLicenseKey);
-
   const navigate = useNavigate();
 
   if (localStorageLicenseKey === null) {
@@ -37,7 +15,10 @@ const User = () => {
     <div className={styles.parentContainer}>
       <div className={styles.top}>
         <img
-          style={{ width: "30px", marginRight: "2rem" }}        />
+          style={{ width: "30px", marginRight: "2rem" }}
+          src="/images/Logo.png"
+          alt="Logo"
+        />
         <div className={styles.navButtons}>
           <Link className={styles.navButtonsLinks} to={"/search"}>
             Search Tags
@@ -57,12 +38,11 @@ const User = () => {
           </button>
           <img
             style={{ width: "40px", marginRight: "2rem" }}
+            src="/images/avataaars.png"
+            alt="User Avatar"
           />
         </div>
       </div>
-      <div className={styles.bottom}>
-      </div>
-      {/* <Tabs style={{height: "100%"}} defaultActiveKey="1" items={items} onChange={onChange} /> */}
     </div>
   );
 };

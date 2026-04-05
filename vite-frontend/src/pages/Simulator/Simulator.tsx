@@ -99,7 +99,6 @@ interface ChatMessage {
 type GameMode = 'ai' | 'opponent' | null;
 
 // ── MODE SELECTION MODAL ──────────────────────────────────────────────────────
-// ── MODE SELECTION MODAL ─────────────────────────────────────────────────────
 const ModeSelectionModal = ({
   caseTitle,
   onSelect,
@@ -114,29 +113,9 @@ const ModeSelectionModal = ({
   const [language, setLanguage] = useState("English");
 
   const languages = [
-    "English",
-    "Hindi",
-    "Bengali",
-    "Telugu",
-    "Marathi",
-    "Tamil",
-    "Urdu",
-    "Gujarati",
-    "Kannada",
-    "Odia",
-    "Malayalam",
-    "Punjabi",
-    "Assamese",
-    "Maithili",
-    "Santali",
-    "Kashmiri",
-    "Nepali",
-    "Sindhi",
-    "Dogri",
-    "Konkani",
-    "Manipuri",
-    "Bodo",
-    "Sanskrit"
+    "English", "Hindi", "Bengali", "Telugu", "Marathi", "Tamil", "Urdu", "Gujarati",
+    "Kannada", "Odia", "Malayalam", "Punjabi", "Assamese", "Maithili", "Santali",
+    "Kashmiri", "Nepali", "Sindhi", "Dogri", "Konkani", "Manipuri", "Bodo", "Sanskrit"
   ];
 
   const handleBegin = () => {
@@ -159,181 +138,75 @@ const ModeSelectionModal = ({
           exit={{ opacity: 0, y: 20, scale: 0.97 }}
           transition={{ type: 'spring', stiffness: 240, damping: 24 }}
         >
-
           <div className={styles.modalGavel}>
             <IconScale size={34} />
           </div>
-
           <button className={styles.modalClose} onClick={onClose}>
             <IconX size={16} />
           </button>
-
           <div className={styles.modalHeader}>
-            <span className={styles.modalEyebrow}>
-              Select Simulation Mode
-            </span>
-
-            <h2 className={styles.modalTitle}>
-              {caseTitle}
-            </h2>
-
-            <p className={styles.modalSub}>
-              Choose language and simulation type
-            </p>
+            <span className={styles.modalEyebrow}>Select Simulation Mode</span>
+            <h2 className={styles.modalTitle}>{caseTitle}</h2>
+            <p className={styles.modalSub}>Choose language and simulation type</p>
           </div>
-
-          {/* LANGUAGE DROPDOWN */}
-
           <div style={{ padding: "14px 22px 4px" }}>
-
-            <label
-              style={{
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                letterSpacing: "1px",
-                textTransform: "uppercase",
-                color: "#64748b",
-                display: "block",
-                marginBottom: "6px"
-              }}
-            >
+            <label style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#64748b", display: "block", marginBottom: "6px" }}>
               Choose Language
             </label>
-
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "9px 12px",
-                borderRadius: "8px",
-                border: "1px solid #e4e8f0",
-                fontSize: "0.85rem",
-                background: "#f8fafc",
-                cursor: "pointer"
-              }}
+              style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", border: "1px solid #e4e8f0", fontSize: "0.85rem", background: "#f8fafc", cursor: "pointer" }}
             >
-              {languages.map((lang) => (
-                <option key={lang}>
-                  {lang}
-                </option>
-              ))}
+              {languages.map((lang) => (<option key={lang}>{lang}</option>))}
             </select>
-
           </div>
-
-          {/* MODE CARDS */}
-
           <div className={styles.modeCards}>
-
            <motion.button
-  className={`${styles.modeCard} ${
-    selectedMode === "ai" ? styles.modeSelectedAI : ""
-  }`}
-  data-mode="ai"
-  onClick={() => setSelectedMode("ai")}
->
-              <div className={styles.modeCardIcon}>
-                <IconRobot size={26} />
-              </div>
-
+              className={`${styles.modeCard} ${selectedMode === "ai" ? styles.modeSelectedAI : ""}`}
+              data-mode="ai"
+              onClick={() => setSelectedMode("ai")}
+            >
+              <div className={styles.modeCardIcon}><IconRobot size={26} /></div>
               <div className={styles.modeCardBody}>
                 <h3>Play vs AI</h3>
-
-                <p>
-                  Argue against an AI-powered opposing counsel
-                  with real-time judge feedback.
-                </p>
-
+                <p>Argue against an AI-powered opposing counsel with real-time judge feedback.</p>
                 <ul className={styles.modeFeatures}>
                   <li>AI opponent adapts to your arguments</li>
                   <li>Instant scoring & analysis</li>
                   <li>Voice-to-text support</li>
                 </ul>
               </div>
-
-              <div className={styles.modeCardCta}>
-                Select Mode
-                <IconArrowRight size={14} />
-              </div>
-
+              <div className={styles.modeCardCta}>Select Mode <IconArrowRight size={14} /></div>
             </motion.button>
-
             <motion.button
-  className={`${styles.modeCard} ${
-    selectedMode === "opponent"
-      ? styles.modeSelectedOpponent
-      : ""
-  }`}
-  data-mode="opponent"
-  onClick={() => setSelectedMode("opponent")}
->
-              <div className={styles.modeCardIcon}>
-                <IconUsers size={26} />
-              </div>
-
+              className={`${styles.modeCard} ${selectedMode === "opponent" ? styles.modeSelectedOpponent : ""}`}
+              data-mode="opponent"
+              onClick={() => setSelectedMode("opponent")}
+            >
+              <div className={styles.modeCardIcon}><IconUsers size={26} /></div>
               <div className={styles.modeCardBody}>
                 <h3>Play vs Opponent</h3>
-
-                <p>
-                  Challenge a real person to a live courtroom debate.
-                </p>
-
+                <p>Challenge a real person to a live courtroom debate.</p>
                 <ul className={styles.modeFeatures}>
                   <li>Real-time multiplayer session</li>
                   <li>Shareable session link</li>
                   <li>AI judge evaluates both sides</li>
                 </ul>
               </div>
-
-              <div className={styles.modeCardCta}>
-                Select Mode
-                <IconArrowRight size={14} />
-              </div>
-
+              <div className={styles.modeCardCta}>Select Mode <IconArrowRight size={14} /></div>
             </motion.button>
-
           </div>
-
-          {/* BEGIN BUTTON */}
-
-          <div
-            style={{
-              padding: "10px 22px 18px",
-              display: "flex",
-              justifyContent: "center"
-            }}
-          >
-
+          <div style={{ padding: "10px 22px 18px", display: "flex", justifySelf: "center" }}>
             <button
               onClick={handleBegin}
               disabled={!selectedMode}
-              style={{
-                padding: "10px 28px",
-                background:
-                  "linear-gradient(135deg,#1535a0 0%,#2563eb 100%)",
-                color: "white",
-                border: "none",
-                borderRadius: "10px",
-                fontSize: "0.85rem",
-                fontWeight: 700,
-                cursor: selectedMode
-                  ? "pointer"
-                  : "not-allowed",
-                opacity: selectedMode ? 1 : 0.4
-              }}
+              style={{ padding: "10px 28px", background: "linear-gradient(135deg,#1535a0 0%,#2563eb 100%)", color: "white", border: "none", borderRadius: "10px", fontSize: "0.85rem", fontWeight: 700, cursor: selectedMode ? "pointer" : "not-allowed", opacity: selectedMode ? 1 : 0.4 }}
             >
               Begin Simulation
             </button>
-
           </div>
-
-          <div className={styles.modalFooter}>
-            <span>
-              All sessions are logged for performance tracking
-            </span>
-          </div>
-
+          <div className={styles.modalFooter}><span>All sessions are logged for performance tracking</span></div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
@@ -343,10 +216,7 @@ const ModeSelectionModal = ({
 // ── JUDGE RESPONSE ────────────────────────────────────────────────────────────
 const JudgeResponse = ({ m }: { m: ChatMessage }) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const [summary, detailed] = m.text.includes("Detailed Analysis:")
-    ? m.text.split("Detailed Analysis:")
-    : [m.text, ""];
+  const [summary, detailed] = m.text.includes("Detailed Analysis:") ? m.text.split("Detailed Analysis:") : [m.text, ""];
 
   return (
     <div className={styles.judgeContainer}>
@@ -360,7 +230,6 @@ const JudgeResponse = ({ m }: { m: ChatMessage }) => {
           {isOpen ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
         </div>
       </div>
-
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -371,18 +240,9 @@ const JudgeResponse = ({ m }: { m: ChatMessage }) => {
             transition={{ duration: 0.22 }}
           >
             <div className={styles.judgeText}>
-              {summary.split('\n\n').map((p, idx) => {
-                if (!p.trim()) return null;
-                return <p key={idx}>{p}</p>;
-              })}
-              {detailed && (
-                <div className={styles.detailedSection}>
-                  <span className={styles.detailedLabel}>Detailed Analysis</span>
-                  <p>{detailed.trim()}</p>
-                </div>
-              )}
+              {summary.split('\n\n').map((p, idx) => p.trim() ? <p key={idx}>{p}</p> : null)}
+              {detailed && (<div className={styles.detailedSection}><span className={styles.detailedLabel}>Detailed Analysis</span><p>{detailed.trim()}</p></div>)}
             </div>
-
             {m.scores && (
               <div className={styles.scoresGrid}>
                 {[
@@ -391,56 +251,28 @@ const JudgeResponse = ({ m }: { m: ChatMessage }) => {
                   { label: 'Evidence Use', val: m.scores.evidence },
                 ].map((s) => (
                   <div key={s.label} className={styles.scoreItem}>
-                    <div className={styles.scoreHeader}>
-                      <span>{s.label}</span>
-                      <span className={styles.scoreVal}>{s.val}</span>
-                    </div>
+                    <div className={styles.scoreHeader}><span>{s.label}</span><span className={styles.scoreVal}>{s.val}</span></div>
                     <div className={styles.progressTrack}>
-                      <motion.div
-                        className={styles.progressFill}
-                        initial={{ width: 0 }}
-                        animate={{ width: `${s.val}%` }}
-                        transition={{ duration: 0.8, delay: 0.1 }}
-                      />
+                      <motion.div className={styles.progressFill} initial={{ width: 0 }} animate={{ width: `${s.val}%` }} transition={{ duration: 0.8, delay: 0.1 }} />
                     </div>
                   </div>
                 ))}
-
                 <div className={styles.overallRow}>
-                  <div className={styles.tierBadge}>
-                    <span className={styles.tierLabel}>Tier</span>
-                    <span className={styles.tierVal}>{m.scores.performance_tier}</span>
-                  </div>
-                  <div className={styles.impactBadge}>
-                    <span className={styles.tierLabel}>Court Impact</span>
-                    <span className={styles.impactVal}>{m.scores.overall}%</span>
-                  </div>
+                  <div className={styles.tierBadge}><span className={styles.tierLabel}>Tier</span><span className={styles.tierVal}>{m.scores.performance_tier}</span></div>
+                  <div className={styles.impactBadge}><span className={styles.tierLabel}>Court Impact</span><span className={styles.impactVal}>{m.scores.overall}%</span></div>
                 </div>
               </div>
             )}
-
             {m.incorrect_sections && m.incorrect_sections.length > 0 && (
               <div className={styles.incorrectSections}>
-                <div className={styles.subSectionTitle}>
-                  <IconX size={13} /> Incorrect Citations
-                </div>
-                {m.incorrect_sections.map((s, i) => (
-                  <div key={i} className={styles.incorrectItem}>
-                    <span className={styles.sectionTag}>§{s.section}</span>
-                    <span>{s.reason}</span>
-                  </div>
-                ))}
+                <div className={styles.subSectionTitle}><IconX size={13} /> Incorrect Citations</div>
+                {m.incorrect_sections.map((s, i) => (<div key={i} className={styles.incorrectItem}><span className={styles.sectionTag}>§{s.section}</span><span>{s.reason}</span></div>))}
               </div>
             )}
-
             {m.suggestions && m.suggestions.length > 0 && (
               <div className={styles.suggestions}>
-                <div className={styles.subSectionTitle}>
-                  <IconLightbulb size={13} /> Suggestions
-                </div>
-                <ul>
-                  {m.suggestions.map((s, i) => <li key={i}>{s}</li>)}
-                </ul>
+                <div className={styles.subSectionTitle}><IconLightbulb size={13} /> Suggestions</div>
+                <ul>{m.suggestions.map((s, i) => <li key={i}>{s}</li>)}</ul>
               </div>
             )}
           </motion.div>
@@ -449,113 +281,32 @@ const JudgeResponse = ({ m }: { m: ChatMessage }) => {
     </div>
   );
 };
-// ── CASE DESCRIPTION PREVIEW MODAL ─────────────────────────────
 
-const CasePreviewModal = ({
-  caseFacts,
-  onStart,
-}: {
-  caseFacts: CaseFacts;
-  onStart: () => void;
-}) => {
+// ── CASE DESCRIPTION PREVIEW MODAL ─────────────────────────────
+const CasePreviewModal = ({ caseFacts, onStart }: { caseFacts: CaseFacts; onStart: () => void; }) => {
   return (
     <AnimatePresence>
-      <motion.div
-        className={styles.modalOverlay}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        <motion.div
-          className={styles.modeModal}
-          initial={{ opacity: 0, y: 36, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 20, scale: 0.97 }}
-          transition={{ type: "spring", stiffness: 240, damping: 24 }}
-        >
+      <motion.div className={styles.modalOverlay} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div className={styles.modeModal} initial={{ opacity: 0, y: 36, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.97 }} transition={{ type: "spring", stiffness: 240, damping: 24 }}>
           <div className={styles.modalHeader}>
-            <span className={styles.modalEyebrow}>
-              Case Description
-            </span>
-
-            <h2 className={styles.modalTitle}>
-              {caseFacts.title}
-            </h2>
+            <span className={styles.modalEyebrow}>Case Description</span>
+            <h2 className={styles.modalTitle}>{caseFacts.title}</h2>
           </div>
-
-          <div
-            style={{
-              padding: "18px 22px",
-              maxHeight: "420px",
-              overflowY: "auto",
-            }}
-          >
-            {/* OVERVIEW */}
-
-            <div className={styles.infoSection}>
-              <h3>Overview</h3>
-              <p>{caseFacts.facts}</p>
-            </div>
-
-            {/* EVIDENCE */}
-
-            <div className={styles.infoSection}>
-              <h3>Evidence & Exhibits</h3>
-
-              <ul className={styles.evidenceList}>
-                {caseFacts.evidence?.map((e, i) => (
-                  <li key={i}>{e}</li>
-                ))}
-              </ul>
-            </div>
-
-            {/* LEGAL PROVISIONS */}
-
+          <div style={{ padding: "18px 22px", maxHeight: "420px", overflowY: "auto" }}>
+            <div className={styles.infoSection}><h3>Overview</h3><p>{caseFacts.facts}</p></div>
+            <div className={styles.infoSection}><h3>Evidence & Exhibits</h3><ul className={styles.evidenceList}>{caseFacts.evidence?.map((e, i) => (<li key={i}>{e}</li>))}</ul></div>
             {caseFacts.legal_provisions?.length > 0 && (
-              <div className={styles.infoSection}>
-                <h3>Legal Provisions</h3>
-
-                <div className={styles.provisionTags}>
-                  {caseFacts.legal_provisions.map(
-                    (p, i) => (
-                      <span
-                        key={i}
-                        className={
-                          styles.provisionTag
-                        }
-                      >
-                        {p}
-                      </span>
-                    )
-                  )}
-                </div>
-              </div>
+              <div className={styles.infoSection}><h3>Legal Provisions</h3><div className={styles.provisionTags}>{caseFacts.legal_provisions.map((p, i) => (<span key={i} className={styles.provisionTag}>{p}</span>))}</div></div>
             )}
           </div>
-
-          {/* START BUTTON */}
-
-          <div
-            style={{
-              padding: "16px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <button
-              onClick={onStart}
-              className={styles.beginButton}
-            >
-              Start Simulation
-            </button>
-          </div>
+          <div style={{ padding: "16px", display: "flex", justifySelf: "center" }}><button onClick={onStart} className={styles.beginButton}>Start Simulation</button></div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
   );
 };
-// ── MAIN SIMULATOR ────────────────────────────────────────────────────────────
 
+// ── MAIN SIMULATOR ────────────────────────────────────────────────────────────
 const Simulator = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const { caseId } = useParams<{ caseId: string }>();
@@ -605,39 +356,28 @@ const Simulator = () => {
         setSessionId(res.data.session_id);
         setCaseFacts(res.data.case_facts);
         setPhase(res.data.current_phase);
-        setMessages([{
-          id: 'welcome',
-          type: 'system',
-          text: `Court is now in session — ${gameMode === 'opponent' ? 'Multiplayer' : 'AI Opponent'} Mode · ${res.data.current_phase.replace(/_/g, ' ').toUpperCase()}`
-        }]);
+        setMessages([{ id: 'welcome', type: 'system', text: `Court is now in session — ${gameMode === 'opponent' ? 'Multiplayer' : 'AI Opponent'} Mode · ${res.data.current_phase.replace(/_/g, ' ').toUpperCase()}` }]);
       } catch (err) {
         console.error("Session init failed, using mock data fallback...", err);
-        const { getMockSessionResponse } = require('../../api/mockData');
+        const { getMockSessionResponse } = await import('../../api/mockData');
         const mockRes = getMockSessionResponse(caseId || "CIVIL_EASY_1");
-        
         setSessionId(mockRes.session_id);
         setCaseFacts(mockRes.case_facts);
         setPhase(mockRes.current_phase);
-        setMessages([{
-          id: 'welcome',
-          type: 'system',
-          text: `Court is now in session (DEMO MODE) — ${gameMode === 'opponent' ? 'Multiplayer' : 'AI Opponent'} Mode · ${mockRes.current_phase.replace(/_/g, ' ').toUpperCase()}`
-        }]);
+        setMessages([{ id: 'welcome', type: 'system', text: `Court is now in session (DEMO MODE) — ${gameMode === 'opponent' ? 'Multiplayer' : 'AI Opponent'} Mode · ${mockRes.current_phase.replace(/_/g, ' ').toUpperCase()}` }]);
       }
     };
     if (caseId && gameMode) initSession();
   }, [caseId, gameMode]);
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
   const handleModeSelect = (mode: GameMode, language: string) => {
-  setGameMode(mode);
-  setSelectedLanguage(language);
-  setShowModeModal(false);
-  setShowCasePreview(true);
-};
+    setGameMode(mode);
+    setSelectedLanguage(language);
+    setShowModeModal(false);
+    setShowCasePreview(true);
+  };
 
   const startRecording = async () => {
     try {
@@ -646,9 +386,7 @@ const Simulator = () => {
       mediaRecorderRef.current = mr;
       audioChunksRef.current = [];
       mr.ondataavailable = (e) => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
-      mr.onstop = async () => {
-        await processAudioUpload(new Blob(audioChunksRef.current, { type: 'audio/wav' }));
-      };
+      mr.onstop = async () => { await processAudioUpload(new Blob(audioChunksRef.current, { type: 'audio/wav' })); };
       mr.start();
       setIsRecording(true);
       setAudioStatus('Recording…');
@@ -666,64 +404,36 @@ const Simulator = () => {
   const toggleRecording = () => { isRecording ? stopRecording() : startRecording(); };
 
   const playFastTTS = async (msgId: string, text: string) => {
-    // If we are already loaded with this audio, just resume it
     if (loadedMsgIdRef.current === msgId && ttsAudioRef.current) {
       playingRef.current = msgId;
       setPlayingMsgId(msgId);
       ttsAudioRef.current.play().catch(() => {});
       return;
     }
-
-    // Otherwise, stop any current audio and load the new one
-    if (ttsAudioRef.current) { 
-      ttsAudioRef.current.pause(); 
-    }
-    
+    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); }
     loadedMsgIdRef.current = msgId;
     playingRef.current = msgId;
     setPlayingMsgId(msgId);
-    
     try {
       const langParam = encodeURIComponent(selectedLanguage);
       const textParam = encodeURIComponent(text.trim().substring(0, 2500));
       const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
       const res = await fetch(`${BASE_URL}/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
-      if (!res.ok) {
-        throw new Error("TTS failed");
-      }
+      if (!res.ok) throw new Error("TTS failed");
       const url = URL.createObjectURL(await res.blob());
       const audio = new Audio(url);
-      audio.playbackRate = 1.25; // 1.25x Speed requirement
-      
+      audio.playbackRate = 1.25;
       ttsAudioRef.current = audio;
       await new Promise<void>((resolve, reject) => {
-        audio.onended = () => { 
-          URL.revokeObjectURL(url); 
-          playingRef.current = null;
-          setPlayingMsgId(null);
-          // Keep loadedMsgIdRef intact so they can't resume after it ends naturally unless designed,
-          // but clearing it requires them to fetch again. We'll clear it:
-          loadedMsgIdRef.current = null;
-          resolve(); 
-        };
+        audio.onended = () => { URL.revokeObjectURL(url); playingRef.current = null; setPlayingMsgId(null); loadedMsgIdRef.current = null; resolve(); };
         audio.onerror = reject;
         audio.play().catch(reject);
       });
-    } catch { /* silent */ }
-    finally { 
-      // If the audio ends naturally, clean up state
-      if (playingRef.current === msgId) {
-        playingRef.current = null; 
-        setPlayingMsgId(null); 
-      }
-    }
+    } catch { /* silent */ } finally { if (playingRef.current === msgId) { playingRef.current = null; setPlayingMsgId(null); } }
   };
 
   const pauseTTS = () => {
-    if (ttsAudioRef.current) { 
-      ttsAudioRef.current.pause(); 
-      // Do NOT set src to '' or null out the ref! We need it to resume!
-    }
+    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); }
     playingRef.current = null;
     setPlayingMsgId(null);
   };
@@ -735,11 +445,7 @@ const Simulator = () => {
       const langParam = encodeURIComponent(selectedLanguage);
       const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
       const res = await axios.post(`${BASE_URL}/api/audio/speech-to-text?language=${langParam}`, fd);
-      if (res.data.transcript) {
-        setInputText(res.data.transcript);
-        setAudioStatus('Transcription complete.');
-        setTimeout(() => setAudioStatus(''), 3000);
-      }
+      if (res.data.transcript) { setInputText(res.data.transcript); setAudioStatus('Transcription complete.'); setTimeout(() => setAudioStatus(''), 3000); }
     } catch { setAudioStatus('Transcription failed.'); }
   };
 
@@ -749,17 +455,14 @@ const Simulator = () => {
     const cited: string[] = [];
     let m;
     while ((m = rx.exec(inputText)) !== null) cited.push(m[1]);
-
     const newMsg: ChatMessage = { id: Date.now().toString(), type: 'user', text: inputText };
     setMessages(prev => [...prev, newMsg]);
     setInputText('');
     setLoading(true);
-
     try {
       let mappedPhase = phase;
       if (mappedPhase === "opening_statements") mappedPhase = "opening_statement";
       if (mappedPhase === "closing_statements") mappedPhase = "closing_statement";
-
       const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
       const res = await axios.post(`${BASE_URL}/api/argument/submit`, {
         session_id: sessionId,
@@ -769,9 +472,7 @@ const Simulator = () => {
         phase: mappedPhase,
         language: selectedLanguage
       });
-
       const { feedback, legal_accuracy_score, reasoning_score, evidence_score, overall_score, opponent_response } = res.data;
-
       setMessages(prev => {
         const next = [...prev];
         next.push({
@@ -793,12 +494,6 @@ const Simulator = () => {
         if (opponent_response) {
           const opp: ChatMessage = { id: Date.now().toString() + '_o', type: 'opponent', text: opponent_response };
           next.push(opp);
-          
-          const AUTO_PLAY = false;
-
-          if (AUTO_PLAY) {
-            setTimeout(() => playFastTTS(opp.id, opp.text), 500);
-          }
         }
         return next;
       });
@@ -806,242 +501,82 @@ const Simulator = () => {
       console.warn("Argument submission failed, using mock response...", err);
       const { getMockArgumentResponse } = await import('../../api/mockData');
       const mockRes = getMockArgumentResponse(newMsg.text, phase);
-
       setMessages(prev => {
         const next = [...prev];
         next.push({
           id: Date.now().toString() + '_j',
           type: 'judge',
           text: mockRes.feedback,
-          scores: {
-            legal: mockRes.legal_accuracy_score,
-            reasoning: mockRes.reasoning_score,
-            evidence: mockRes.evidence_score,
-            overall: mockRes.overall_score,
-            turn_score: mockRes.turn_score,
-            cumulative_score: mockRes.cumulative_score,
-            performance_tier: mockRes.performance_tier,
-          },
+          scores: { legal: mockRes.legal_accuracy_score, reasoning: mockRes.reasoning_score, evidence: mockRes.evidence_score, overall: mockRes.overall_score, turn_score: mockRes.turn_score, cumulative_score: mockRes.cumulative_score, performance_tier: mockRes.performance_tier, },
           suggestions: mockRes.suggestions,
           incorrect_sections: mockRes.incorrect_sections,
         });
-
-        const opp: ChatMessage = { 
-          id: Date.now().toString() + '_o', 
-          type: 'opponent', 
-          text: mockRes.opponent_response 
-        };
+        const opp: ChatMessage = { id: Date.now().toString() + '_o', type: 'opponent', text: mockRes.opponent_response };
         next.push(opp);
         return next;
       });
     } finally { setLoading(false); }
   };
 
-  const terminateSession = () => {
-  if (
-    window.confirm(
-      "Terminate this session? Unsaved progress will be lost."
-    )
-  ) {
-    navigate('/judgementsearch');
-  }
-};
+  const terminateSession = () => { if (window.confirm("Terminate this session? Unsaved progress will be lost.")) { navigate('/judgementsearch'); } };
 
-  if (!caseId) return (
-    <div className={styles.emptyState}>
-      <IconScale size={40} />
-      <h2>No Case Selected</h2>
-      <p>Return to the cases page to select a matter for simulation.</p>
-      <button onClick={() => navigate('/simulator')}>Browse Cases</button>
-    </div>
-  );
-
-  if (!caseFacts && gameMode) return (
-    <div className={styles.loadingContainer}>
-      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }} className={styles.loader} />
-      <p>Consulting Judicial Records…</p>
-    </div>
-  );
+  if (!caseId) return (<div className={styles.emptyState}><IconScale size={40} /><h2>No Case Selected</h2><p>Return to the cases page to select a matter for simulation.</p><button onClick={() => navigate('/simulator')}>Browse Cases</button></div>);
+  if (!caseFacts && gameMode) return (<div className={styles.loadingContainer}><motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }} className={styles.loader} /><p>Consulting Judicial Records…</p></div>);
 
   return (
     <div className={styles.fullPage}>
       <Navbar />
-
-      <AnimatePresence>
-        {showModeModal && (
-          <ModeSelectionModal
-            caseTitle={caseFacts?.title || `Case #${caseId}`}
-            onSelect={handleModeSelect}
-            onClose={() => navigate(-1)}
-          />
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-  {showCasePreview && caseFacts && (
-    <CasePreviewModal
-      caseFacts={caseFacts}
-      onStart={() => setShowCasePreview(false)}
-    />
-  )}
-</AnimatePresence>
-
+      <AnimatePresence>{showModeModal && (<ModeSelectionModal caseTitle={caseFacts?.title || `Case #${caseId}`} onSelect={handleModeSelect} onClose={() => navigate(-1)} />)}</AnimatePresence>
+      <AnimatePresence>{showCasePreview && caseFacts && (<CasePreviewModal caseFacts={caseFacts} onStart={() => setShowCasePreview(false)} />)}</AnimatePresence>
       {gameMode && caseFacts && (
         <div className={styles.simulatorContainer}>
-
-          {/* LEFT PANE */}
           <div className={styles.leftPane}>
             <div className={styles.caseHeader}>
-              <div className={styles.caseHeaderTop}>
-                <span className={styles.caseType}>{caseFacts.type}</span>
-                <span className={`${styles.modeBadge} ${gameMode === 'ai' ? styles.modeAI : styles.modeMulti}`}>
-                  {gameMode === 'ai' ? <><IconRobot size={10} /> AI Mode</> : <><IconUsers size={10} /> Multiplayer</>}
-                </span>
-              </div>
+              <div className={styles.caseHeaderTop}><span className={styles.caseType}>{caseFacts.type}</span><span className={`${styles.modeBadge} ${gameMode === 'ai' ? styles.modeAI : styles.modeMulti}`}>{gameMode === 'ai' ? <><IconRobot size={10} /> AI Mode</> : <><IconUsers size={10} /> Multiplayer</>}</span></div>
               <h2 className={styles.caseTitle}>{caseFacts.title}</h2>
               <span className={styles.phaseBadge}>{phase.replace(/_/g, ' ').toUpperCase()}</span>
             </div>
-
             <div className={styles.paneScroll}>
-              <div className={styles.infoSection}>
-                <h3>Overview</h3>
-                <p>
-                  {caseFacts.facts}
-                </p>
-              </div>
-
-              {caseFacts.evidence && caseFacts.evidence.length > 0 && (
-                <div className={styles.infoSection}>
-                  <h3>Evidence & Exhibits</h3>
-                  <ul className={styles.evidenceList}>
-                    {caseFacts.evidence.map((ev, i) => (
-                      <li key={i}>{ev}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <div className={styles.infoSection}><h3>Overview</h3><p>{caseFacts.facts}</p></div>
+              {caseFacts.evidence && caseFacts.evidence.length > 0 && (<div className={styles.infoSection}><h3>Evidence & Exhibits</h3><ul className={styles.evidenceList}>{caseFacts.evidence.map((ev, i) => (<li key={i}>{ev}</li>))}</ul></div>)}
             </div>
-
             <div className={styles.sideControls}>
-              <div className={`${styles.timer} ${timeLeft < 300 ? styles.timerUrgent : ''}`}>
-                <IconClock size={14} />
-                <span>{formatTime(timeLeft)}</span>
-                <span className={styles.timerLabel}>remaining</span>
-              </div>
-              <button className={styles.terminateBtn} onClick={terminateSession}>
-                <IconLogout size={14} /> End Session
-              </button>
+              <div className={`${styles.timer} ${timeLeft < 300 ? styles.timerUrgent : ''}`}><IconClock size={14} /><span>{formatTime(timeLeft)}</span><span className={styles.timerLabel}>remaining</span></div>
+              <button className={styles.terminateBtn} onClick={terminateSession}><IconLogout size={14} /> End Session</button>
             </div>
           </div>
-
-          {/* RIGHT PANE */}
           <div className={styles.rightPane}>
-            <div className={styles.chatHeader}>
-              <div className={styles.chatHeaderLeft}>
-                <div className={styles.liveDot} />
-                <span>Live Session</span>
-              </div>
-              <span className={styles.chatHeaderPhase}>{phase.replace(/_/g, ' ')}</span>
-            </div>
-
+            <div className={styles.chatHeader}><div className={styles.chatHeaderLeft}><div className={styles.liveDot} /><span>Live Session</span></div><span className={styles.chatHeaderPhase}>{phase.replace(/_/g, ' ')}</span></div>
             <div className={styles.chatFeed}>
               <AnimatePresence initial={false}>
                 {messages.map((msg) => (
-                  <motion.div
-                    key={msg.id}
-                    className={styles.messageWrap}
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.28 }}
-                  >
-                    {msg.type === 'system' && (
-                      <div className={styles.systemMsg}>{msg.text}</div>
-                    )}
-
-                    {msg.type === 'user' && (
-                      <div className={styles.userBubble}>
-                        <div className={styles.bubbleLabel}>You</div>
-                        <p>{msg.text}</p>
-                      </div>
-                    )}
-
+                  <motion.div key={msg.id} className={styles.messageWrap} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.28 }}>
+                    {msg.type === 'system' && (<div className={styles.systemMsg}>{msg.text}</div>)}
+                    {msg.type === 'user' && (<div className={styles.userBubble}><div className={styles.bubbleLabel}>You</div><p>{msg.text}</p></div>)}
                     {msg.type === 'opponent' && (
                       <div className={styles.opponentBubble}>
                         <div className={styles.opponentTop}>
-                          <div className={styles.bubbleLabel}>
-                            {gameMode === 'ai' ? 'Opposing Counsel (AI)' : 'Opposing Counsel'}
-                          </div>
-                          <button
-                            className={`${styles.ttsBtn} ${playingMsgId === msg.id ? styles.ttsBtnActive : ''}`}
-                            onClick={() => playingMsgId === msg.id ? pauseTTS() : playFastTTS(msg.id, msg.text)}
-                          >
-                            {playingMsgId === msg.id ? <IconPause size={12} /> : <IconVolume2 size={12} />}
-                            {playingMsgId === msg.id ? 'Pause' : 'Speak'}
+                          <div className={styles.bubbleLabel}>{gameMode === 'ai' ? 'Opposing Counsel (AI)' : 'Opposing Counsel'}</div>
+                          <button className={`${styles.ttsBtn} ${playingMsgId === msg.id ? styles.ttsBtnActive : ''}`} onClick={() => playingMsgId === msg.id ? pauseTTS() : playFastTTS(msg.id, msg.text)}>
+                            {playingMsgId === msg.id ? <IconPause size={12} /> : <IconVolume2 size={12} />}{playingMsgId === msg.id ? 'Pause' : 'Speak'}
                           </button>
                         </div>
                         <p>{msg.text}</p>
                       </div>
                     )}
-
                     {msg.type === 'judge' && <JudgeResponse m={msg} />}
                   </motion.div>
                 ))}
               </AnimatePresence>
-
-              {loading && (
-                <motion.div className={styles.thinkingRow} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                  <div className={styles.wave}>
-                    {[...Array(5)].map((_, i) => <span key={i} />)}
-                  </div>
-                  <span className={styles.thinkingText}>The bench is deliberating…</span>
-                </motion.div>
-              )}
+              {loading && (<motion.div className={styles.thinkingRow} initial={{ opacity: 0 }} animate={{ opacity: 1 }}><div className={styles.wave}>{[...Array(5)].map((_, i) => <span key={i} />)}</div><span className={styles.thinkingText}>The bench is deliberating…</span></motion.div>)}
               <div ref={chatEndRef} />
             </div>
-
             <div className={styles.inputArea}>
-              <AnimatePresence>
-                {audioStatus && (
-                  <motion.div
-                    className={styles.audioStatus}
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    {audioStatus}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
+              <AnimatePresence>{audioStatus && (<motion.div className={styles.audioStatus} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>{audioStatus}</motion.div>)}</AnimatePresence>
               <div className={styles.inputRow}>
-                <button
-                  className={`${styles.recordBtn} ${isRecording ? styles.recordingActive : ''}`}
-                  onClick={toggleRecording}
-                  title={isRecording ? 'Stop recording' : 'Start voice input'}
-                >
-                  <motion.div
-                    animate={isRecording ? { scale: [1, 1.15, 1] } : {}}
-                    transition={{ repeat: Infinity, duration: 1 }}
-                  >
-                    {isRecording ? <IconMicOff size={17} /> : <IconMic size={17} />}
-                  </motion.div>
-                </button>
-
-                <textarea
-                  className={styles.argumentInput}
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Submit your oral or written argument…"
-                  onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitArgument(); } }}
-                  rows={3}
-                />
-
-                <button
-                  className={styles.submitBtn}
-                  onClick={submitArgument}
-                  disabled={loading || !inputText.trim()}
-                >
-                  <IconSend size={16} />
-                </button>
+                <button className={`${styles.recordBtn} ${isRecording ? styles.recordingActive : ''}`} onClick={toggleRecording} title={isRecording ? 'Stop recording' : 'Start voice input'}><motion.div animate={isRecording ? { scale: [1, 1.15, 1] } : {}} transition={{ repeat: Infinity, duration: 1 }}>{isRecording ? <IconMicOff size={17} /> : <IconMic size={17} />}</motion.div></button>
+                <textarea className={styles.argumentInput} value={inputText} onChange={(e) => setInputText(e.target.value)} placeholder="Submit your oral or written argument…" onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitArgument(); } }} rows={3} />
+                <button className={styles.submitBtn} onClick={submitArgument} disabled={loading || !inputText.trim()}><IconSend size={16} /></button>
               </div>
             </div>
           </div>

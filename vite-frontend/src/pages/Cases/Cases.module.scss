@@ -34,11 +34,6 @@
   margin-bottom: 12px;
 }
 
-.heroIcon {
-  font-size: 36px;
-  color: white; /* FIX */
-}
-
 .heroTitle {
   margin: 0;
   letter-spacing: -0.5px;
@@ -50,7 +45,7 @@
 
 .heroSubtitle {
   margin-top: 6px;
-  color: rgba(255,255,255,0.75); /* FIX */
+  color: rgba(255,255,255,0.75);
   font-style: italic;
   font-size: 15px;
 }
@@ -85,7 +80,7 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: #64748b; /* FIX */
+  color: #64748b;
 }
 
 .searchInput {
@@ -143,8 +138,6 @@
   padding: 18px 20px 16px;
 }
 
-/* ---------- VISIBILITY FIXES ---------- */
-
 .cardHeader svg {
   color: white;
 }
@@ -173,7 +166,7 @@
 
 .stats {
   display: flex;
-  justify-content: space-between; /* left and right */
+  justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 16px;
 }
@@ -212,7 +205,7 @@
 .startButton {
   width: 100%;
   padding: 11px;
-  margin-top: 14px; /* ← THIS adds the gap */
+  margin-top: 14px;
   background: linear-gradient(135deg, #1a2f7a 0%, #2347c8 100%);
   color: white;
   border: none;
@@ -240,9 +233,10 @@
 
 .cardHeaderTop {
   display: flex;
-  justify-content: space-between; /* pushes tag to right */
+  justify-content: space-between;
   align-items: flex-start;
 }
+
 .cardDescription {
   font-size: 13px;
   color: #ced0d3;
