@@ -48,6 +48,7 @@ const Footer = () => {
           {/* ── LEFT: Brand ── */}
           <div className={styles.brandCol}>
             <div className={styles.brandLogo}>
+              <LogoIcon />
               <div>
                 <span className={styles.brandName}>Adjournment.ai</span>
               </div>
