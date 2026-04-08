@@ -111,11 +111,12 @@ const ModeSelectionModal = ({
   onClose,
 }: {
   caseTitle: string;
-  onSelect: (mode: GameMode, language: string) => void;
+  onSelect: (mode: GameMode, language: string, role: string) => void;
   onClose: () => void;
 }) => {
   const [selectedMode, setSelectedMode] = useState<GameMode>(null);
   const [language, setLanguage] = useState("English");
+  const [userRole, setUserRole] = useState("defense");
 
   const languages = [
     "English","Hindi","Bengali","Telugu","Marathi","Tamil","Urdu","Gujarati",
@@ -125,7 +126,7 @@ const ModeSelectionModal = ({
 
   const handleBegin = () => {
     if (!selectedMode) return;
-    onSelect(selectedMode, language);
+    onSelect(selectedMode, language, userRole);
   };
 
   return (
@@ -157,17 +158,71 @@ const ModeSelectionModal = ({
             <p className={styles.modalSub}>Choose language and simulation type</p>
           </div>
 
-          <div style={{ padding: "14px 22px 4px" }}>
+          <div style={{ padding: "0 22px 14px" }}>
             <label style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#64748b", display: "block", marginBottom: "6px" }}>
               Choose Language
             </label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", border: "1px solid #e4e8f0", fontSize: "0.85rem", background: "#f8fafc", cursor: "pointer" }}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #e4e8f0", fontSize: "0.85rem", background: "#f8fafc", cursor: "pointer", marginBottom: "16px" }}
             >
               {languages.map((lang) => (<option key={lang}>{lang}</option>))}
             </select>
+
+            <label style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#64748b", display: "block", marginBottom: "8px" }}>
+              Choose Your Role
+            </label>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <button
+                onClick={() => setUserRole("prosecution")}
+                style={{ 
+                  padding: "16px", 
+                  borderRadius: "12px", 
+                  border: "2px solid", 
+                  borderColor: userRole === "prosecution" ? "#2563eb" : "#e4e8f0", 
+                  background: userRole === "prosecution" ? "#2563eb" : "#f8fafc", 
+                  color: userRole === "prosecution" ? "white" : "#64748b", 
+                  fontSize: "0.9rem", 
+                  fontWeight: userRole === "prosecution" ? 800 : 500, 
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                <span>Prosecutor</span>
+                {userRole === "prosecution" && <span style={{ fontSize: "0.7rem", opacity: 0.9 }}>AI acts as Defence</span>}
+              </button>
+              <button
+                onClick={() => setUserRole("defense")}
+                style={{ 
+                  padding: "16px", 
+                  borderRadius: "12px", 
+                  border: "2px solid", 
+                  borderColor: userRole === "defense" ? "#2563eb" : "#e4e8f0", 
+                  background: userRole === "defense" ? "#2563eb" : "#f8fafc", 
+                  color: userRole === "defense" ? "white" : "#64748b", 
+                  fontSize: "0.9rem", 
+                  fontWeight: userRole === "defense" ? 800 : 500, 
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                <span>Defence Lawyer</span>
+                {userRole === "defense" && <span style={{ fontSize: "0.7rem", opacity: 0.9 }}>AI acts as Prosecution</span>}
+              </button>
+            </div>
+            <p style={{ fontSize: "0.7rem", color: "#94a3b8", marginTop: "12px", textAlign: "center" }}>
+              <span style={{ verticalAlign: "middle", marginRight: "4px", display: "inline-flex" }}>
+                <IconLightbulb size={12} />
+              </span>
+              <strong>Auto-Refine Active:</strong> Your arguments will be polished for courtroom standards automatically.
+            </p>
           </div>
 
           <div className={styles.modeCards}>
@@ -651,7 +706,9 @@ const Simulator = () => {
   const navigate = useNavigate();
 
   const [gameMode, setGameMode] = useState<GameMode>(null);
+  const [userRole, setUserRole] = useState("defense");
   const [showModeModal, setShowModeModal] = useState(true);
+  const [mobileActiveCol, setMobileActiveCol] = useState<'user' | 'judge' | 'opponent'>('user');
   const [showCasePreview, setShowCasePreview] = useState(false);
   const [showCaseDescription, setShowCaseDescription] = useState(false);
 
@@ -694,11 +751,11 @@ const Simulator = () => {
   useEffect(() => {
     const initSession = async () => {
       try {
-        const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
-        const res = await axios.post(`${BASE_URL}/api/session/create`, {
+        const res = await axios.post("http://localhost:8000/api/session/create", {
           case_id: caseId,
           user_id: "demo_user_001",
-          mode: 'criminal'
+          mode: 'criminal',
+          user_role: userRole
         });
         setSessionId(res.data.session_id);
         setCaseFacts(res.data.case_facts);
@@ -717,19 +774,39 @@ const Simulator = () => {
     if (caseId && gameMode) initSession();
   }, [caseId, gameMode]);
 
+  // --- AUTO SCROLLING ---
+  const scrollColToBottom = (ref: React.RefObject<HTMLDivElement>, behavior: ScrollBehavior = 'smooth') => {
+    setTimeout(() => {
+      ref.current?.scrollIntoView({ behavior, block: 'end' });
+    }, 100);
+  };
+
   useEffect(() => {
-    userChatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [userMessages]);
+    scrollColToBottom(userChatEndRef);
+    // If user is typing a lot, also scroll on mobile
+    if (window.innerWidth <= 1024 && inputText.split('\n').length > 2) {
+      setMobileActiveCol('user');
+    }
+  }, [userMessages, inputText]);
+
   useEffect(() => {
-    judgeChatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    scrollColToBottom(judgeChatEndRef);
+    if (window.innerWidth <= 1024 && judgeMessages.length > 0) {
+      setMobileActiveCol('judge');
+    }
   }, [judgeMessages]);
+
   useEffect(() => {
-    opponentChatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    scrollColToBottom(opponentChatEndRef);
+    if (window.innerWidth <= 1024 && opponentMessages.length > 0) {
+      setMobileActiveCol('opponent');
+    }
   }, [opponentMessages]);
 
-  const handleModeSelect = (mode: GameMode, language: string) => {
+  const handleModeSelect = (mode: GameMode, language: string, role: string) => {
     setGameMode(mode);
     setSelectedLanguage(language);
+    setUserRole(role);
     setShowModeModal(false);
     setShowCasePreview(true);
   };
@@ -774,8 +851,7 @@ const Simulator = () => {
     try {
       const langParam = encodeURIComponent(selectedLanguage);
       const textParam = encodeURIComponent(text.trim().substring(0, 2500));
-      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
-      const res = await fetch(`${BASE_URL}/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
+      const res = await fetch(`http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
       if (!res.ok) throw new Error("TTS failed");
       const url = URL.createObjectURL(await res.blob());
       const audio = new Audio(url);
@@ -809,8 +885,7 @@ const Simulator = () => {
     fd.append('file', blob, 'recording.wav');
     try {
       const langParam = encodeURIComponent(selectedLanguage);
-      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
-      const res = await axios.post(`${BASE_URL}/api/audio/speech-to-text?language=${langParam}`, fd);
+      const res = await axios.post(`http://localhost:8000/api/audio/speech-to-text?language=${langParam}`, fd);
       if (res.data.transcript) {
         setInputText(res.data.transcript);
         setAudioStatus('Transcription complete.');
@@ -836,14 +911,15 @@ const Simulator = () => {
       let mappedPhase = phase;
       if (mappedPhase === "opening_statements") mappedPhase = "opening_statement";
       if (mappedPhase === "closing_statements") mappedPhase = "closing_statement";
-      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
-      const res = await axios.post(`${BASE_URL}/api/argument/submit`, {
+
+      const res = await axios.post("http://localhost:8000/api/argument/submit", {
         session_id: sessionId,
         argument_text: newMsg.text,
         cited_sections: cited,
         evidence_references: [],
         phase: mappedPhase,
-        language: selectedLanguage
+        language: selectedLanguage,
+        refine_prompt: true
       });
 
       const { feedback, legal_accuracy_score, reasoning_score, evidence_score, overall_score, opponent_response } = res.data;
@@ -973,13 +1049,38 @@ const Simulator = () => {
             </div>
           </div>
 
+          {/* ── MOBILE SWITCHER ── */}
+          <div className={styles.mobileSwitcher}>
+            <button 
+              className={`${styles.switcherTab} ${mobileActiveCol === 'user' ? styles.active : ''}`}
+              onClick={() => setMobileActiveCol('user')}
+            >
+              <IconUser size={18} />
+              <span>You</span>
+            </button>
+            <button 
+              className={`${styles.switcherTab} ${mobileActiveCol === 'judge' ? styles.active : ''}`}
+              onClick={() => setMobileActiveCol('judge')}
+            >
+              <IconScale size={18} />
+              <span>Judge</span>
+            </button>
+            <button 
+              className={`${styles.switcherTab} ${mobileActiveCol === 'opponent' ? styles.active : ''}`}
+              onClick={() => setMobileActiveCol('opponent')}
+            >
+              <IconRobot size={18} />
+              <span>Opponent</span>
+            </button>
+          </div>
+
           {/* ── ARENA COLUMNS ── */}
           <div className={styles.arenaColumns}>
 
             {/* LEFT — USER */}
-            <div className={`${styles.arenaCol} ${styles.userCol}`}>
+            <div className={`${styles.arenaCol} ${styles.userCol} ${mobileActiveCol === 'user' ? styles.activeMobile : ''}`}>
               <div className={styles.colHeader}>
-                <Avatar type="user" isActive={!loading} label="You — Defence" />
+                <Avatar type="user" isActive={!loading} label={`You — ${userRole === 'prosecution' ? 'Prosecution' : 'Defence'}`} />
               </div>
 
               <div className={styles.colFeed}>
@@ -1056,7 +1157,7 @@ const Simulator = () => {
             </div>
 
             {/* CENTER — JUDGE */}
-            <div className={`${styles.arenaCol} ${styles.judgeCol}`}>
+            <div className={`${styles.arenaCol} ${styles.judgeCol} ${mobileActiveCol === 'judge' ? styles.activeMobile : ''}`}>
               <div className={styles.colHeader}>
                 <Avatar type="judge" isActive={loading} label="The Bench" />
                 {lastScore !== null && <ScoreRing score={lastScore} label="Impact" />}
@@ -1097,7 +1198,7 @@ const Simulator = () => {
             </div>
 
             {/* RIGHT — OPPONENT */}
-            <div className={`${styles.arenaCol} ${styles.opponentCol}`}>
+            <div className={`${styles.arenaCol} ${styles.opponentCol} ${mobileActiveCol === 'opponent' ? styles.activeMobile : ''}`}>
               <div className={styles.colHeader}>
                 <Avatar
                   type="ai"
