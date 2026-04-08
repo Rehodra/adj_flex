@@ -158,8 +158,10 @@ const ModeSelectionModal = ({
             <p className={styles.modalSub}>Choose language and simulation type</p>
           </div>
 
-          <div style={{ padding: "0 22px 14px" }}>
-            <label style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#64748b", display: "block", marginBottom: "6px" }}>
+          <div className={styles.modalBody}>
+
+          <div className={styles.roleSelectionArea}>
+            <label style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#64748b", display: "block", marginBottom: "8px" }}>
               Choose Language
             </label>
             <select
@@ -173,48 +175,20 @@ const ModeSelectionModal = ({
             <label style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "#64748b", display: "block", marginBottom: "8px" }}>
               Choose Your Role
             </label>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div className={styles.roleSelectionArea} style={{ padding: 0 }}>
               <button
                 onClick={() => setUserRole("prosecution")}
-                style={{ 
-                  padding: "16px", 
-                  borderRadius: "12px", 
-                  border: "2px solid", 
-                  borderColor: userRole === "prosecution" ? "#2563eb" : "#e4e8f0", 
-                  background: userRole === "prosecution" ? "#2563eb" : "#f8fafc", 
-                  color: userRole === "prosecution" ? "white" : "#64748b", 
-                  fontSize: "0.9rem", 
-                  fontWeight: userRole === "prosecution" ? 800 : 500, 
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  transition: "all 0.2s ease"
-                }}
+                className={`${styles.roleButton} ${userRole === "prosecution" ? styles.activeRole : ''}`}
               >
                 <span>Prosecutor</span>
-                {userRole === "prosecution" && <span style={{ fontSize: "0.7rem", opacity: 0.9 }}>AI acts as Defence</span>}
+                {userRole === "prosecution" && <span className={styles.aiRoleHint}>AI acts as Defence</span>}
               </button>
               <button
                 onClick={() => setUserRole("defense")}
-                style={{ 
-                  padding: "16px", 
-                  borderRadius: "12px", 
-                  border: "2px solid", 
-                  borderColor: userRole === "defense" ? "#2563eb" : "#e4e8f0", 
-                  background: userRole === "defense" ? "#2563eb" : "#f8fafc", 
-                  color: userRole === "defense" ? "white" : "#64748b", 
-                  fontSize: "0.9rem", 
-                  fontWeight: userRole === "defense" ? 800 : 500, 
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  transition: "all 0.2s ease"
-                }}
+                className={`${styles.roleButton} ${userRole === "defense" ? styles.activeRole : ''}`}
               >
                 <span>Defence Lawyer</span>
-                {userRole === "defense" && <span style={{ fontSize: "0.7rem", opacity: 0.9 }}>AI acts as Prosecution</span>}
+                {userRole === "defense" && <span className={styles.aiRoleHint}>AI acts as Prosecution</span>}
               </button>
             </div>
             <p style={{ fontSize: "0.7rem", color: "#94a3b8", marginTop: "12px", textAlign: "center" }}>
@@ -244,21 +218,18 @@ const ModeSelectionModal = ({
               <div className={styles.modeCardCta}>Select Mode <IconArrowRight size={14} /></div>
             </motion.button>
 
-            
-          </div>
-
-          <div style={{ padding: "10px 22px 18px", display: "flex", justifyContent: "center" }}>
-            <button
-              onClick={handleBegin}
-              disabled={!selectedMode}
-              style={{ padding: "10px 28px", background: "linear-gradient(135deg,#1535a0 0%,#2563eb 100%)", color: "white", border: "none", borderRadius: "10px", fontSize: "0.85rem", fontWeight: 700, cursor: selectedMode ? "pointer" : "not-allowed", opacity: selectedMode ? 1 : 0.4 }}
-            >
-              Begin Simulation
-            </button>
+            </div>
           </div>
 
           <div className={styles.modalFooter}>
-            <span>All sessions are logged for performance tracking</span>
+            <button
+              onClick={handleBegin}
+              disabled={!selectedMode}
+              className={styles.beginButton}
+            >
+              Begin Simulation
+            </button>
+            <span className={styles.modalFooterHint}>All sessions are logged for performance tracking</span>
           </div>
         </motion.div>
       </motion.div>
