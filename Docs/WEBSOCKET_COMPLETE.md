@@ -246,7 +246,7 @@ npm start
 
 **Expected Output:**
 - Backend: `🔌 WebSocket: ws://localhost:8000/socket.io`
-- Frontend: App opens at http://localhost:3000
+- Frontend: App opens at https://adj-flex.vercel.app
 - No CORS errors in console
 
 ---
@@ -308,7 +308,7 @@ npm start
 ```bash
 # 1. Run both servers (see Quick Start above)
 # 2. Open 2 browser windows side-by-side
-# 3. Visit http://localhost:3000 in both
+# 3. Visit https://adj-flex.vercel.app in both
 # 4. Create/join same session
 # 5. Submit arguments and see real-time updates
 ```
@@ -376,7 +376,7 @@ SOCKET_LOGGER = False         # Set True for debugging
 SOCKET_DEBUG = False          # Set True for development
 
 # Frontend  
-REACT_APP_SOCKET_URL = "http://localhost:8000"
+REACT_APP_SOCKET_URL = "https://adj-deploy-ahix.onrender.com"
 ```
 
 ---

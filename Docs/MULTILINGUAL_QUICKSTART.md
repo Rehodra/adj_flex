@@ -131,19 +131,19 @@ print(f"Hindi: {hindi}")
 ### Test Text-to-Speech:
 ```bash
 # Generate Hindi speech
-curl "http://localhost:8000/api/audio/tts?text=नमस्ते&language=Hindi" -o test_hindi.mp3
+curl "https://adj-deploy-ahix.onrender.com/api/audio/tts?text=नमस्ते&language=Hindi" -o test_hindi.mp3
 
 # Generate Bengali speech
-curl "http://localhost:8000/api/audio/tts?text=নমস্কার&language=Bengali" -o test_bengali.mp3
+curl "https://adj-deploy-ahix.onrender.com/api/audio/tts?text=নমস্কার&language=Bengali" -o test_bengali.mp3
 
 # Generate Tamil speech
-curl "http://localhost:8000/api/audio/tts?text=வணக்கம்&language=Tamil" -o test_tamil.mp3
+curl "https://adj-deploy-ahix.onrender.com/api/audio/tts?text=வணக்கம்&language=Tamil" -o test_tamil.mp3
 ```
 
 ### Test Full Flow:
 ```bash
 # 1. Create a session (existing endpoint)
-curl -X POST http://localhost:8000/api/session/create \
+curl -X POST https://adj-deploy-ahix.onrender.com/api/session/create \
   -H "Content-Type: application/json" \
   -d '{
     "case_id": "CRIM_EASY_1",
@@ -152,7 +152,7 @@ curl -X POST http://localhost:8000/api/session/create \
   }'
 
 # 2. Submit argument in Hindi
-curl -X POST http://localhost:8000/api/argument/submit \
+curl -X POST https://adj-deploy-ahix.onrender.com/api/argument/submit \
   -H "Content-Type: application/json" \
   -d '{
     "session_id": "YOUR_SESSION_ID",
@@ -208,7 +208,7 @@ const [selectedLanguage, setSelectedLanguage] = useState("English");
 
 // When submitting argument
 const submitArgument = async () => {
-  const res = await axios.post("http://localhost:8000/api/argument/submit", {
+  const res = await axios.post("https://adj-deploy-ahix.onrender.com/api/argument/submit", {
     session_id: sessionId,
     argument_text: inputText,
     language: selectedLanguage  // Pass the language!
@@ -222,7 +222,7 @@ const submitArgument = async () => {
 // When playing opponent response
 const playFastTTS = async (msgId: string, text: string) => {
   const res = await fetch(
-    `http://localhost:8000/api/audio/tts?text=${text}&language=${selectedLanguage}`
+    `https://adj-deploy-ahix.onrender.com/api/audio/tts?text=${text}&language=${selectedLanguage}`
   );
   // Play audio in user's language
 };

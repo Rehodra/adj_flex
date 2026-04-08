@@ -11,7 +11,7 @@ pip install python-socketio==5.11.0 python-engineio==4.9.0
 
 # 2. Run backend
 python -m uvicorn app.main:app --reload
-# Server will be at http://localhost:8000
+# Server will be at https://adj-deploy-ahix.onrender.com
 # WebSocket at ws://localhost:8000/socket.io
 ```
 
@@ -24,17 +24,17 @@ npm install socket.io-client@4.7.2
 
 # 2. Add environment variable
 # In .env or .env.local:
-REACT_APP_SOCKET_URL=http://localhost:8000
+REACT_APP_SOCKET_URL=https://adj-deploy-ahix.onrender.com
 
 # 3. Run frontend
 npm start
-# Frontend at http://localhost:3000
+# Frontend at https://adj-flex.vercel.app
 ```
 
 ## ✅ Verification Checklist
 
-- [ ] Backend running and accessible at http://localhost:8000/docs
-- [ ] Frontend running at http://localhost:3000
+- [ ] Backend running and accessible at https://adj-deploy-ahix.onrender.com/docs
+- [ ] Frontend running at https://adj-flex.vercel.app
 - [ ] No CORS errors in browser console
 - [ ] WebSocket connection appears in browser DevTools → Network → WS
 - [ ] Can see "🔌 WebSocket: ws://localhost:8000/socket.io" in backend console
@@ -71,15 +71,15 @@ gameSocket.submitArgument(
 
 ```bash
 # Check WebSocket is ready
-curl http://localhost:8000/health
+curl https://adj-deploy-ahix.onrender.com/health
 
 # View API info
-curl http://localhost:8000/api/info
+curl https://adj-deploy-ahix.onrender.com/api/info
 ```
 
 ## 🎮 Try It in the App
 
-1. Go to [Simulator](http://localhost:3000/simulator)
+1. Go to [Simulator](https://adj-flex.vercel.app/simulator)
 2. Create or join a session
 3. Select your role (plaintiff/defense/spectator)
 4. Start submitting arguments
@@ -100,7 +100,7 @@ Open browser DevTools:
 ```
 Error: Unable to connect
 Solution: 
-- Backend running? Check http://localhost:8000
+- Backend running? Check https://adj-deploy-ahix.onrender.com
 - Port 8000 not used by something else? netstat -tuln
 ```
 
@@ -156,7 +156,7 @@ SOCKET_LOGGER = False      # Set to True for debugging
 ### Frontend (.env or .env.local)
 
 ```
-REACT_APP_SOCKET_URL=http://localhost:8000
+REACT_APP_SOCKET_URL=https://adj-deploy-ahix.onrender.com
 REACT_APP_SOCKET_DEBUG=true
 ```
 
@@ -238,6 +238,6 @@ gameSocket.onVerdictReached((data) => {
 
 For detailed documentation, see `WEBSOCKET_SETUP_GUIDE.md`
 
-For API endpoints, visit http://localhost:8000/docs
+For API endpoints, visit https://adj-deploy-ahix.onrender.com/docs
 
 For Socket.io events reference, check `app/sockets/events.py`

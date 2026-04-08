@@ -60,10 +60,10 @@ cd frontend
 npm install
 npm start
 ```
-**Output:** App opens at http://localhost:3000
+**Output:** App opens at https://adj-flex.vercel.app
 
 ### Test WebSocket
-1. Open 2 browser tabs at http://localhost:3000
+1. Open 2 browser tabs at https://adj-flex.vercel.app
 2. Create a game session
 3. Join from different tab with different role
 4. Submit arguments
@@ -185,7 +185,7 @@ npm start
 ```
 
 ### 4. Test It (Browser)
-- Go to http://localhost:3000
+- Go to https://adj-flex.vercel.app
 - Create a game session
 - Submit arguments
 - Watch real-time updates
@@ -307,7 +307,7 @@ See WEBSOCKET_SETUP_GUIDE.md for detailed troubleshooting.
 - **Full Guide**: WEBSOCKET_SETUP_GUIDE.md  
 - **Architecture**: WEBSOCKET_IMPLEMENTATION_SUMMARY.md
 - **Auto-Verify**: `python verify_websocket.py`
-- **API Docs**: http://localhost:8000/docs (when running)
+- **API Docs**: https://adj-deploy-ahix.onrender.com/docs (when running)
 - **Code Comments**: Throughout event handlers
 
 ---
@@ -340,7 +340,7 @@ Your WebSocket system is:
 
 **Then run:** Backend + Frontend (see above)
 
-**Then test:** Open http://localhost:3000
+**Then test:** Open https://adj-flex.vercel.app
 
 ---
 

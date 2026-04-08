@@ -206,7 +206,7 @@ def print_summary(checks: dict):
         print("\nNext steps:")
         print("  1. cd backend && python -m uvicorn app.main:app --reload")
         print("  2. cd frontend && npm start")
-        print("  3. Visit http://localhost:3000")
+        print("  3. Visit https://adj-flex.vercel.app")
         return True
     else:
         print(f"\n⚠️  {total - passed} check(s) failed. See details above.")

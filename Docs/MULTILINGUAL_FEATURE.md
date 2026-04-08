@@ -176,7 +176,7 @@ GET /api/audio/tts?text=...&language=Hindi&role=opponent
 #### 2. **Updated submitArgument Function**
 ```tsx
 // Now includes language parameter
-const res = await axios.post("http://localhost:8000/api/argument/submit", {
+const res = await axios.post("https://adj-deploy-ahix.onrender.com/api/argument/submit", {
   session_id: sessionId,
   argument_text: newMsg.text,
   cited_sections: cited,
@@ -190,7 +190,7 @@ const res = await axios.post("http://localhost:8000/api/argument/submit", {
 ```tsx
 // Now passes language parameter
 const res = await axios.post(
-  `http://localhost:8000/api/audio/speech-to-text?language=${langParam}`, 
+  `https://adj-deploy-ahix.onrender.com/api/audio/speech-to-text?language=${langParam}`, 
   fd
 );
 ```
@@ -199,7 +199,7 @@ const res = await axios.post(
 ```tsx
 // Now passes language parameter
 const res = await fetch(
-  `http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`
+  `https://adj-deploy-ahix.onrender.com/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`
 );
 ```
 
@@ -326,14 +326,14 @@ cd backend
 python -m uvicorn app.main:app --reload
 
 # 2. Test STT with language
-curl -X POST http://localhost:8000/api/audio/speech-to-text?language=Hindi \
+curl -X POST https://adj-deploy-ahix.onrender.com/api/audio/speech-to-text?language=Hindi \
   -F "file=@recording.wav"
 
 # 3. Test TTS with language
-curl http://localhost:8000/api/audio/tts?text=नमस्ते&language=Hindi
+curl https://adj-deploy-ahix.onrender.com/api/audio/tts?text=नमस्ते&language=Hindi
 
 # 4. Test argument submission with language
-curl -X POST http://localhost:8000/api/argument/submit \
+curl -X POST https://adj-deploy-ahix.onrender.com/api/argument/submit \
   -H "Content-Type: application/json" \
   -d '{
     "session_id": "test_123",

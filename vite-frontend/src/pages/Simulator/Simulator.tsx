@@ -347,7 +347,7 @@ const Simulator = () => {
   useEffect(() => {
     const initSession = async () => {
       try {
-        const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+        const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
         const res = await axios.post(`${BASE_URL}/api/session/create`, {
           case_id: caseId,
           user_id: "demo_user_001",
@@ -417,7 +417,7 @@ const Simulator = () => {
     try {
       const langParam = encodeURIComponent(selectedLanguage);
       const textParam = encodeURIComponent(text.trim().substring(0, 2500));
-      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
       const res = await fetch(`${BASE_URL}/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`);
       if (!res.ok) throw new Error("TTS failed");
       const url = URL.createObjectURL(await res.blob());
@@ -443,7 +443,7 @@ const Simulator = () => {
     fd.append('file', blob, 'recording.wav');
     try {
       const langParam = encodeURIComponent(selectedLanguage);
-      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
       const res = await axios.post(`${BASE_URL}/api/audio/speech-to-text?language=${langParam}`, fd);
       if (res.data.transcript) { setInputText(res.data.transcript); setAudioStatus('Transcription complete.'); setTimeout(() => setAudioStatus(''), 3000); }
     } catch { setAudioStatus('Transcription failed.'); }
@@ -463,7 +463,7 @@ const Simulator = () => {
       let mappedPhase = phase;
       if (mappedPhase === "opening_statements") mappedPhase = "opening_statement";
       if (mappedPhase === "closing_statements") mappedPhase = "closing_statement";
-      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+      const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
       const res = await axios.post(`${BASE_URL}/api/argument/submit`, {
         session_id: sessionId,
         argument_text: newMsg.text,

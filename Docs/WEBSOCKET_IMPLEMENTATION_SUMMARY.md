@@ -199,7 +199,7 @@ python -m uvicorn app.main:app --reload
 🚀 Starting AI Legal Courtroom Simulator API...
 📍 Environment: development
 🌐 CORS Origins: *
-📚 Documentation: http://localhost:8000/docs
+📚 Documentation: https://adj-deploy-ahix.onrender.com/docs
 🔌 WebSocket: ws://localhost:8000/socket.io
 ```
 
@@ -211,7 +211,7 @@ npm start
 ```
 
 **Verify in browser:**
-- [ ] App loads at http://localhost:3000
+- [ ] App loads at https://adj-flex.vercel.app
 - [ ] No CORS errors in console
 - [ ] WebSocket shows in DevTools Network tab
 
@@ -289,7 +289,7 @@ See `WEBSOCKET_SETUP_GUIDE.md` for detailed security configurations.
 
 - **Setup Guide**: `WEBSOCKET_SETUP_GUIDE.md` - Comprehensive reference
 - **Quick Start**: `WEBSOCKET_QUICKSTART.md` - Fast setup guide
-- **API Docs**: http://localhost:8000/docs - Interactive API documentation
+- **API Docs**: https://adj-deploy-ahix.onrender.com/docs - Interactive API documentation
 - **Code Comments**: Check docstrings in event handlers
 
 ## 🎓 Learning Path

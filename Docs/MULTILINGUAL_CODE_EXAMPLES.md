@@ -378,7 +378,7 @@ const submitArgument = async () => {
 
     // SUBMIT WITH LANGUAGE PARAMETER
     const res = await axios.post(
-      "http://localhost:8000/api/argument/submit", 
+      "https://adj-deploy-ahix.onrender.com/api/argument/submit", 
       {
         session_id: sessionId,
         argument_text: newMsg.text,
@@ -468,7 +468,7 @@ const playFastTTS = async (msgId: string, text: string) => {
       const textParam = encodeURIComponent(chunk);
       
       const res = await fetch(
-        `http://localhost:8000/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`
+        `https://adj-deploy-ahix.onrender.com/api/audio/tts?text=${textParam}&language=${langParam}&role=opponent`
       );
       
       if (!res.ok) throw new Error();
@@ -505,7 +505,7 @@ const processAudioUpload = async (blob: Blob) => {
     const langParam = encodeURIComponent(selectedLanguage);
     
     const res = await axios.post(
-      `http://localhost:8000/api/audio/speech-to-text?language=${langParam}`, 
+      `https://adj-deploy-ahix.onrender.com/api/audio/speech-to-text?language=${langParam}`, 
       fd
     );
     
@@ -586,7 +586,7 @@ import requests
 import json
 
 # Submit argument in Hindi
-url = "http://localhost:8000/api/argument/submit"
+url = "https://adj-deploy-ahix.onrender.com/api/argument/submit"
 payload = {
     "session_id": "sess_001",
     "argument_text": "मेरा तर्क यह है कि भारतीय संविधान लागू नहीं हो सकता",

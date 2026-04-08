@@ -4,7 +4,7 @@ import { queryClient } from "../AppRoutes";
 
 export const API_URL = import.meta.env.VITE_API_BASE_URL
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://adj-deploy-ahix.onrender.com";
 
 const api: AxiosInstance = axios.create({
     baseURL : BASE_URL,

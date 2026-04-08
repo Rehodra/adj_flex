@@ -170,7 +170,7 @@ npm install socket.io-client@4.7.2
 Add to `.env` file:
 
 ```env
-REACT_APP_SOCKET_URL=http://localhost:8000
+REACT_APP_SOCKET_URL=https://adj-deploy-ahix.onrender.com
 ```
 
 ### 3. Basic Usage
